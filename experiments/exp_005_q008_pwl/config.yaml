@@ -1,0 +1,18 @@
+experiment_id: EXP_005
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+pwl_profiles:
+  stage1_backend:
+    signed_code_bits: 10
+    unsigned_magnitude_bits: 9
+    expected_slice_width: 128
+    provenance: paper_reported_and_rederived
+  stage2_backend:
+    signed_code_bits: 8
+    unsigned_magnitude_bits: 7
+    expected_slice_width: 32
+    provenance: derived_conditional_on_unscaled_sar_centered_code
+validation_slopes: [1.1, 0.8, 1.25, 0.95]
+inverse_truth_samples_per_polarity: 4095
+negative_full_scale_policies:
+  behavioral_default: extend_last_slice
+  bit_true_audit: reject

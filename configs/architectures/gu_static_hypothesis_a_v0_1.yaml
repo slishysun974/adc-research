@@ -1,0 +1,101 @@
+schema_version: 1
+assumption_set_id: gu_static_hypothesis_a_v0_1
+status: derived_candidate_unfrozen
+applies_to: gu_nominal_v0_1_draft
+derivation: docs/theory/uncalibrated_adc/GU_STATIC_HYPOTHESIS_A_DERIVATION_V0_1.md
+joint_redundancy_audit: docs/theory/uncalibrated_adc/GU_JOINT_REDUNDANCY_AND_DITHER_AUDIT_V0_1.md
+
+normalized_domain:
+  input_range: [-1.0, 1.0]
+  interval: left_closed_right_open
+
+front_stage_template:
+  thresholds: [-0.875, -0.625, -0.375, -0.125, 0.125, 0.375, 0.625, 0.875]
+  output_symbols: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
+  thermometer_ones_by_symbol: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+  dac_levels: [-1.0, -0.75, -0.5, -0.25, 0.0, 0.25, 0.5, 0.75, 1.0]
+  nominal_interstage_gain: 4.0
+  nominal_residue_range: [-0.5, 0.5]
+  provenance: derived_candidate
+  evidence_constraints:
+    - eight_comparators_vth_7_to_0_and_d_7_to_0
+    - nominal_gain_about_four
+    - one_bit_redundancy
+    - residue_and_redundancy_62_5_mV_at_1_Vpp
+
+backend:
+  bits: 8
+  channels: 4
+  encoding: offset_binary
+  raw_range: [0, 255]
+  centered_zero: 128
+  quantizer: midrise_left_closed_right_open
+
+digital_reconstruction:
+  centered_weights:
+    stage1_symbol: 512
+    stage2_symbol: 128
+    backend_centered_code: 1
+  output_offset: 2048
+  output_range: [0, 4095]
+  expected_identity: U12=floor(2048*(x+1))
+
+pwl_implications:
+  stage1_backend_signed_bits: 10
+  stage1_positive_magnitude_bits: 9
+  stage1_four_slice_b0: 128
+  stage2_backend_signed_bits: 8
+  stage2_positive_magnitude_bits: 7
+  stage2_four_slice_b0: 32
+  provenance:
+    stage1_four_slice_b0: paper_reported_and_rederived
+    stage2_four_slice_b0: derived_candidate
+
+dither_hypothesis:
+  status: behavioral_candidate_physical_switch_mapping_unresolved
+  source_statement_backend_full_scale_fraction: 0.0625
+  magnitude_interpretation: each_binary_level_has_absolute_magnitude_fsr_over_16
+  symbol_values: [-1, 1]
+  default_profile: each_level_absolute_fsr_over_16
+  analog_polarity_convention: positive_symbol_adds_at_residue_preamp_input
+  digital_operation: subtract_corresponding_backend_code_after_pwl_correction
+  residue_preamp_normalized_half_amplitude: 0.03125
+  backend_input_normalized_half_amplitude: 0.125
+  stage1_digital_copy_centered_codes: 64
+  stage2_digital_copy_centered_codes: 16
+  profiles:
+    each_level_absolute_fsr_over_16:
+      interpretation: each_binary_level_has_absolute_magnitude_fsr_over_16
+      residue_preamp_normalized_half_amplitude: 0.03125
+      backend_input_normalized_half_amplitude: 0.125
+      digital_copy_centered_codes: [64, 16]
+    total_peak_to_peak_fsr_over_16:
+      interpretation: total_binary_peak_to_peak_span_equals_fsr_over_16
+      residue_preamp_normalized_half_amplitude: 0.015625
+      backend_input_normalized_half_amplitude: 0.0625
+      digital_copy_centered_codes: [32, 8]
+  provenance:
+    analog_add_and_digital_subtract: paper_reported
+    magnitude_fraction: paper_reported
+    magnitude_interpretation: derived_candidate
+    normalized_and_code_scaling: derived_candidate
+  physical_prng_switch_mapping: null
+
+physical_voltage_interpretation:
+  status: derived_interpretation_high_confidence
+  system_input_full_scale_differential_vpp: 1.0
+  balanced_single_ended_branch_vpp: 0.5
+  differential_volts_per_normalized_unit: 0.5
+  ideal_residue_preamp_peak_v: 0.0625
+  rationale:
+    - OJSSCS_Fig14_is_explicitly_a_single_ended_representation
+    - actual_signal_path_and_amplifier_are_differential
+    - effective_reference_range_is_reported_as_reduced_from_2Vpp_to_1Vpp
+    - mapping_reproduces_reported_plus_minus_62_5mV_input_referred_residue
+
+unresolved:
+  physical_prng_switch_mapping: Q-004
+  dither_magnitude_peak_vs_peak_wording: Q-004
+  physical_single_ended_vs_differential: Q-006
+  internal_binary_encoding: Q-002
+  endpoint_saturation_hardware: Q-005

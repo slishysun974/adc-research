@@ -1,0 +1,34 @@
+experiment_id: EXP_009
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+truth_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+
+training:
+  samples: 1000000
+  seed: 20260915
+  paired_dither_probe: true
+  checkpoints: [0, 1000, 10000, 50000, 100000, 250000, 500000, 750000, 1000000]
+  initial_coefficients: [1.0, 1.0, 1.0, 1.0]
+  normalized_slice_width: 0.25
+  normalized_dither_half_amplitude: 0.125
+  coefficient_bounds: [0.0, 2.0]
+  step_sizes: [0.001, 0.003, 0.006, 0.012]
+
+stimulus_profiles:
+  nominal_residue:
+    kind: uniform
+    half_range: 0.5
+    interpretation: candidate_A_nominal_residue_after_dither_subtraction
+  expanded_residue:
+    kind: uniform
+    half_range: 0.85
+    interpretation: synthetic_large_signal_excitation_not_silicon_distribution
+
+evaluation_grid_points: 8193
+
+acceptance:
+  nominal_fourth_gate_count: 0
+  nominal_fourth_coefficient_change: 0.0
+  minimum_expanded_fourth_gate_count: 1000
+  maximum_expanded_coefficient_absolute_error: 0.02
+  minimum_expanded_rms_improvement_ratio: 10.0
+  maximum_adaptive_threshold_identity_error: 1.0e-12

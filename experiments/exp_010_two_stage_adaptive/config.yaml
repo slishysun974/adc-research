@@ -1,0 +1,26 @@
+experiment_id: EXP_010
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+truth_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+
+training:
+  epochs: 64
+  seed: 20260915
+  checkpoint_epochs: [0, 1, 2, 4, 8, 16, 32, 64]
+  schedule: shuffled_exhaustive_code_centers_and_four_dither_pairs
+  normalized_step_sizes: [0.001, 0.003, 0.006, 0.012]
+  coefficient_bounds: [0.0, 2.0]
+
+dither_symbol_pairs:
+  - [-1, -1]
+  - [-1, 1]
+  - [1, -1]
+  - [1, 1]
+
+acceptance:
+  maximum_fourth_gate_count: 0
+  maximum_stage1_k1_k2_absolute_error: 0.02
+  maximum_stage2_k1_k2_absolute_error: 0.02
+  minimum_mae_improvement_ratio_over_unity: 5.0
+  maximum_adaptive_mae_codes: 1.0
+  maximum_physical_overloads: 0
+

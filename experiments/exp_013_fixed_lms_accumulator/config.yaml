@@ -1,0 +1,38 @@
+experiment_id: EXP_013
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+truth_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+
+training:
+  epochs: 64
+  seed: 20260915
+  checkpoint_epochs: [0, 1, 2, 4, 8, 16, 32, 64]
+  schedule: shuffled_exhaustive_code_centers_and_four_dither_pairs
+  normalized_step_sizes: [0.001, 0.003, 0.006, 0.012]
+
+dither_symbol_pairs:
+  - [-1, -1]
+  - [-1, 1]
+  - [1, -1]
+  - [1, 1]
+
+fixed_point:
+  coefficient_total_bits: 11
+  coefficient_fractional_bits: 10
+  data_fractional_bits: 3
+  accumulator_fractional_bits: [10, 14, 18, 22, 26]
+  coefficient_rounding: nearest_even
+  multiplication_rounding: nearest_even
+  offset_rounding: after_coefficient_sum
+  update_rounding: nearest_even
+  coefficient_export_rounding: nearest_even
+  threshold_rounding: nearest_even
+
+acceptance:
+  reference_accumulator_fractional_bits: 26
+  maximum_reference_stage1_k1_k2_absolute_error: 0.02
+  maximum_reference_stage2_k1_k2_absolute_error: 0.02
+  minimum_reference_mae_improvement_ratio_over_unity: 5.0
+  maximum_reference_adaptive_mae_codes: 1.0
+  maximum_reference_physical_overloads: 0
+  maximum_fourth_gate_count: 0
+  maximum_q10_coefficient_changes: 0

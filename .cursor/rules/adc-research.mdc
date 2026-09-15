@@ -1,0 +1,18 @@
+---
+description: Maintain continuity and evidence discipline for the ADC research project
+alwaysApply: true
+---
+
+# ADC Research Project Continuity
+
+- Before substantive work, read `docs/PROJECT_CHARTER.md`, `docs/STATUS.md`, and `docs/DECISIONS.md` when they exist.
+- Treat the charter as the current, amendable research baseline. New evidence or user decisions may revise it.
+- Follow the current three-stage route: Gu et al. experimental platform, uncalibrated ADC prediction theory, then calibration-impact theory. Do not infer authorization to advance beyond the user's current request.
+- Keep the experimental platform and analytical predictor independently implemented; sharing reviewed architecture parameters is allowed, sharing simulator-derived sensitivities as theory is not.
+- Mark important parameters and claims by provenance: paper-reported, externally sourced, derived, fitted, or assumed.
+- Do not present a numerical Jacobian, fitted response surface, or surrogate model as an analytical ADC theory.
+- Do not invoke the `mcm-modeling` skill for this project unless the user explicitly reverses this instruction.
+- In research documents, use standard technical terminology and prefer wording already used in the cited papers or established literature. Do not coin new terms when a standard expression is available; if a new label is unavoidable, define it explicitly and mark it as a local label rather than literature terminology.
+- Update `docs/STATUS.md` after substantive project work. Record decisions that alter scope, methods, assumptions, or validation standards in `docs/DECISIONS.md`.
+- Whenever a stage or other meaningful interim conclusion is completed, update the relevant status, decision, and report documents; run the applicable checks; then commit the coherent change set to Git with a descriptive message and push it to the configured remote. Do not leave a completed milestone only in the working tree.
+- Deep Research may be used for stages two and three when requested or when a focused literature investigation is needed.

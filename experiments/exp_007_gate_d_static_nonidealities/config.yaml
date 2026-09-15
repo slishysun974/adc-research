@@ -1,0 +1,45 @@
+experiment_id: EXP_007
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+nonidealities_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+dither_profile: each_level_absolute_fsr_over_16
+dither_symbol_pairs:
+  - [-1, -1]
+  - [-1, 1]
+  - [1, -1]
+  - [1, 1]
+
+cases:
+  baseline_disabled:
+    kind: configured
+    enabled_effects: []
+  explicit_zero_bundle:
+    kind: explicit_zero
+  flash_threshold_offsets_only:
+    kind: configured
+    enabled_effects: [flash_threshold_offsets]
+  cdac_code_level_mismatch_only:
+    kind: configured
+    enabled_effects: [cdac_code_level_mismatch]
+  linear_interstage_gain_only:
+    kind: configured
+    enabled_effects: [linear_interstage_gain]
+  static_pwl_truth_only:
+    kind: configured
+    enabled_effects: [static_pwl_truth]
+  all_combined:
+    kind: configured
+    enabled_effects:
+      - flash_threshold_offsets
+      - cdac_code_level_mismatch
+      - linear_interstage_gain
+      - static_pwl_truth
+
+acceptance:
+  maximum_baseline_code_failures: 0
+  maximum_explicit_zero_numeric_failures: 0
+  maximum_trace_leakage_events: 0
+  maximum_composition_equation_failures: 0
+  minimum_activation_events_per_enabled_effect: 1
+  minimum_noncommutative_gain_pwl_examples: 1
+  maximum_repeatability_failures: 0
+

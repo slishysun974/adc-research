@@ -1,0 +1,29 @@
+schema_version: 1
+sources:
+  - id: gu_ojsscs_2026
+    title: "A 12-b 3-GS/s Pipelined ADC With Piecewise-Linear Gain Nonlinearity Calibration"
+    authors: ["Mingyang Gu", "Yi Zhong", "Lu Jie", "Nan Sun"]
+    year: 2026
+    doi: "10.1109/OJSSCS.2026.3656850"
+    local_file: "local/OJSSCS2026_Gu.pdf"
+    role: "Primary architecture and calibration reference"
+    provenance: "Previously collected local reference"
+
+  - id: gu_isscc_2025
+    title: "A 12b 3GS/s Pipelined ADC with Gated-LMS-Based Piecewise-Linear Nonlinearity Calibration"
+    authors: ["Mingyang Gu", "Yi Zhong", "Lu Jie", "Nan Sun"]
+    year: 2025
+    doi: "10.1109/ISSCC49661.2025.10904536"
+    local_file: "local/ISSCC2025_Gu.pdf"
+    role: "Conference paper used to cross-check the primary source"
+    provenance: "Previously collected local reference"
+
+  - id: gu_isscc_2025_slides
+    title: "ISSCC 2025 presentation slides for the Gu et al. ADC"
+    authors: ["Mingyang Gu et al."]
+    year: 2025
+    doi: null
+    local_file: "local/ISSCC2025_Gu_Slides.pdf"
+    role: "Visual and implementation-detail cross-check"
+    provenance: "Previously collected local reference"
+

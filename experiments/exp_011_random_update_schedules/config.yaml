@@ -1,0 +1,42 @@
+experiment_id: EXP_011
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+truth_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+
+training:
+  phase: steady_state_from_exp_010_adaptive_coefficients
+  samples_per_replication: 240000
+  replications: 8
+  base_seed: 20260915
+  checkpoint_samples: [0, 30000, 60000, 120000, 180000, 240000]
+  steady_state_start_sample: 60000
+  steady_state_snapshot_period: 3000
+  normalized_step_sizes: [0.001, 0.003, 0.006, 0.012]
+  coefficient_bounds: [0.0, 2.0]
+  low_slice_error_threshold: 0.025
+  initial_coefficients:
+    provenance: artifacts/runs/EXP_010/two_stage_adaptive_v1_20260915/metrics.json
+    stage1: [1.0775271767232066, 0.9472959333198103, 1.0, 1.0]
+    stage2: [0.9154583727739595, 1.0687900117784335, 0.9985324282397566, 1.0]
+
+schedules:
+  - name: every_sample
+    kind: instantaneous
+    period: 1
+    step_scale: 1.0
+  - name: one_sample_per_30
+    kind: subsampled_instantaneous
+    period: 30
+    step_scale: 30.0
+  - name: block_mean_30
+    kind: block_mean
+    period: 30
+    step_scale: 30.0
+
+acceptance:
+  maximum_absolute_prng_cross_correlation_z: 5.0
+  maximum_physical_overloads: 0
+  maximum_fourth_gate_count: 0
+  maximum_low_variance_schedule_mae_ratio_to_unity: 0.5
+  maximum_block_to_subsampled_steady_variance_ratio: 0.15
+  maximum_block_to_every_steady_variance_relative_difference: 0.15
+  maximum_block_to_every_final_mae_relative_difference: 0.15

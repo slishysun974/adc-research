@@ -1,0 +1,13 @@
+[project]
+name = "adc-research"
+version = "0.1.0"
+description = "Behavioral and causal-performance models for background-calibrated pipeline ADC research"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.23"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

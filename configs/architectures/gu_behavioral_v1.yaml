@@ -1,0 +1,113 @@
+schema_version: 1
+config_id: gu_behavioral_v1
+status: frozen_behavioral_baseline
+freeze_date: 2026-09-15
+claim_scope: executable_static_behavior_not_silicon_bit_true
+originating_assumption_set_id: gu_static_hypothesis_a_v0_1
+supersedes_for_execution: gu_static_hypothesis_a_v0_1
+evidence_baseline: docs/specifications/GU_ARCHITECTURE_EVIDENCE_V1.md
+signal_conventions: docs/specifications/GU_SIGNAL_CODE_CONVENTIONS_V1.md
+validation_reports:
+  - docs/reports/experiments/EXP_001_002_GATE_AB_HYPOTHESIS_A_V0_1.md
+  - docs/reports/experiments/EXP_003_GATE_C_HYPOTHESIS_A_V0_1.md
+  - docs/reports/experiments/EXP_006_TWO_STAGE_PWL_TRUTH_V1.md
+  - docs/reports/experiments/EXP_007_GATE_D_STATIC_NONIDEALITIES_V1.md
+  - docs/reports/experiments/EXP_008_PWL_SLICE4_REACHABILITY_V1.md
+  - docs/reports/experiments/EXP_009_ADAPTIVE_GATED_LMS_IDENTIFIABILITY_V1.md
+  - docs/reports/experiments/EXP_010_TWO_STAGE_ADAPTIVE_PWL_V1.md
+
+normalized_domain:
+  input_range: [-1.0, 1.0]
+  interval: left_closed_right_open
+  differential_volts_per_normalized_unit: 0.5
+  provenance: derived_interpretation_high_confidence
+
+front_stage_template:
+  thresholds: [-0.875, -0.625, -0.375, -0.125, 0.125, 0.375, 0.625, 0.875]
+  output_symbols: [-4, -3, -2, -1, 0, 1, 2, 3, 4]
+  thermometer_ones_by_symbol: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+  dac_levels: [-1.0, -0.75, -0.5, -0.25, 0.0, 0.25, 0.5, 0.75, 1.0]
+  nominal_interstage_gain: 4.0
+  nominal_residue_range: [-0.5, 0.5]
+  next_stage_representable_range: [-1.0, 1.0]
+  provenance: derived_candidate_validated_gate_a_b_c
+
+signal_path_mapping:
+  stage1_flash_input: sampled_adc_input
+  stage1_main_residue_output: stage2_cdac_input
+  stage1_auxiliary_residue_output: stage2_flash_input
+  stage2_main_residue_output: backend_sar_input
+  reported_three_percent_gain_mismatch_applies_to: stage2_flash_auxiliary_input
+  provenance: paper_reported_topology_with_behavioral_mapping
+
+backend:
+  kind: time_interleaved_sar
+  bits: 8
+  channels: 4
+  encoding: offset_binary
+  raw_range: [0, 255]
+  centered_zero: 128
+  quantizer: midrise_left_closed_right_open
+  channel_assignment: sample_index_modulo_4
+  provenance: paper_reported_structure_with_software_endpoint_convention
+
+digital_reconstruction:
+  centered_weights:
+    stage1_symbol: 512
+    stage2_symbol: 128
+    backend_centered_code: 1
+  output_offset: 2048
+  output_range: [0, 4095]
+  saturation: clip_and_report
+  expected_identity: U12=floor(2048*(x+1))
+  provenance: derived_candidate_validated_gate_c
+
+dither_hypothesis:
+  status: behavioral_default_with_configured_alternative
+  source_statement_backend_full_scale_fraction: 0.0625
+  symbol_values: [-1, 1]
+  default_profile: each_level_absolute_fsr_over_16
+  analog_polarity_convention: positive_symbol_adds_at_residue_preamp_input
+  digital_operation: subtract_corresponding_backend_code_after_pwl_correction
+  profiles:
+    each_level_absolute_fsr_over_16:
+      interpretation: each_binary_level_has_absolute_magnitude_fsr_over_16
+      residue_preamp_normalized_half_amplitude: 0.03125
+      backend_input_normalized_half_amplitude: 0.125
+      digital_copy_centered_codes: [64, 16]
+      status: default_derived_interpretation
+    total_peak_to_peak_fsr_over_16:
+      interpretation: total_binary_peak_to_peak_span_equals_fsr_over_16
+      residue_preamp_normalized_half_amplitude: 0.015625
+      backend_input_normalized_half_amplitude: 0.0625
+      digital_copy_centered_codes: [32, 8]
+      status: nondefault_falsifiable_alternative
+  physical_prng_switch_mapping: null
+
+pwl_implications:
+  stage1_backend_signed_bits: 10
+  stage1_positive_magnitude_bits: 9
+  stage1_four_slice_b0: 128
+  stage2_backend_signed_bits: 8
+  stage2_positive_magnitude_bits: 7
+  stage2_four_slice_b0: 32
+  stage2_code_unit_condition: unscaled_8_bit_sar_centered_code
+  negative_full_scale_behavioral_policy: extend_last_slice
+  negative_full_scale_bit_true_alternative: reject
+  status: q008_behavioral_closed_stage2_internal_scaling_still_unresolved
+
+model_defaults:
+  fidelity: ideal_static
+  dither_enabled: false
+  dither_profile: each_level_absolute_fsr_over_16
+  nonidealities_enabled: false
+  calibration_mode: none
+  trace_level: full
+
+unresolved_physical_details:
+  flash_internal_binary_encoding: Q-002
+  silicon_cdac_switch_truth_table: Q-003
+  physical_prng_switch_mapping: Q-004
+  dither_magnitude_source_wording: Q-004
+  endpoint_saturation_hardware: Q-005
+  literal_single_ended_vs_differential_label: Q-006

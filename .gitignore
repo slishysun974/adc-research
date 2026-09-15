@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.venv/
+build/
+dist/
+*.egg-info/
+notebooks/.ipynb_checkpoints/
+
+# Large or machine-specific local reference files.
+references/local/*
+!references/local/README.md
+
+# Reproducible run outputs; reviewed summaries belong in docs/reports/.
+artifacts/runs/*
+!artifacts/runs/README.md
+

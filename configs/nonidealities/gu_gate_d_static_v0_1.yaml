@@ -1,0 +1,55 @@
+schema_version: 1
+config_id: gu_gate_d_static_v0_1
+status: synthetic_behavioral_gate_d_profile
+claim_scope: switch_isolation_and_composition_order_not_silicon_statistics
+
+composition_order:
+  - flash_threshold_offsets
+  - cdac_code_level_mismatch
+  - analog_dither_injection
+  - linear_interstage_gain
+  - static_pwl_truth
+
+effects:
+  flash_threshold_offsets:
+    provenance: synthetic_behavioral_stimulus
+    stage1: [0.0015, -0.0010, 0.0005, -0.0015, 0.0010, -0.0005, 0.0015, -0.0010]
+    stage2: [-0.0010, 0.0015, -0.0005, 0.0010, -0.0015, 0.0005, -0.0010, 0.0015]
+
+  cdac_code_level_mismatch:
+    provenance: synthetic_behavioral_stimulus
+    stage1:
+      -4: 0.0008
+      -3: -0.0006
+      -2: 0.0004
+      -1: -0.0002
+      0: 0.0
+      1: 0.0003
+      2: -0.0005
+      3: 0.0007
+      4: -0.0009
+    stage2:
+      -4: -0.0007
+      -3: 0.0005
+      -2: -0.0003
+      -1: 0.0001
+      0: 0.0
+      1: -0.0002
+      2: 0.0004
+      3: -0.0006
+      4: 0.0008
+
+  linear_interstage_gain:
+    provenance: synthetic_behavioral_stimulus
+    stage1: 4.04
+    stage2: 3.96
+
+  static_pwl_truth:
+    provenance: synthetic_behavioral_truth_reused_from_exp_006
+    stage1:
+      ideal_output_edges: [0.0, 0.27, 0.505, 0.7625, 1.0]
+      distorted_output_edges: [0.0, 0.25, 0.5, 0.75, 1.0]
+    stage2:
+      ideal_output_edges: [0.0, 0.23, 0.495, 0.74, 1.0]
+      distorted_output_edges: [0.0, 0.25, 0.5, 0.75, 1.0]
+

@@ -1,0 +1,24 @@
+experiment_id: EXP_004
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+dither_profile: each_level_absolute_fsr_over_16
+physical_mapping:
+  differential_full_scale_vpp: 1.0
+pretrim:
+  systematic_gain_mismatch_magnitude: 0.03
+  random_gain_mismatch_sigma: 0.003
+  random_offset_sigma_v: 0.020
+  deterministic_sigma_envelopes: [1, 2]
+posttrim_temperature_drift:
+  gain_sigma_upper_bound: 0.001
+  offset_sigma_upper_bound_v: 0.0005
+  deterministic_sigma_envelope: 3
+platform_validation:
+  code_points: all_4096_output_code_centers
+  dither_symbol_pairs:
+    - [-1, -1]
+    - [-1, 1]
+    - [1, -1]
+    - [1, 1]
+theory_boundary_scopes:
+  all_candidate_boundaries: [0, 1, 2, 3, 4, 5, 6, 7]
+  nominal_stage2_reachable_with_dither: [1, 2, 3, 4, 5, 6]

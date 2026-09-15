@@ -1,0 +1,36 @@
+experiment_id: EXP_008
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+nonidealities_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+
+dither_profiles:
+  behavioral_default:
+    preamp_half_amplitude: 0.03125
+    stage1_digital_copy: 64
+    stage2_digital_copy: 16
+    status: frozen_behavioral_default
+  controlled_slice4_probe:
+    preamp_half_amplitude: 0.078125
+    stage1_digital_copy: 160
+    stage2_digital_copy: 40
+    status: synthetic_reachability_probe_not_paper_linearization_dither
+
+dither_symbol_pairs:
+  - [-1, -1]
+  - [-1, 1]
+  - [1, -1]
+  - [1, 1]
+
+reachability_model:
+  nominal_residue_output_half_range: 0.5
+  interstage_gain: 4.0
+  next_stage_half_range: 1.0
+
+uniform_internal_code_scale_factors: [2, 4, 8]
+
+acceptance:
+  maximum_default_fourth_slice_hits: 0
+  minimum_probe_fourth_slice_hits_per_stage: 1
+  maximum_probe_physical_overloads: 0
+  maximum_uniform_scaling_invariance_failures: 0
+  maximum_probe_corrected_absolute_error_codes: 0.65
+

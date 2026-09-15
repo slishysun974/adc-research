@@ -1,0 +1,16 @@
+experiment_id: EXP_003
+architecture_draft: configs/architectures/gu_nominal_v0_1_draft.yaml
+assumption_set: configs/architectures/gu_static_hypothesis_a_v0_1.yaml
+mode: ideal_static
+dc_sweep:
+  sample_points: all_4096_output_code_centers
+dither_validation:
+  default_profile: each_level_absolute_fsr_over_16
+  alternative_profile: total_peak_to_peak_fsr_over_16
+  symbol_pairs:
+    - [-1, -1]
+    - [-1, 1]
+    - [1, -1]
+    - [1, 1]
+  stage2_flash_auxiliary_gain_ratios: [0.97, 1.03]
+representative_trace_codes: [0, 1, 2047, 2048, 4094, 4095]

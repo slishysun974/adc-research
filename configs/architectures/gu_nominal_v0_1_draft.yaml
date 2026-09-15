@@ -1,0 +1,194 @@
+schema_version: 1
+config_id: gu_nominal_v0_1_draft
+status: draft_unfrozen
+primary_source: gu_ojsscs_2026
+cross_check_sources:
+  - gu_isscc_2025
+  - gu_isscc_2025_slides
+
+normalization:
+  input_range: [-1.0, 1.0]
+  interval: left_closed_right_open
+  physical_input_full_scale_vpp:
+    value: 1.0
+    unit: V
+    provenance: paper_reported
+    locator: OJSSCS Sec. III-A/III-B
+    interpretation: differential_system_level_strongly_supported_not_source_literal
+    interpretation_provenance: derived
+    rationale: OJSSCS states Fig.14 is a single-ended representation of a differential implementation and reports an effective 1-Vpp reference range
+
+architecture:
+  nominal_output_bits:
+    value: 12
+    provenance: paper_reported
+    locator: OJSSCS abstract and Fig. 13
+  sample_rate_hz:
+    value: 3.0e9
+    provenance: paper_reported
+    locator: OJSSCS abstract and Sec. III-A
+  sha_less:
+    value: true
+    provenance: paper_reported
+    locator: OJSSCS Sec. III-A
+  effective_bit_contributions:
+    value: [2, 2, 8]
+    provenance: derived
+    rationale: two 3-bit stages each provide 1-bit redundancy, followed by 8-bit backend
+
+stages:
+  - id: stage1
+    kind: flash_mdac
+    subadc_label_bits:
+      value: 3
+      provenance: paper_reported
+      locator: OJSSCS Sec. III-A and Fig. 13
+    effective_bits:
+      value: 2
+      provenance: derived
+      rationale: 3-bit stage with 1-bit redundancy
+    nominal_interstage_gain:
+      value: 4.0
+      provenance: paper_reported
+      locator: OJSSCS Sec. III-A
+    redundancy_bits:
+      value: 1
+      provenance: paper_reported
+      locator: OJSSCS Sec. III-A
+    sampling_capacitance_f:
+      value: 4.80e-13
+      provenance: paper_reported
+      locator: OJSSCS Sec. III-A and Fig. 13
+    flash_thresholds_normalized:
+      value: null
+      provenance: unresolved
+      open_question: Q-001
+    flash_output_symbols:
+      value: null
+      provenance: unresolved
+      open_question: Q-002
+    cdac_levels_normalized:
+      value: null
+      provenance: unresolved
+      open_question: Q-003
+    dither:
+      enabled_by_default: false
+      symbols: [-1, 1]
+      magnitude_backend_full_scale_fraction:
+        value: 0.0625
+        provenance: paper_reported
+        locator: OJSSCS Sec. III-A
+      polarity:
+        value: analog_add_then_digital_subtract
+        provenance: paper_reported
+        locator: OJSSCS Figs. 4-5 and ISSCC Fig. 24.1.3
+      physical_prng_switch_mapping:
+        value: null
+        provenance: unresolved
+        open_question: Q-004
+    dual_path:
+      value: true
+      provenance: paper_reported
+      locator: OJSSCS Fig. 13
+      main_accuracy_bits: 10
+      auxiliary_accuracy_bits: 5
+      auxiliary_systematic_gain_mismatch_fraction: 0.03
+
+  - id: stage2
+    kind: flash_mdac
+    subadc_label_bits:
+      value: 3
+      provenance: paper_reported
+      locator: OJSSCS Sec. III-A and Fig. 13
+    effective_bits:
+      value: 2
+      provenance: derived
+      rationale: 3-bit stage with 1-bit redundancy
+    nominal_interstage_gain:
+      value: 4.0
+      provenance: paper_reported
+      locator: OJSSCS Sec. III-A
+    redundancy_bits:
+      value: 1
+      provenance: paper_reported
+      locator: OJSSCS Sec. III-A
+    sampling_capacitance_f:
+      value: 8.0e-14
+      provenance: paper_reported
+      locator: OJSSCS Sec. III-A and Fig. 13
+    flash_thresholds_normalized:
+      value: null
+      provenance: unresolved
+      open_question: Q-001
+    flash_output_symbols:
+      value: null
+      provenance: unresolved
+      open_question: Q-002
+    cdac_levels_normalized:
+      value: null
+      provenance: unresolved
+      open_question: Q-003
+    dither:
+      enabled_by_default: false
+      symbols: [-1, 1]
+      magnitude_backend_full_scale_fraction:
+        value: 0.0625
+        provenance: paper_reported
+        locator: OJSSCS Sec. III-A
+      polarity:
+        value: analog_add_then_digital_subtract
+        provenance: paper_reported
+        locator: OJSSCS Figs. 4-5 and ISSCC Fig. 24.1.3
+      physical_prng_switch_mapping:
+        value: null
+        provenance: unresolved
+        open_question: Q-004
+
+backend:
+  kind: time_interleaved_sar
+  channels:
+    value: 4
+    provenance: paper_reported
+    locator: OJSSCS Sec. III-A and Fig. 13
+  bits_per_channel:
+    value: 8
+    provenance: paper_reported
+    locator: OJSSCS Sec. III-A and Fig. 13
+  sampling_capacitance_f:
+    value: 2.0e-14
+    provenance: paper_reported
+    locator: OJSSCS Sec. III-A
+  unit_capacitance_f:
+    value: 1.5e-16
+    provenance: paper_reported
+    locator: OJSSCS Sec. III-A
+  timing_skew_enabled_by_default: false
+
+timing:
+  tracking_s: 1.50e-10
+  quantization_and_dac_switching_s: 6.0e-11
+  amplification_s: 1.0e-10
+  nonoverlap_margin_s: 2.0e-11
+  provenance: paper_reported
+  locator: OJSSCS Sec. III-A
+
+digital_reconstruction:
+  stage_weight_tables:
+    value: null
+    provenance: unresolved
+    open_question: Q-005
+  output_encoding:
+    value: null
+    provenance: unresolved
+    open_question: Q-005
+  saturation_rule:
+    value: null
+    provenance: unresolved
+    open_question: Q-005
+
+model_defaults:
+  fidelity: ideal_static
+  dither_enabled: false
+  nonidealities_enabled: false
+  calibration_mode: none
+  trace_level: full

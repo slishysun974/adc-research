@@ -1,0 +1,28 @@
+experiment_id: EXP_014
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+truth_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+
+static_code_density:
+  samples_per_code: 32
+  minimum_code: 0
+  maximum_code: 4095
+
+spectral:
+  sample_rate_hz: 3.0e9
+  sample_count: 65536
+  coherent_tone_bins: [997, 21845, 32749]
+  amplitude_peak_normalized: 0.999
+  harmonic_orders: [2, 3, 4, 5]
+  full_scale_peak_codes: 2048.0
+
+acceptance:
+  maximum_ideal_absolute_dnl_lsb: 0.0
+  maximum_ideal_absolute_inl_lsb: 0.0
+  maximum_ideal_missing_codes: 0
+  minimum_ideal_sndr_db: 72.0
+  maximum_ideal_sndr_db: 75.0
+  maximum_ideal_sndr_spread_db: 0.2
+  minimum_pwl_corrected_sfdr_improvement_db: 10.0
+  minimum_pwl_corrected_sndr_improvement_db: 10.0
+  maximum_pwl_corrected_balanced_dither_missing_codes: 0
+  maximum_physical_overloads: 0

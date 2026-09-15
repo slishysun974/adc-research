@@ -1,0 +1,127 @@
+{
+  "experiment": "001_uncalibrated_factorial_baseline",
+  "description": "Common-random-number interventions for gain error, code-dependent CDAC mismatch, and comparator threshold offset in a two-stage ADC.",
+  "configuration": {
+    "n_samples": 32768,
+    "tone_bin": 127,
+    "base": {
+      "stage1_bits": 3,
+      "stage2_bits": 9,
+      "amplitude": 0.9,
+      "gain_error": 0.0,
+      "cdac_mismatch_lsb": 0.0,
+      "comparator_offset_lsb": 0.0,
+      "residue_cubic": 0.0,
+      "noise_std": 0.0,
+      "seed": 20260914
+    },
+    "active_factors": {
+      "gain_error": 0.015,
+      "cdac_mismatch_lsb": 0.08,
+      "comparator_offset_lsb": 0.06
+    }
+  },
+  "runs": {
+    "ideal": {
+      "sfdr_db": 97.9048887147448,
+      "sndr_db": 73.06473520414006,
+      "enob_bits": 11.844640399358815,
+      "signal_bin": 127,
+      "worst_spur_bin": 6059,
+      "worst_spur_dbc": -97.9048887147448,
+      "threshold_crossing_rate": 0.0,
+      "overload_rate": 0.0
+    },
+    "cdac_mismatch_lsb": {
+      "sfdr_db": 35.29666176379378,
+      "sndr_db": 30.59757233143822,
+      "enob_bits": 4.790294407215651,
+      "signal_bin": 127,
+      "worst_spur_bin": 381,
+      "worst_spur_dbc": -35.29666176379378,
+      "threshold_crossing_rate": 0.0,
+      "overload_rate": 0.06842041015625
+    },
+    "comparator_offset_lsb": {
+      "sfdr_db": 69.7289681384785,
+      "sndr_db": 54.85826924250279,
+      "enob_bits": 8.820310505399137,
+      "signal_bin": 127,
+      "worst_spur_bin": 2032,
+      "worst_spur_dbc": -69.7289681384785,
+      "threshold_crossing_rate": 0.02874755859375,
+      "overload_rate": 0.02874755859375
+    },
+    "gain_error": {
+      "sfdr_db": 64.00088763885917,
+      "sndr_db": 56.30605894385111,
+      "enob_bits": 9.060807133530087,
+      "signal_bin": 127,
+      "worst_spur_bin": 2413,
+      "worst_spur_dbc": -64.00088763885917,
+      "threshold_crossing_rate": 0.0,
+      "overload_rate": 0.01177978515625
+    },
+    "cdac_mismatch_lsb+comparator_offset_lsb": {
+      "sfdr_db": 35.554823734687716,
+      "sndr_db": 30.64909181386035,
+      "enob_bits": 4.798852460774144,
+      "signal_bin": 127,
+      "worst_spur_bin": 381,
+      "worst_spur_dbc": -35.554823734687716,
+      "threshold_crossing_rate": 0.02874755859375,
+      "overload_rate": 0.07867431640625
+    },
+    "cdac_mismatch_lsb+gain_error": {
+      "sfdr_db": 35.183999780607216,
+      "sndr_db": 30.463853102104686,
+      "enob_bits": 4.768081910648619,
+      "signal_bin": 127,
+      "worst_spur_bin": 381,
+      "worst_spur_dbc": -35.183999780607216,
+      "threshold_crossing_rate": 0.0,
+      "overload_rate": 0.076416015625
+    },
+    "comparator_offset_lsb+gain_error": {
+      "sfdr_db": 63.0590367926896,
+      "sndr_db": 52.681594223526346,
+      "enob_bits": 8.458736581981121,
+      "signal_bin": 127,
+      "worst_spur_bin": 2413,
+      "worst_spur_dbc": -63.0590367926896,
+      "threshold_crossing_rate": 0.02874755859375,
+      "overload_rate": 0.03460693359375
+    },
+    "cdac_mismatch_lsb+comparator_offset_lsb+gain_error": {
+      "sfdr_db": 35.429612204225656,
+      "sndr_db": 30.511980480911426,
+      "enob_bits": 4.7760764918457514,
+      "signal_bin": 127,
+      "worst_spur_bin": 381,
+      "worst_spur_dbc": -35.429612204225656,
+      "threshold_crossing_rate": 0.02874755859375,
+      "overload_rate": 0.08428955078125
+    }
+  },
+  "shapley_metric_loss_db": {
+    "sfdr_db": {
+      "gain_error": 12.473503090278475,
+      "cdac_mismatch_lsb": 40.577722556812105,
+      "comparator_offset_lsb": 9.424050863428556
+    },
+    "sndr_db": {
+      "gain_error": 6.016994905797621,
+      "cdac_mismatch_lsb": 29.887489416837067,
+      "comparator_offset_lsb": 6.648270400593948
+    }
+  },
+  "combined_loss_db": {
+    "sfdr_db": 62.475276510519144,
+    "sndr_db": 42.55275472322864
+  },
+  "interpretation_limits": [
+    "Attributions apply to this designed simulator and intervention range.",
+    "They are not observational causal estimates from silicon data.",
+    "One mismatch seed is a reproducibility baseline, not a population result."
+  ]
+}

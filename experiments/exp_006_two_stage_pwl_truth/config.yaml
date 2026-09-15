@@ -1,0 +1,38 @@
+experiment_id: EXP_006
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+dither_profile: each_level_absolute_fsr_over_16
+dither_symbol_pairs:
+  - [-1, -1]
+  - [-1, 1]
+  - [1, -1]
+  - [1, 1]
+
+# Synthetic, odd-symmetric behavioral truths.  The distorted-output edges are
+# uniform because Gu's raw-code MSBs select equal-width PWL slices.  The ideal
+# edges are deliberately nonuniform; their increments yield the oracle inverse
+# slopes.  Each profile closes at (1, 1), so it adds nonlinearity without
+# changing the full-scale endpoint.
+pwl_truths:
+  stage1:
+    ideal_output_edges: [0.0, 0.27, 0.505, 0.7625, 1.0]
+    distorted_output_edges: [0.0, 0.25, 0.5, 0.75, 1.0]
+    expected_oracle_slopes: [1.08, 0.94, 1.03, 0.95]
+    raw_code_full_scale: 512
+    provenance: synthetic_behavioral_truth
+  stage2:
+    ideal_output_edges: [0.0, 0.23, 0.495, 0.74, 1.0]
+    distorted_output_edges: [0.0, 0.25, 0.5, 0.75, 1.0]
+    expected_oracle_slopes: [0.92, 1.06, 0.98, 1.04]
+    raw_code_full_scale: 128
+    provenance: synthetic_behavioral_truth
+
+continuous_inverse_probe_count: 8192
+acceptance:
+  maximum_continuous_inverse_error_codes: 1.0e-9
+  maximum_quantized_corrected_absolute_error_codes: 0.65
+  maximum_quantized_corrected_mae_codes: 0.25
+  minimum_mae_improvement_ratio: 20.0
+  minimum_wrong_order_mae_ratio: 4.0
+  maximum_negative_transfer_steps: 0
+  allowed_calibrated_saturation_expected_codes: [0, 4095]
+

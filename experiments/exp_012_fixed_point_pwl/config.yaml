@@ -1,0 +1,23 @@
+experiment_id: EXP_012
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+truth_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+
+fixed_point:
+  coefficient_total_bits: 11
+  coefficient_fractional_bits: 10
+  data_fractional_bits: 3
+  coefficient_overflow: saturate
+  coefficient_rounding_modes: [nearest_even, floor]
+  multiplication_rounding_modes: [nearest_even, floor]
+  offset_rounding_modes: [after_coefficient_sum, per_coefficient]
+  final_integer_rounding_modes: [nearest_even, floor]
+
+acceptance:
+  maximum_coefficient_saturations: 0
+  maximum_physical_overloads: 0
+  maximum_internal_negative_steps: 0
+  maximum_final_integer_negative_steps: 0
+  maximum_nearest_even_internal_mae_codes: 0.35
+  maximum_nearest_even_internal_maximum_error_codes: 0.9
+  maximum_signed_data_bits_required: 16
+
