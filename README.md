@@ -43,7 +43,7 @@
 - `configs/`：架构、非理想和实验配置；
 - `experiments/`：带编号的可复现实验入口；
 - `artifacts/runs/`：运行时生成的配置快照、日志、trace、指标和图表；
-- `docs/reports/`：经过审查后保留的实验结论；
+- `docs/reports/`：经过审查后保留的实验结论、理论与证据审查报告；
 - `legacy/pre_charter_v0_1/`：新章程形成前的两级原型，非当前正式模型。
 
 ## 开发检查
