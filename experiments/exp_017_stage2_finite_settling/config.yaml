@@ -1,0 +1,45 @@
+experiment_id: EXP_017
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+
+tone:
+  sample_rate_hz: 3.0e9
+  sample_count: 32768
+  coherent_tone_bins: [997, 10923]
+  amplitude_peaks_normalized: [0.901, 0.999]
+  phase_radians: 0.2718281828459045
+  harmonic_orders: [2, 3, 4, 5]
+  full_scale_peak_codes: 2048.0
+
+platform_validation:
+  initial_stage_residues: [0.73, -0.41]
+  warmup_periods: 1
+
+cases:
+  static_limit:
+    provenance: mathematical_limit
+    residual_factors: [0.0, 0.0]
+
+  paper_main_path_anchor:
+    provenance: paper_reported_bandwidth_and_phase_duration
+    bandwidth_hz: [1.1e10, 1.1e10]
+    phase_duration_s: [1.0e-10, 1.0e-10]
+
+  shorter_phase_holdout:
+    provenance: research_stress_case
+    bandwidth_hz: [1.1e10, 1.1e10]
+    phase_duration_s: [6.0e-11, 6.0e-11]
+
+  lower_bandwidth_holdout:
+    provenance: research_stress_case
+    bandwidth_hz: [8.0e9, 8.0e9]
+    phase_duration_s: [1.0e-10, 1.0e-10]
+
+acceptance:
+  maximum_code_disagreements: 0
+  maximum_correctable_disagreements: 0
+  maximum_stage_residue_absolute_error: 1.0e-13
+  maximum_metric_absolute_error_db: 1.0e-10
+  maximum_static_limit_code_disagreements: 0
+  maximum_uncorrectable_samples: 0
+  minimum_anchor_equivalent_bits: 9.9
+  maximum_anchor_equivalent_bits: 10.05

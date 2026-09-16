@@ -8,12 +8,15 @@
 
 阶段一 Gate A 至 Gate E 已全部通过，候选 A 行为级 v1 已冻结为可信、可观测
 的静态参考平台。理想码制、数字冗余、逐项静态非理想、已知参数与自适应校正、
-定点实现、静态码密度和相干单音频谱指标均有正式实验与测试证据。项目现转入
-阶段二，开始建立不含数字后台校准的独立性能预测理论。继续工作前，请先阅读：
+定点实现、静态码密度和相干单音频谱指标均有正式实验与测试证据。阶段二的独立
+区间传播和正弦相位积分预测器已通过 EXP-015/016，可直接预测静态传输、
+DNL/INL、连续傅里叶功率及有限记录 SNDR/SNR/THD/SFDR/ENOB；EXP-017 已为
+有限建立建立首个具有静态极限和周期稳态的一阶动态基线。继续工作前，请先阅读：
 
 - `docs/PROJECT_CHARTER.md`：已经批准、但允许后续修订的研究章程；
 - `docs/STATUS.md`：当前进度和下一项工作；
 - `docs/DECISIONS.md`：重要研究决策及理由。
+- `docs/theory/ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.tex`：阶段二、三理论对象、层次、依赖和证据边界的持续更新地图。
 
 阶段一冻结规格和指标协议集中在 `docs/specifications/`，验收报告为
 `docs/reports/STAGE1_PLATFORM_ACCEPTANCE_V1.md`。机器可读的行为级基线为

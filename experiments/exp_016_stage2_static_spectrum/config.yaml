@@ -1,0 +1,40 @@
+experiment_id: EXP_016
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+nonidealities_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+
+tone:
+  sample_rate_hz: 3.0e9
+  sample_count: 32768
+  coherent_tone_bins: [997, 10923]
+  amplitude_peaks_normalized: [0.499, 0.901, 0.999]
+  offset_normalized: 0.0
+  phase_radians: 0.2718281828459045
+  harmonic_orders: [2, 3, 4, 5]
+  full_scale_peak_codes: 2048.0
+
+cases:
+  ideal:
+    enabled_effects: []
+
+  light_static_holdout:
+    enabled_effects:
+      - flash_threshold_offsets
+      - cdac_code_level_mismatch
+      - linear_interstage_gain
+
+  combined_pwl_holdout:
+    enabled_effects:
+      - flash_threshold_offsets
+      - cdac_code_level_mismatch
+      - linear_interstage_gain
+      - static_pwl_truth
+
+acceptance:
+  maximum_code_disagreements: 0
+  maximum_correctable_disagreements: 0
+  maximum_metric_absolute_error_db: 1.0e-10
+  maximum_spectrum_power_absolute_error: 0.0
+  maximum_static_frequency_sndr_spread_db: 0.01
+  maximum_static_frequency_sfdr_spread_db: 0.01
+  maximum_finite_continuous_sndr_error_db: 0.20
+  maximum_uncorrectable_samples: 0

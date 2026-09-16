@@ -10,6 +10,9 @@
 - `GU_SIGNAL_CODE_CONVENTIONS_V1.md`：行为级 v1 的路径、码制、dither、重构与事件语义；
 - `configs/architectures/gu_behavioral_v1.yaml`：Gate A/B/C 验证后的可执行配置。
 - `ADC_METRICS_PROTOCOL_V1.md`：阶段一 Gate E 冻结的静态码密度与相干单音频谱指标。
+- `STAGE2_STATIC_PREDICTION_SPEC_V0_1.md`：阶段二首个独立静态传输预测问题、区间算法、留出验证和验收条件。
+- `STAGE2_STATIC_SPECTRUM_SPEC_V0_1.md`：正弦相位区间、连续傅里叶积分、有限相干记录口径及 EXP-016 验收条件。
+- `STAGE2_FINITE_SETTLING_SPEC_V0_1.md`：有限建立的一阶状态基线、循环稳态、静态极限、替代初值语义及 EXP-017 验收条件。
 
 ## 历史草案与持续问题
 

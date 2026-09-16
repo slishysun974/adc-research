@@ -1,0 +1,51 @@
+experiment_id: EXP_015
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+nonidealities_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+
+holdout:
+  sample_count: 65536
+  fractional_phase: 0.6180339887498949
+
+cases:
+  ideal:
+    enabled_effects: []
+    dither_symbols: [null, null]
+    stage2_flash_auxiliary_gain_ratio: 1.0
+    stage2_flash_auxiliary_offset: 0.0
+
+  light_static_holdout:
+    enabled_effects:
+      - flash_threshold_offsets
+      - cdac_code_level_mismatch
+      - linear_interstage_gain
+    dither_symbols: [null, null]
+    stage2_flash_auxiliary_gain_ratio: 1.0
+    stage2_flash_auxiliary_offset: 0.0
+
+  combined_pwl_holdout:
+    enabled_effects:
+      - flash_threshold_offsets
+      - cdac_code_level_mismatch
+      - linear_interstage_gain
+      - static_pwl_truth
+    dither_symbols: [null, null]
+    stage2_flash_auxiliary_gain_ratio: 1.0
+    stage2_flash_auxiliary_offset: 0.0
+
+  redundancy_boundary_failure:
+    enabled_effects: []
+    dither_symbols: [1, 1]
+    stage2_flash_auxiliary_gain_ratio: 0.964
+    stage2_flash_auxiliary_offset: -0.08
+
+acceptance:
+  maximum_ideal_absolute_dnl_lsb: 1.0e-12
+  maximum_ideal_absolute_inl_lsb: 1.0e-12
+  maximum_ideal_missing_codes: 0
+  maximum_ideal_negative_steps: 0
+  maximum_ideal_uncorrectable_input_width: 0.0
+  maximum_holdout_code_disagreements: 0
+  maximum_holdout_correctable_disagreements: 0
+  minimum_boundary_failure_theory_width: 1.0e-12
+  minimum_boundary_failure_platform_count: 1
+  maximum_boundary_failure_width_error: 0.0002

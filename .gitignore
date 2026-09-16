@@ -8,6 +8,7 @@ __pycache__/
 build/
 dist/
 *.egg-info/
+tmp/
 notebooks/.ipynb_checkpoints/
 
 # Large or machine-specific local reference files.
@@ -17,4 +18,3 @@ references/local/*
 # Reproducible run outputs; reviewed summaries belong in docs/reports/.
 artifacts/runs/*
 !artifacts/runs/README.md
-
