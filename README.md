@@ -10,15 +10,17 @@
 的静态参考平台。理想码制、数字冗余、逐项静态非理想、已知参数与自适应校正、
 定点实现、静态码密度和相干单音频谱指标均有正式实验与测试证据。阶段二的独立
 区间传播和正弦相位积分预测器已通过 EXP-015/016，可直接预测静态传输、
-DNL/INL、连续傅里叶功率及有限记录 SNDR/SNR/THD/SFDR/ENOB；EXP-017 已为
-有限建立建立首个具有静态极限和周期稳态的一阶动态基线。25 页理论框架 v1.0
-现已给出从逐级胞腔到频谱和校准分布的完整推导，并明确区分成熟理论、适配理论
-与待证伪的项目工作理论。继续工作前，请先阅读：
+码密度、连续傅里叶功率及有限记录 SNDR/SNR/THD/SFDR/ENOB；EXP-017 已为
+有限建立建立首个具有静态极限和周期稳态的一阶动态基线。理论框架 v1.1
+已完成独立审查与修订；EXP-018 第一门验证了单个阈值对连续静态谱线的局部
+边界导数。为便于理解和检查，继续工作前请先阅读：
 
 - `docs/PROJECT_CHARTER.md`：已经批准、但允许后续修订的研究章程；
 - `docs/STATUS.md`：当前进度和下一项工作；
 - `docs/DECISIONS.md`：重要研究决策及理由。
-- `docs/theory/ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.tex`：阶段二、三理论对象、层次、依赖和证据边界的持续更新地图。
+- `docs/theory/STAGE2_READER_GUIDE_V1.md`：从手算阈值例子进入阶段二主线；
+- `docs/theory/STAGE2_CLAIM_EVIDENCE_LEDGER_V1.md`：逐项结论、证据等级和缺口；
+- `docs/theory/ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.tex`：严格推导、适用条件和阶段三入口。
 
 阶段一冻结规格和指标协议集中在 `docs/specifications/`，验收报告为
 `docs/reports/STAGE1_PLATFORM_ACCEPTANCE_V1.md`。机器可读的行为级基线为

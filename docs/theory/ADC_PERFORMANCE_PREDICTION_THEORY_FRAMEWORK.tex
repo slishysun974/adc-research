@@ -31,7 +31,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small 流水线 ADC 结构化性能预测理论框架}
-\fancyhead[R]{\small v1.0\quad 2026-09-16}
+\fancyhead[R]{\small v1.1\quad 2026-09-16}
 \fancyfoot[C]{\small \thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 
@@ -142,7 +142,7 @@
   \end{scopebox}
 
   \vfill
-  {\large 版本 v1.0}\par
+  {\large 版本 v1.1}\par
   \vspace{2mm}
   {\large 2026-09-16}\par
   \vspace{13mm}
@@ -153,7 +153,8 @@
 \begin{abstract}
 本文建立一条从流水线 ADC 结构到性能指标的可解释理论链。ADC 首先被表示为
 带离散判决路径和连续内部状态的混合系统；在静态极限下，逐级判决与 residue
-传播把输入域划分为路径胞腔，每个胞腔内部具有确定的仿射或光滑映射。码宽、
+传播与局部分段边界把输入域划分为细化路径胞腔，每个胞腔内部具有确定的仿射或
+光滑映射。码宽、
 DNL、INL、缺失码与不可纠正测度由这些胞腔的测度导出。对周期输入，输入胞腔
 的相位原像给出精确的傅里叶系数，从而把码域边界连接到确定性谱线和 ADC 性能
 泛函。动态层从连续时间建立方程推导离散状态递推、唯一周期稳态及静态极限，
@@ -344,10 +345,14 @@ Gu 架构是 $L=3$ 的主要实例。
 
 \subsection{判决路径与路径胞腔}
 
-将一条完整离散路径记为
+将前级判决、各级局部模拟分段和末级量化结果组成完整路径。令
+$\sigma_i$ 为第 $i$ 级静态映射 $A_i$ 的局部仿射分段标签，
+$J_{i,\sigma_i}$ 为该分段的输入域，且
+$w_i=v_{i-1}-D_i(q_i)+d_i$。在不需要分段的级，$\sigma_i$ 只有一个取值。
+完整路径记为
 
 \begin{equation}
-  p=(q_1,q_2,\ldots,q_{L-1},b).
+  p=(q_1,\sigma_1,\ldots,q_{L-1},\sigma_{L-1},b).
 \end{equation}
 
 在静态情形 $v_i=u_i$ 下，路径 $p$ 对应的输入集合为
@@ -355,18 +360,20 @@ Gu 架构是 $L=3$ 的主要实例。
 \begin{equation}
   \mathcal C_p(\theta)
   =
-  \left\{
-    x\in\mathcal D:
-    \tau_{i,q_i}^{-}
-    \le a_i v_{i-1}(x;p,\theta)+o_i
-    <\tau_{i,q_i}^{+},\quad
-    i=1,\ldots,L
-  \right\}.
+  \left\{x\in\mathcal D:\;
+  \begin{aligned}
+    &\tau_{i,q_i}^{-}\le a_i v_{i-1}(x;p,\theta)+o_i
+      <\tau_{i,q_i}^{+},\quad
+      w_i(x;p,\theta)\in J_{i,\sigma_i},\quad i<L;\\
+    &\tau_{L,b}^{-}\le v_{L-1}(x;p,\theta)<\tau_{L,b}^{+}
+  \end{aligned}\right\}.
   \label{eq:path-cell}
 \end{equation}
 
-这里 $v_{i-1}(x;p,\theta)$ 是假定前序路径已经固定后得到的内部值。路径胞腔不是
-简单的第一级阈值区间，而是所有后级判决不等式向原输入域的递归原像。
+这里 $v_{i-1}(x;p,\theta)$ 是假定前序路径和局部分段已固定后得到的内部值；
+$\tau_{L,b}^{\pm}$ 是末级量化器的码区间端点。路径胞腔由所有后级判决及局部
+分段不等式向原输入域的递归原像共同确定。同一判决码路径可能跨越 PWL 拐点，
+此时必须进一步细分，不能在未细分的整条判决路径上宣称仿射闭包。
 
 \begin{definition}[结构路径胞腔]
 对固定参数 $\theta$，满足式 \eqref{eq:path-cell} 的最大连通输入集合称为路径
@@ -374,18 +381,18 @@ Gu 架构是 $L=3$ 的主要实例。
 \end{definition}
 
 \begin{proposition}[静态路径胞腔内的仿射闭包]
-若每级辅助路径、CDAC 和局部放大器在固定分段内均为仿射映射，则对任意非空路径
-胞腔 $\mathcal C_p$，所有内部 residue 和未饱和数字输出均是输入 $x$ 的仿射函数。
+若每级辅助路径、CDAC 和局部放大器在路径 $p$ 指定的分段内均为仿射映射，则
+对任意非空路径胞腔 $\mathcal C_p$，所有内部 residue 均是输入 $x$ 的仿射函数；
+固定末级码后的未裁剪数字输出为常数。
 \end{proposition}
 
 \begin{proof}
-第一级判决路径固定后，$D_1(q_1)$ 为常数；局部放大器为仿射映射，因此
+第一级判决与局部分段固定后，$D_1(q_1)$ 为常数；所选放大器分段为仿射映射，因此
 $v_1(x)=\alpha_{1,p}x+\beta_{1,p}$。假设第 $i-1$ 级 residue 为
 $v_{i-1}(x)=\alpha_{i-1,p}x+\beta_{i-1,p}$，则第 $i$ 级 CDAC 在固定
-$q_i$ 下仍为常数，仿射放大器与仿射输入的复合仍为仿射函数。由数学归纳法，
-所有前级 residue 均为仿射函数。最后一级判决在路径胞腔内固定，线性数字重构
-是有限个固定码与权重的组合，因此未饱和输出在该胞腔内也是仿射函数；纯码输出
-则为常数。证毕。
+$q_i$ 下仍为常数，所选局部分段与仿射输入的复合仍为仿射函数。由数学归纳法，
+所有前级 residue 均为仿射函数。末级码 $b$ 在路径胞腔内固定，数字重构
+是有限个固定码与权重的组合，因此未裁剪数字输出在该胞腔内为常数。证毕。
 \end{proof}
 
 这个命题借用了分段仿射系统的闭包性质，但“逐级路径胞腔”及其与数字冗余的结合
@@ -413,12 +420,13 @@ $q_i$ 下仍为常数，仿射放大器与仿射输入的复合仍为仿射函�
 
 则边界两侧由不同 $q_i$ 引起的内部码变化在最终重构中抵消。式
 \eqref{eq:redundancy-cancel} 是数字冗余的代数条件；模拟 residue 是否仍落入
-后级量程则是独立的可纠正条件。于是
+后级量程、最终未裁剪码是否仍在允许输出范围内，则是独立的可纠正条件。于是
 
 \begin{equation}
   \mathcal C_{\mathrm{safe}}
   =
-  \bigcup_{p:\,\text{所有后级状态均未过载}}
+  \bigcup_{p:\,\substack{\text{所有后级状态均未过载，}\\
+                         \text{最终数字重构未裁剪}}}
   \mathcal C_p,
   \label{eq:safe-domain}
 \end{equation}
@@ -438,9 +446,10 @@ $q_i$ 下仍为常数，仿射放大器与仿射输入的复合仍为仿射函�
   a_i\bigl(\alpha_{i-1,p}x+\beta_{i-1,p}\bigr)+o_i.
 \end{equation}
 
-每个阈值条件
-$\tau^-_{i,q_i}\le s_i<\tau^+_{i,q_i}$
-都可化为关于 $x$ 的线性不等式。若
+每个前级判决条件
+$\tau^-_{i,q_i}\le s_i<\tau^+_{i,q_i}$、局部分段条件
+$w_i\in J_{i,\sigma_i}$ 以及末级码条件，都可在已固定的前序路径内化为关于
+$x$ 的线性不等式。若
 $a_i\alpha_{i-1,p}>0$，则
 
 \begin{equation}
@@ -453,21 +462,26 @@ $a_i\alpha_{i-1,p}>0$，则
   \label{eq:pullback-boundary}
 \end{equation}
 
-负斜率时不等号方向交换。一个路径胞腔是所有级约束与输入定义域的交：
+负斜率时不等号方向及端点开闭都会交换。一个路径胞腔是全部判决、局部分段
+和输入定义域约束的交：
 
 \begin{equation}
   \mathcal C_p
   =
   \mathcal D
   \cap
-  \bigcap_{i=1}^{L}
-  \mathcal I_{i,p}.
+  \left(\bigcap_{i=1}^{L}\mathcal I^{(Q)}_{i,p}\right)
+  \cap
+  \left(\bigcap_{i=1}^{L-1}\mathcal I^{(A)}_{i,p}\right).
   \label{eq:cell-intersection}
 \end{equation}
 
-一维输入下，$\mathcal C_p$ 是空集或有限区间；含动态状态时，它推广为
-$(x,z)$ 空间中的多面体或分段光滑区域。式 \eqref{eq:pullback-boundary}
-说明后级阈值必须通过前级 residue 斜率反推到原输入域。
+这里 $\mathcal I^{(Q)}$ 和 $\mathcal I^{(A)}$ 分别表示判决与局部模拟分段的
+原像。一维输入下，$\mathcal C_p$ 是空集或区间；端点开闭由原不等式决定，
+不能在负斜率扩展中一律写作左闭右开。当前已验证的静态预测器只处理正局部斜率。
+含动态状态时，胞腔推广为 $(x,z)$ 空间中的多面体或分段光滑区域。
+式 \eqref{eq:pullback-boundary} 说明后级阈值必须通过前级 residue 斜率反推到
+原输入域。
 
 \subsection{码区域、转换电平与码宽}
 
@@ -494,19 +508,28 @@ $(x,z)$ 空间中的多面体或分段光滑区域。式 \eqref{eq:pullback-boun
   \label{eq:general-code-width}
 \end{equation}
 
-设理想 LSB 为 $\Delta$，则
+设理想 LSB 为 $\Delta$，则任意静态码映射均可定义码密度 DNL 和累计码密度偏差
 
 \begin{align}
   \mathrm{DNL}_k
   &=\frac{w_k}{\Delta}-1, \label{eq:dnl}\\
-  \mathrm{INL}_k
-  &=\frac{T_k-T_k^{\mathrm{ideal}}}{\Delta}
-    -\mathcal L_k, \label{eq:inl}
+  D_k^{(\mathrm{density})}
+  &=\sum_{i<k}\mathrm{DNL}_i. \label{eq:density-cumulative}
 \end{align}
 
-其中 $\mathcal L_k$ 表示所采用的 offset/gain 去除直线。缺失码等价于
-$w_k=0$；负向步则对应存在 $x_1<x_2$ 但 $q_\theta(x_1)>q_\theta(x_2)$。
-这些定义与测试协议的具体端点约定相容，但理论对象首先是输入原像及其测度。
+仅当码区域按码序单调排列、转换电平 $T_k$ 有定义时，端点参考的转换电平 INL
+才可由下式得到：
+\begin{equation}
+  \mathrm{INL}_k=D_k^{(\mathrm{density})}
+  =\frac{T_k-T_k^{\mathrm{ideal}}}{\Delta}.
+  \label{eq:inl}
+\end{equation}
+若另行去除 offset/gain，须明确所用参考直线。非单调传输的
+$D_k^{(\mathrm{density})}$ 仍可计算，
+但它不是物理转换电平 INL。例如三个等宽输入区间依次输出 $0,2,1$，累计码密度
+偏差为零，却存在负向步。缺失码等价于 $w_k=0$；负向步则对应存在
+$x_1<x_2$ 但 $q_\theta(x_1)>q_\theta(x_2)$。报告时必须同时列出码密度量与
+单调性。
 
 \subsection{不可纠正输入测度}
 
@@ -542,7 +565,8 @@ $w_k=0$；负向步则对应存在 $x_1<x_2$ 但 $q_\theta(x_1)>q_\theta(x_2)$�
   \label{eq:sine-input}
 \end{equation}
 
-对每个静态胞腔 $I_r=[\ell_r,u_r)$，定义相位原像
+对当前正局部斜率、左闭右开约定下的每个静态胞腔
+$I_r=[\ell_r,u_r)$，定义相位原像
 
 \begin{equation}
   \Phi_r
@@ -562,8 +586,10 @@ $w_k=0$；负向步则对应存在 $x_1<x_2$ 但 $q_\theta(x_1)>q_\theta(x_2)$�
   \pmod{2\pi}
 \end{equation}
 
-给出；上边界同理。将所有边界相位排序后，整个周期被划分成有限相位区间
-$[\phi_j,\phi_{j+1})$。每个区间内输出码固定为 $k_j$。
+给出；上边界同理。将所有边界相位排序后，整个周期被划分成有限相位区间。
+每个正测度区间内输出码固定为 $k_j$。单点端点不影响连续 Fourier 积分；若
+扩展到负局部斜率并精确预测有限记录中恰落边界的样本，必须保留原判决的开闭规则，
+不能一律以左闭右开区间查询。
 
 \subsection{傅里叶系数的闭式表达}
 
@@ -802,6 +828,11 @@ Gu 主路径的 11 GHz/100 ps 报告在这一候选模型下对应约 9.97 bit �
 缩小为原来的 $\rho^M$，所以该解全局渐近稳定。证毕。
 \end{proof}
 
+该命题以周期目标 $u_n$ 已给定为前提。对当前无状态反馈的前馈级联，可先求第一级
+唯一周期 residue，再由它确定第二级周期目标并求第二级唯一周期 residue；逐级归纳
+得到本候选模型的周期轨道。任意带状态依赖切换和反馈的混合系统未必唯一，不能由
+标量命题直接推出其唯一周期解。
+
 \subsection{线性频率响应与静态极限}
 
 对式 \eqref{eq:first-order-recurrence} 作 $z$ 变换：
@@ -831,8 +862,9 @@ residue 随后穿过判决边界，最终 SNDR/SFDR 不必随频率单调变化�
 \subsection{级联动态成为分段仿射状态系统}
 
 以两级前端为例，定义状态
-$z_n=(r_{1,n-1},r_{2,n-1})^\mathsf T$。固定路径
-$p_n=(q_{1,n},q_{2,n})$ 后，
+$z_n=(r_{1,n-1},r_{2,n-1})^\mathsf T$。固定包含两级判决、
+各级局部放大器分段及末级 SAR 码的完整路径
+$p_n=(q_{1,n},\sigma_{1,n},q_{2,n},\sigma_{2,n},b_n)$ 后，
 
 \begin{align}
   r_{1,n}
@@ -852,11 +884,13 @@ $p_n=(q_{1,n},q_{2,n})$ 后，
   =
   A_p z_n+B_p x_n+c_p,
   \qquad
-  y_n=C_p z_n+D_p x_n+d_p,
+  y_n=\mathcal R(p)=k_p,
   \label{eq:pwa-dynamic-state}
 \end{equation}
 
-而路径 $p$ 由关于 $(x_n,z_n)$ 的阈值不等式决定。因此动态流水线 ADC 是
+而路径 $p$ 由关于 $(x_n,z_n)$ 的前级阈值、局部分段和末级量化不等式共同决定。
+状态递推在每个细化胞腔内仿射，最终整数码在该胞腔内固定；若不固定末级码，
+整数输出仍是阶梯函数，不能写成单一仿射读出。因此动态流水线 ADC 是
 “分段仿射状态系统加离散码读出”，而不是单一 LTI 滤波器。
 
 \subsection{复位模型与跨样本记忆不可由终点精度区分}
@@ -1015,11 +1049,14 @@ $\phi_j(\alpha)$ 也随参数移动，则 Fourier 系数
   \item 判决边界移动造成的有限跳变面积变化。
 \end{enumerate}
 
-只在固定路径内求 Jacobian 会漏掉第二项。
+只在固定路径内求 Jacobian 会漏掉第二项。对阶段二的最终整数码，拓扑不变的
+相位区间内 $y_j=k_j$ 固定，故下式内部项严格为零；若研究未量化 residue 或
+连续校正输出，内部项才可能非零。两类观测量不可混用。
 
 \begin{proposition}[边界--内部谱灵敏度分解]
-若各 $y_j(\varphi,\alpha)$ 在区间内部对 $\alpha$ 可微，边界
-$\phi_j(\alpha)$ 可微，且相邻区间单侧极限存在，则
+设参数在所考察点的邻域内保持有限相位区间的数目、次序和非零宽度；各边界
+$\phi_j(\alpha)$ 连续可微；每个 $y_j$ 及其参数偏导在对应闭移动区间上存在
+连续的单侧延拓，从而参数微分与积分可以交换。则
 
 \begin{align}
   \frac{\dd c_m}{\dd\alpha}
@@ -1057,9 +1094,11 @@ $[y_{j-1}(\phi_j^-)-y_j(\phi_j^+)]e^{-\jj m\phi_j}\phi_j'$。
 对全部边界求和即得式 \eqref{eq:boundary-interior-sensitivity}。证毕。
 \end{proof}
 
-式 \eqref{eq:boundary-interior-sensitivity} 是本项目为连接静态结构、参数变化和
-频谱而提出的工作理论。它不是把仿真差分拟合成 Jacobian，而是从移动边界积分
-直接推出。
+式 \eqref{eq:boundary-interior-sensitivity} 使用成熟的 Leibniz 移动边界积分法则；
+本项目的工作接口是把 ADC 的逐级边界、局部输出和观测谱线放入同一分解。
+它不是把仿真差分拟合成 Jacobian。固定长度的整数码 DFT 对足够小的参数扰动
+通常局部不变，不能直接以其小步差分检验连续相位系数的导数；应先对连续谱线
+验证，再另行考察记录长度和扰动步长的联合极限。
 
 \subsection{边界相位的隐式导数}
 
@@ -1488,6 +1527,11 @@ Volterra 与衰减记忆 &
 \bottomrule
 \end{tabularx}
 
+验证层级必须对应所用参考：同一冻结行为模型的独立实现比较支持条件性一致性；
+若两侧码序列相同且采用共同的频谱指标算子，频谱指标相同是派生结果。
+同一一阶状态方程的周期解与逐样本预热一致，检验求解与传播，不能识别芯片
+是否真的跨样本保持。物理语义需要能区分候选模型的电路瞬态或测量。
+
 \subsection{当前理论版图}
 
 \noindent\begin{tabularx}{\textwidth}{p{34mm} X p{31mm}}
@@ -1495,11 +1539,11 @@ Volterra 与衰减记忆 &
 理论层 & 当前结论 & 状态 \\
 \midrule
 逐级结构与冗余 & 路径、residue、数字重构和可纠正域具有统一数学表示 & \textcolor{FrameworkTeal}{已建立} \\
-静态路径胞腔 & 逐级边界原像决定完整输入分割与码域测度 & \textcolor{FrameworkTeal}{已验证} \\
-静态频谱 & 相位原像闭式积分连接码跳变和连续谱线；有限记录单列 & \textcolor{FrameworkTeal}{已验证} \\
-有限建立状态 & 一阶保持模型具有连续时间来源、唯一周期稳态和静态极限 & \textcolor{FrameworkTeal}{基线已验证} \\
+静态路径胞腔 & 逐级判决与局部分段边界原像决定输入分割和码域测度 & \textcolor{FrameworkTeal}{行为级已验证} \\
+静态频谱 & 相位原像闭式积分连接码跳变和连续谱线；有限记录单列 & \textcolor{FrameworkTeal}{行为级已验证} \\
+有限建立状态 & 前馈一阶保持模型具有唯一周期稳态和静态极限 & \textcolor{FrameworkTeal}{同假设交叉实现} \\
 动态物理语义 & 固定复位、跨样本保持、压摆和高阶模型尚未由外部证据区分 & \textcolor{FrameworkGold}{待识别} \\
-边界谱灵敏度 & 内部变化与边界移动的解析分解已经给出 & \textcolor{FrameworkGold}{工作理论} \\
+边界谱灵敏度 & 移动边界法则；单阈值静态码谱的局部映射已通过第一门 & \textcolor{FrameworkGold}{局部行为级验证} \\
 校准状态理论 & 均值场、局部协方差、可辨识性和谱线传播已经连成理论链 & \textcolor{FrameworkGold}{待实验验证} \\
 高保真锚定 & 行为理论尚缺电路瞬态、PVT 和硅后数据的系统锚定 & \textcolor{FrameworkRed}{资料待补} \\
 \bottomrule
@@ -1507,9 +1551,10 @@ Volterra 与衰减记忆 &
 
 \begin{statusbox}{FrameworkGreen}
 \textbf{当前边界：}阶段二已经建立静态码域、静态频谱和一阶动态状态的闭环理论。
-新版框架补齐了连续时间来源、路径胞腔证明、精确频谱推导、动态误差入口和校准
-状态到频谱的理论接口。其中边界谱灵敏度和观测等价类是本项目工作理论，尚需专门
-实验验证；复位、保持、压摆或高阶动态哪一种更接近 Gu 芯片仍未识别。
+新版框架补齐了连续时间来源、细化路径胞腔证明、精确频谱推导、动态误差入口和校准
+状态到频谱的理论接口。边界谱灵敏度的单阈值静态整数码情形已通过第一验证门；
+多边界、连续内部读出及拓扑事件仍待验证。观测等价用于组织动态候选模型，
+复位、保持、压摆或高阶动态哪一种更接近 Gu 芯片仍未识别。
 \end{statusbox}
 
 \section{阅读顺序与后续扩展}
@@ -1538,12 +1583,13 @@ Volterra 与衰减记忆 &
 \midrule
 $x(t),x_n$ & 连续时间输入及第 $n$ 个样本对应的输入 \\
 $\theta,e_n$ & 固定物理参数及环境或慢变参数 \\
-$p_n$ & 完整离散判决路径 \\
+$p_n$ & 含前级判决、局部模拟分段标签和末级码的完整路径 \\
+$\sigma_i,J_{i,\sigma_i}$ & 第 $i$ 级局部分段标签及其输入域 \\
 $z_n$ & 有限建立、记忆和其他动态内部状态 \\
 $q_{i,n},b_n$ & 第 $i$ 个前级判决状态和末级后端码 \\
 $u_{i,n},r_{i,n}$ & 第 $i$ 级静态 residue 目标和相位末端实际 residue \\
 $\mathcal C_p,\mathcal B_k$ & 路径胞腔与最终码的输入原像 \\
-$T_k,w_k$ & 码转换电平与广义码宽 \\
+$T_k,w_k$ & 单调情形的码转换电平与任意静态传输的广义码宽 \\
 $c_m,Y_M[\ell]$ & 连续周期 Fourier 系数与有限记录 DFT \\
 $\Pi$ & 记录、带宽、窗、基波和谐波约定组成的观测协议 \\
 $a_n,a^\star$ & 校准状态与所选表示族中的可实现最优状态 \\
@@ -1558,6 +1604,7 @@ $G_c$ & 含判决边界移动项的谱线灵敏度矩阵 \\
 \toprule
 版本 & 日期 & 主要变化 \\
 \midrule
+v1.1 & 2026-09-16 & 审查并修正细化路径胞腔与动态码读出；限定周期稳态证明范围，区分非单调码密度偏差和转换电平 INL，补齐安全域与谱灵敏度正则条件。 \\
 v1.0 & 2026-09-16 & 改写为完整推导稿；加入文献适配性审查、逐级路径胞腔证明、精确频谱、连续时间动态来源、采样动态、边界--内部谱灵敏度及校准状态到性能的传播。 \\
 v0.2 & 2026-09-16 & 加入一阶 residue 状态、周期稳态、静态极限及相位复位替代语义。 \\
 v0.1 & 2026-09-16 & 建立阶段二/三统一对象、静态--动态关系、校准闭环和验证阶梯。 \\

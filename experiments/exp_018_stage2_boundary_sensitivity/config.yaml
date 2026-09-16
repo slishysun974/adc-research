@@ -1,0 +1,19 @@
+experiment_id: EXP_018
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+nonideality_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+enabled_effects:
+  - flash_threshold_offsets
+  - cdac_code_level_mismatch
+  - linear_interstage_gain
+first_stage_threshold_indices: [2, 5]
+amplitude_peaks_normalized: [0.901, 0.999]
+harmonic_orders: [0, 1, 2, 3]
+threshold_offset_steps: [2.0e-5, 1.0e-5, 5.0e-6, 2.5e-6]
+toy_thresholds: [0.2, 0.5]
+fixed_record_sample_count: 4096
+fixed_record_phase_radians: 0.123
+acceptance:
+  maximum_toy_derivative_absolute_error: 1.0e-12
+  maximum_full_adc_derivative_absolute_error: 5.0e-4
+  maximum_full_adc_code_jump_disagreements: 0
+  minimum_tangent_amplification_ratio: 2.0

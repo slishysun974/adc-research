@@ -182,7 +182,13 @@ class TransferSegment:
 
 @dataclass(frozen=True)
 class StaticTransferPrediction:
-    """Complete static transfer partition and exact uniform-input metrics."""
+    """Complete static transfer partition and exact uniform-input metrics.
+
+    ``transition_inl_lsb`` is cumulative code-density DNL for compatibility
+    with the frozen metrics protocol. It represents physical transition INL
+    only when output codes are ordered monotonically over the input range.
+    Check ``negative_step_count`` before using that interpretation.
+    """
 
     input_range: tuple[float, float]
     output_range: tuple[int, int]

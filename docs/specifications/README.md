@@ -13,6 +13,7 @@
 - `STAGE2_STATIC_PREDICTION_SPEC_V0_1.md`：阶段二首个独立静态传输预测问题、区间算法、留出验证和验收条件。
 - `STAGE2_STATIC_SPECTRUM_SPEC_V0_1.md`：正弦相位区间、连续傅里叶积分、有限相干记录口径及 EXP-016 验收条件。
 - `STAGE2_FINITE_SETTLING_SPEC_V0_1.md`：有限建立的一阶状态基线、循环稳态、静态极限、替代初值语义及 EXP-017 验收条件。
+- `STAGE2_BOUNDARY_SENSITIVITY_SPEC_V0_1.md`：连续相位谱线的边界/内部灵敏度分离、EXP-018 验证设计及失效边界。
 
 ## 历史草案与持续问题
 

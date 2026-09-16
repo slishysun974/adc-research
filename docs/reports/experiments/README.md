@@ -17,6 +17,7 @@
 - `EXP_012_FIXED_POINT_PWL_V1.md`：11-bit Q1.10 系数、Q3 校正数据通路、舍入规则、最终整数码和中间位宽审计。
 - `EXP_013_FIXED_LMS_ACCUMULATOR_V1.md`：Q1.10 系数接口与 LMS 更新累加器分离、累加器小数位数扫描及更新量化审计。
 - `EXP_014_GATE_E_METRICS_V1.md`：均匀斜坡 DNL/INL、相干单音 FFT、理想链验证及 PWL 校正前后趋势核对。
-- `EXP_015_STAGE2_STATIC_TRANSFER_V0_1.md`：独立区间传播预测器、解析 DNL/INL、静态非理想留出验证及冗余失效输入测度。
+- `EXP_015_STAGE2_STATIC_TRANSFER_V0_1.md`：独立区间传播预测器、码密度、静态非理想留出验证及冗余失效输入测度；非单调条件的累计 DNL 已勘误解释。
 - `EXP_016_STAGE2_STATIC_SPECTRUM_V0_1.md`：正弦相位闭式积分、有限相干复频谱、动态指标留出验证及连续/有限记录误差分解。
 - `EXP_017_STAGE2_FINITE_SETTLING_V0_1.md`：一阶 residue 状态、精确周期稳态、静态极限及频率/幅度/建立强度留出验证。
+- `EXP_018_STAGE2_BOUNDARY_SENSITIVITY_PHASE1_V0_1.md`：单阈值连续谱线边界导数的手算、平台和独立积分差分第一验证门。

@@ -29,12 +29,14 @@ def code_density_metrics(
     minimum_code: int,
     maximum_code: int,
 ) -> CodeDensityMetrics:
-    """Compute histogram DNL and endpoint-referenced transition INL.
+    """Compute histogram DNL and endpoint-referenced cumulative DNL.
 
     The input stimulus is assumed to be uniformly distributed over the full
     converter range.  DNL is the observed code-bin width divided by the mean
-    code-bin width minus one.  Transition INL is the cumulative DNL from the
-    lower endpoint and therefore has one more entry than the code histogram.
+    code-bin width minus one. The cumulative DNL has one more entry than the
+    code histogram. It is physical transition INL only for a monotone static
+    transfer; this function sees codes but cannot infer that property from a
+    histogram alone. ``transition_inl_lsb`` is retained as the protocol field.
     """
 
     if maximum_code < minimum_code:
