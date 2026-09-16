@@ -1,4 +1,9 @@
-"""Sample orchestration for the ideal-static three-stage ADC platform."""
+"""Static three-stage ADC with an affine proxy for the auxiliary amplifier.
+
+The stage-2 flash observes a scaled/offset copy of the stage-1 main
+residue.  This preserves the paper's decision/CDAC topology but does not model
+an independently nonlinear or dynamically settling stage-1 auxiliary output.
+"""
 
 from __future__ import annotations
 

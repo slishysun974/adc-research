@@ -3,6 +3,9 @@
 This module is deliberately platform-side: it advances one sample at a time
 from an explicit prior residue state.  The independent theory implementation
 uses the closed-form periodic boundary condition instead of calling this code.
+Only the two main residue paths have state; the stage-2 flash input remains
+an affine copy of the settled stage-1 main residue.  This cannot represent an
+independently settling stage-1 auxiliary amplifier.
 """
 
 from __future__ import annotations
@@ -23,7 +26,7 @@ from adc_research.platform.stage import StageResult, process as process_stage
 
 @dataclass(frozen=True)
 class SettlingState:
-    """Previous settled outputs of the two front stages."""
+    """Previous settled main outputs of the two front stages."""
 
     stage1_residue: float = 0.0
     stage2_residue: float = 0.0
