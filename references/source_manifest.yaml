@@ -27,3 +27,112 @@ sources:
     role: "Visual and implementation-detail cross-check"
     provenance: "Previously collected local reference"
 
+  - id: ieee_1241_2023
+    title: "IEEE Standard for Terminology and Test Methods for Analog-to-Digital Converters"
+    authors: ["IEEE Standards Association"]
+    year: 2023
+    doi: "10.1109/IEEESTD.2023.10345250"
+    url: "https://standards.ieee.org/ieee/1241/6797/"
+    local_file: null
+    role: "Authoritative ADC terminology and observation-protocol boundary"
+    provenance: "Primary-source web review on 2026-09-16"
+
+  - id: bennett_1948_quantized_spectra
+    title: "Spectra of Quantized Signals"
+    authors: ["W. R. Bennett"]
+    year: 1948
+    doi: "10.1002/j.1538-7305.1948.tb01340.x"
+    url: "https://onlinelibrary.wiley.com/doi/10.1002/j.1538-7305.1948.tb01340.x"
+    local_file: null
+    role: "Deterministic quantization-spectrum foundation"
+    provenance: "Primary-source web review on 2026-09-16"
+
+  - id: widrow_kollar_liu_1996
+    title: "Statistical Theory of Quantization"
+    authors: ["Bernard Widrow", "Istvan Kollar", "Ming-Chang Liu"]
+    year: 1996
+    doi: "10.1109/19.492748"
+    url: "https://isl.stanford.edu/~widrow/papers/j1996statisticaltheory.pdf"
+    local_file: null
+    role: "Conditions for additive statistical quantization models"
+    provenance: "Author-hosted primary paper reviewed on 2026-09-16"
+
+  - id: gray_neuhoff_1998
+    title: "Quantization"
+    authors: ["Robert M. Gray", "David L. Neuhoff"]
+    year: 1998
+    doi: "10.1109/18.720541"
+    url: "https://doi.org/10.1109/18.720541"
+    local_file: null
+    role: "Quantization-theory survey and high-resolution assumptions"
+    provenance: "Primary-source bibliographic review on 2026-09-16"
+
+  - id: schuchman_1964
+    title: "Dither Signals and Their Effect on Quantization Noise"
+    authors: ["Leonard Schuchman"]
+    year: 1964
+    doi: "10.1109/TCOM.1964.1088973"
+    url: "https://doi.org/10.1109/TCOM.1964.1088973"
+    local_file: null
+    role: "Necessary and sufficient conditions for subtractive-dither independence"
+    provenance: "Primary-source bibliographic review on 2026-09-16"
+
+  - id: sontag_1981
+    title: "Nonlinear Regulation: The Piecewise Linear Approach"
+    authors: ["Eduardo D. Sontag"]
+    year: 1981
+    doi: "10.1109/TAC.1981.1102596"
+    url: "https://doi.org/10.1109/TAC.1981.1102596"
+    local_file: null
+    role: "Piecewise-linear state systems on polyhedral partitions"
+    provenance: "Primary-source bibliographic review on 2026-09-16"
+
+  - id: boyd_chua_1985
+    title: "Fading Memory and the Problem of Approximating Nonlinear Operators with Volterra Series"
+    authors: ["Stephen Boyd", "Leon O. Chua"]
+    year: 1985
+    doi: "10.1109/TCS.1985.1085649"
+    url: "https://www.web.stanford.edu/~boyd/papers/fading_volterra.html"
+    local_file: null
+    role: "Continuity and fading-memory assumptions behind Volterra approximation"
+    provenance: "Author-hosted primary paper page reviewed on 2026-09-16"
+
+  - id: bjorsell_2010_kautz_volterra
+    title: "Kautz-Volterra Modelling of Analogue-to-Digital Converters"
+    authors: ["Niclas Bjorsell", "Magnus Isaksson", "Peter Handel", "Daniel Ronnow"]
+    year: 2010
+    doi: "10.1016/j.csi.2009.11.007"
+    url: "https://doi.org/10.1016/j.csi.2009.11.007"
+    local_file: null
+    role: "Prior ADC dynamic-error modelling with a Volterra-family representation"
+    provenance: "Primary-source bibliographic review on 2026-09-16"
+
+  - id: kobayashi_2002_sampling
+    title: "Sampling Jitter and Finite Aperture Time Effects in Wideband Data Acquisition Systems"
+    authors: ["Haruo Kobayashi", "Kenichi Kobayashi", "Masao Morimura", "Yasuo Onaya", "Yasushi Takahashi", "Katsumasa Enomoto", "Hiroshi Kogure"]
+    year: 2002
+    doi: "10.1587/e85-a_2_335"
+    url: "https://globals.ieice.org/en_transactions/fundamentals/10.1587/e85-a_2_335/_p"
+    local_file: null
+    role: "Sampling-jitter and finite-aperture error mechanisms"
+    provenance: "Publisher primary-source page reviewed on 2026-09-16"
+
+  - id: robbins_monro_1951
+    title: "A Stochastic Approximation Method"
+    authors: ["Herbert Robbins", "Sutton Monro"]
+    year: 1951
+    doi: "10.1214/aoms/1177729586"
+    url: "https://www.columbia.edu/~ww2040/8100F16/RM51.pdf"
+    local_file: null
+    role: "Stochastic-approximation foundation for calibration-state dynamics"
+    provenance: "Primary paper copy reviewed on 2026-09-16"
+
+  - id: widrow_hoff_1960
+    title: "Adaptive Switching Circuits"
+    authors: ["Bernard Widrow", "Marcian E. Hoff"]
+    year: 1960
+    doi: null
+    url: "https://isl.stanford.edu/~widrow/papers/c1960adaptiveswitching.pdf"
+    local_file: null
+    role: "Original LMS adaptive-update source"
+    provenance: "Author-hosted primary paper reviewed on 2026-09-16"

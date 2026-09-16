@@ -1,8 +1,7 @@
-\documentclass[UTF8,a4paper,11pt]{ctexart}
-
-\usepackage[a4paper,margin=22mm,headheight=15pt]{geometry}
-\usepackage{amsmath,amssymb,mathtools}
-\usepackage{booktabs,tabularx,array}
+\documentclass[11pt,a4paper]{ctexart}
+\usepackage[left=23mm,right=23mm,top=22mm,bottom=24mm]{geometry}
+\usepackage{amsmath,amssymb,mathtools,amsthm,bm}
+\usepackage{booktabs,tabularx,array,longtable}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc}
@@ -11,19 +10,20 @@
 \usepackage{fancyhdr}
 \usepackage{hyperref}
 
-\definecolor{FrameworkBlue}{HTML}{1E4F78}
-\definecolor{FrameworkTeal}{HTML}{2A7F7F}
-\definecolor{FrameworkGold}{HTML}{B27A19}
-\definecolor{FrameworkInk}{HTML}{263238}
-\definecolor{FrameworkPale}{HTML}{EEF4F8}
-\definecolor{FrameworkGreen}{HTML}{EAF5EF}
-\definecolor{FrameworkGray}{HTML}{F4F5F6}
-\definecolor{FrameworkRed}{HTML}{9A3F3F}
+\definecolor{FrameworkBlue}{HTML}{174A7E}
+\definecolor{FrameworkTeal}{HTML}{178B8B}
+\definecolor{FrameworkGold}{HTML}{C57A10}
+\definecolor{FrameworkRed}{HTML}{B64242}
+\definecolor{FrameworkInk}{HTML}{25313A}
+\definecolor{FrameworkPale}{HTML}{EAF1F7}
+\definecolor{FrameworkGreen}{HTML}{E7F3EF}
+\definecolor{FrameworkGray}{HTML}{F3F5F6}
 
 \hypersetup{
   colorlinks=true,
   linkcolor=FrameworkBlue,
-  urlcolor=FrameworkTeal,
+  citecolor=FrameworkTeal,
+  urlcolor=FrameworkBlue,
   pdftitle={流水线 ADC 结构化性能预测理论框架},
   pdfauthor={ADC Research Project}
 }
@@ -31,15 +31,16 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small 流水线 ADC 结构化性能预测理论框架}
-\fancyhead[R]{\small v0.2\quad 2026-09-16}
+\fancyhead[R]{\small v1.0\quad 2026-09-16}
 \fancyfoot[C]{\small \thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 
+\setcounter{tocdepth}{2}
 \setlist[itemize]{leftmargin=2em,itemsep=0.35em,topsep=0.4em}
 \setlist[enumerate]{leftmargin=2.2em,itemsep=0.35em,topsep=0.4em}
 \setlength{\parindent}{2em}
-\setlength{\parskip}{0.25em}
-\renewcommand{\arraystretch}{1.28}
+\setlength{\parskip}{0.28em}
+\renewcommand{\arraystretch}{1.30}
 
 \newtcolorbox{scopebox}{
   colback=FrameworkPale,
@@ -53,6 +54,16 @@
   colframe=#1!55!FrameworkInk,
   boxrule=0.5pt,
   arc=1.2mm,
+  left=2mm,right=2mm,top=1.2mm,bottom=1.2mm
+}
+\newtcolorbox{derivationbox}[1][]{
+  colback=FrameworkGray,
+  colframe=FrameworkTeal,
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=0.6pt,
+  arc=1.2mm,
+  breakable,
   left=2mm,right=2mm,top=1.2mm,bottom=1.2mm
 }
 
@@ -91,376 +102,1473 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\spr}{\operatorname{spr}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\jj}{\mathrm{j}}
+
+\newtheoremstyle{adcplain}
+  {0.6em}{0.6em}{\itshape}{}{\bfseries\color{FrameworkBlue}}{。}{0.5em}{}
+\theoremstyle{adcplain}
+\newtheorem{proposition}{命题}[section]
+\newtheorem{corollary}[proposition]{推论}
+\theoremstyle{definition}
+\newtheorem{definition}[proposition]{定义}
+\renewcommand{\proofname}{证明}
 
 \begin{document}
 \pagenumbering{gobble}
 
 \begin{titlepage}
   \centering
-  \vspace*{22mm}
-  {\color{FrameworkBlue}\rule{0.82\textwidth}{1.2pt}}\\[13mm]
+  \vspace*{19mm}
+  {\color{FrameworkBlue}\rule{0.82\textwidth}{1.2pt}}\\[12mm]
   {\fontsize{24}{32}\selectfont\bfseries 流水线 ADC\par}
   \vspace{3mm}
   {\fontsize{22}{30}\selectfont\bfseries 结构化性能预测理论框架\par}
-  \vspace{9mm}
-  {\large 阶段二：无校准 ADC 本体理论\quad $\longrightarrow$\quad
-  阶段三：校准影响理论\par}
-  \vspace{13mm}
-  {\color{FrameworkBlue}\rule{0.82\textwidth}{1.2pt}}\\[18mm]
+  \vspace{7mm}
+  {\large 从逐级路径、码域边界和动态状态到频谱与校准性能\par}
+  \vspace{12mm}
+  {\color{FrameworkBlue}\rule{0.82\textwidth}{1.2pt}}\\[15mm]
 
   \begin{scopebox}
   \centering
-  本文只描述理论对象、层次关系、抽象映射、验证逻辑与当前边界。\\
-  不描述具体数值算法、软件模块、函数接口、实验脚本或实现步骤。
+  本文给出可独立阅读的数学框架与推导。成熟理论只在其假设成立处使用；\\
+  不能直接适配流水线判决、冗余和校准闭环的部分，由本项目工作理论补齐。\\
+  本文不描述软件结构、函数接口、实验脚本或具体数值求解步骤。
   \end{scopebox}
 
   \vfill
-  {\large 版本 v0.2}\par
+  {\large 版本 v1.0}\par
   \vspace{2mm}
   {\large 2026-09-16}\par
-  \vspace{14mm}
+  \vspace{13mm}
   {\small ADC Research Project}\par
 \end{titlepage}
 
 \pagenumbering{roman}
+\begin{abstract}
+本文建立一条从流水线 ADC 结构到性能指标的可解释理论链。ADC 首先被表示为
+带离散判决路径和连续内部状态的混合系统；在静态极限下，逐级判决与 residue
+传播把输入域划分为路径胞腔，每个胞腔内部具有确定的仿射或光滑映射。码宽、
+DNL、INL、缺失码与不可纠正测度由这些胞腔的测度导出。对周期输入，输入胞腔
+的相位原像给出精确的傅里叶系数，从而把码域边界连接到确定性谱线和 ADC 性能
+泛函。动态层从连续时间建立方程推导离散状态递推、唯一周期稳态及静态极限，
+并把采样时差、随机抖动、孔径和弱非线性记忆放在相互可区分的物理入口中。
+
+阶段三把校准表示为扩展闭环。本文从随机逼近的局部误差动力学推导校准状态的
+均值和协方差，再通过本项目提出的“边界--内部谱灵敏度分解”传播到谱线与性能。
+该分解同时计算区域内部映射变化和判决边界移动，避免用单一光滑 Jacobian 覆盖
+量化跳变。文中明确区分直接借用的成熟理论、针对流水线 ADC 的适配结果，以及
+尚待外部验证的项目工作理论。
+\end{abstract}
 \tableofcontents
 \clearpage
 \pagenumbering{arabic}
 
-\section{框架的任务与边界}
+\section{问题、证据和理论架构}
 
-本课题的核心问题不是用黑箱关系把器件参数直接拟合为一个性能数值，而是建立一条
-可解释、可分层验证的理论链：输入信号经过流水线 ADC 的物理与逻辑结构，形成
-离散输出过程；输出过程产生频谱；频谱在明确的观测协议下形成 SNDR、SFDR、
-THD、SNR、ENOB 等性能泛函。阶段三进一步把校准观测、校准状态与数字校正纳入
-同一闭环。
+\subsection{需要被预测的对象}
+
+本课题研究的不是一个从器件参数到 SNDR 或 SFDR 的黑箱函数，而是一组按因果
+顺序连接的数学对象。设连续时间输入为 $x(t)$，第 $n$ 个采样对应的外部输入为
+$x_n$，固定物理参数为 $\theta$，环境或慢变参数为 $e_n$，内部模拟状态为
+$z_n$，离散判决路径为 $p_n$，最终原始码为 $y_n$。无校准 ADC 本体写为
+
+\begin{align}
+  p_n &= \mathcal P(x_n,z_n;\theta,e_n), \label{eq:path-select}\\
+  z_{n+1} &= \mathcal F_{p_n}(z_n,x_n;\theta,e_n), \label{eq:state-map}\\
+  y_n &= \mathcal H_{p_n}(z_n,x_n;\theta,e_n). \label{eq:output-map}
+\end{align}
+
+输出过程 $Y=\{y_n\}$ 通过频谱算子 $\mathcal S_\Pi$ 和性能泛函
+$\Psi_\Pi$ 形成
+
+\begin{equation}
+  S_Y=\mathcal S_\Pi[Y],
+  \qquad
+  \mathcal J=\Psi_\Pi(S_Y),
+  \label{eq:metric-chain}
+\end{equation}
+
+其中 $\Pi$ 是观测协议，包含记录长度、相干条件、窗函数、积分带宽、基波与谐波
+集合。IEEE 1241 给出 ADC 术语和测试方法的标准化边界
+\cite{IEEE1241_2023}；但测试标准本身不是器件性能的生成理论。因此本框架始终
+区分 ADC 本体 $\mathcal G_\theta=(\mathcal P,\mathcal F,\mathcal H)$ 与观测
+协议 $\Pi$。
 
 \begin{center}
-\begin{tikzpicture}[node distance=7mm and 6mm]
-  \node[block,text width=22mm] (input) {输入对象\\$x$ 或 $X$};
-  \node[block,text width=25mm,right=of input] (adc) {ADC 本体\\结构化算子};
-  \node[block,text width=22mm,right=of adc] (code) {输出码过程\\$y$ 或 $Y$};
-  \node[block,text width=23mm,right=of code] (spec) {频谱对象\\$S_y$};
-  \node[block,text width=25mm,right=of spec] (metric) {性能泛函\\$\mathcal{J}$};
-  \draw[flow] (input) -- (adc);
-  \draw[flow] (adc) -- (code);
-  \draw[flow] (code) -- (spec);
-  \draw[flow] (spec) -- (metric);
-  \node[open,text width=37mm,below=12mm of adc] (param) {物理参数、环境与不确定性\\$\theta,\,e,\,\Prob_{\theta}$};
-  \draw[influence] (param) -- (adc);
-  \node[open,text width=37mm,below=12mm of spec] (protocol) {观测协议与积分带宽\\$\Pi$};
-  \draw[influence] (protocol) -- (spec);
+\begin{tikzpicture}[node distance=7mm and 5mm,scale=0.88,transform shape]
+  \node[block,text width=22mm] (input) {输入与环境\\$X,E$};
+  \node[block,text width=28mm,right=of input] (structure) {结构化混合系统\\$\mathcal G_\theta$};
+  \node[stage,text width=25mm,right=of structure] (process) {输出过程\\$Y$};
+  \node[stage,text width=25mm,right=of process] (spectrum) {谱测度\\$S_Y$};
+  \node[block,text width=25mm,right=of spectrum] (metric) {性能泛函\\$\mathcal J$};
+  \draw[flow] (input) -- (structure);
+  \draw[flow] (structure) -- (process);
+  \draw[flow] (process) -- (spectrum);
+  \draw[flow] (spectrum) -- (metric);
+  \node[open,text width=31mm,below=12mm of structure] (param) {参数与不确定性\\$\theta,\Prob_\theta$};
+  \node[open,text width=31mm,below=12mm of spectrum] (protocol) {观测协议\\$\Pi$};
+  \draw[influence] (param) -- (structure);
+  \draw[influence] (protocol) -- (spectrum);
   \draw[influence] (protocol) -- (metric);
 \end{tikzpicture}
 \end{center}
 
-\subsection{五类基本对象}
+\subsection{三种理论来源必须分开}
 
-\noindent\begin{tabularx}{\textwidth}{>{\bfseries\color{FrameworkBlue}}p{23mm} X p{43mm}}
+\noindent\begin{tabularx}{\textwidth}{>{\bfseries\color{FrameworkBlue}}p{25mm} X X}
 \toprule
-对象 & 理论含义 & 典型问题 \\
+类别 & 本文中的含义 & 证据要求 \\
 \midrule
-输入对象 & 确定性波形、随机过程或具有参数分布的信号族 & 幅度、频率、相位、统计结构是什么 \\
-结构对象 & 逐级判决、残差、冗余、动态状态与数字重构组成的混合系统 & 哪些路径和边界产生输出码 \\
-参数对象 & 固定参数、慢变环境、随机失配和未决物理量 & 参数是否已知、可识别或仅能给出范围 \\
-输出对象 & 确定性码序列、随机码过程或其条件分布 & 输出如何随输入与内部状态变化 \\
-性能对象 & 对频谱、误差功率或码域测度施加的泛函 & 指标依赖何种带宽、谐波和记录约定 \\
-\bottomrule
-\end{tabularx}
-
-\begin{scopebox}
-框架的首要纪律是区分三个层次：器件与结构事实、从事实推出的数学对象、在观测
-协议下得到的性能数值。任何一层的不确定性都必须显式传递，不能被下一层的单个
-拟合系数吸收。
-\end{scopebox}
-
-\section{阶段二：无校准 ADC 本体理论}
-
-\subsection{统一的混合系统表示}
-
-阶段二把固定物理参数下的 ADC 本体表示为离散采样驱动的混合系统。设 $x_n$ 为
-第 $n$ 个采样时刻对应的外部输入，$z_n$ 为承载有限建立、历史残差、路径记忆等
-动态信息的内部状态，$p_n$ 为由判决边界选择的离散路径，$y_n$ 为最终输出码，
-$\theta$ 为固定物理参数，则抽象关系写为
-
-\begin{align}
-  p_n &= \mathcal{P}(x_n,z_n;\theta),\\
-  z_{n+1} &= \mathcal{F}_{p_n}(z_n,x_n;\theta),\\
-  y_n &= \mathcal{H}_{p_n}(z_n,x_n;\theta).
-\end{align}
-
-这里的 $\mathcal{P}$、$\mathcal{F}$ 与 $\mathcal{H}$ 是理论层的路径选择、状态演化
-和输出映射；它们不预设任何具体求解算法。冗余意味着多个内部路径可以映射到相同
-最终码，可纠正域则是这些等价关系仍能保持正确重构的输入--状态集合。
-
-\subsection{静态子理论是动态理论的退化极限}
-
-当内部状态对当前输出没有记忆作用，或动态时间尺度相对采样间隔趋于零时，统一
-模型退化为静态映射
-
-\begin{equation}
-  y=q_{\theta}(x), \qquad
-  \mathcal{D}_{\theta}=\bigcup_r I_r,
-\end{equation}
-
-其中输入域 $\mathcal{D}_{\theta}$ 被判决、残差与后级量化边界划分为若干区域
-$I_r$，每个区域对应确定的内部路径、最终码和可纠正属性。由区域的 Lebesgue
-测度可以直接定义码宽、DNL、INL、缺失码测度与不可纠正输入测度。
-
-对周期输入 $x(\varphi)$，静态输入分割通过原像
-
-\begin{equation}
-  \Phi_r=\{\varphi\in[0,2\pi):x(\varphi)\in I_r\}
-\end{equation}
-
-诱导相位域分割。输出周期函数 $q_{\theta}(x(\varphi))$ 的傅里叶系数、均方功率
-和确定性失真由这些相位集合的积分定义。这一层建立了“静态结构边界”到“频谱
-谱线”的直接理论联系。
-
-\subsection{动态扩展的理论位置}
-
-动态非理想不应被压缩为静态传输曲线上的任意附加失真。它们通过状态 $z_n$ 进入，
-并可能使同一个当前输入 $x_n$ 因历史不同而产生不同输出。当前框架把动态机制分为：
-
-\begin{itemize}
-  \item \textbf{建立与记忆：}残差或内部节点不能在一个相位内完全到达静态目标；
-  \item \textbf{采样时刻与路径差异：}不同观测路径对应不同时间截面；
-  \item \textbf{输入侧动态：}缓冲、采样网络或带宽限制改变进入量化结构的信号；
-  \item \textbf{随机动态：}热噪声、时钟抖动等使输出成为条件随机过程。
-\end{itemize}
-
-这些机制可以共享统一状态空间，但必须保留各自的物理入口和可验证极限，不能用
-一个无来源的“动态误差项”合并。
-
-当前建立的首个动态子理论把每一级静态 residue 视为状态的瞬时目标 $u_n$，把
-相位末端 residue 视为状态 $r_n$，并用稳定的一阶关系
-
-\begin{equation}
-  r_n=(1-\rho)u_n+\rho r_{n-1},\qquad 0\le\rho<1
-\end{equation}
-
-连接相邻样本。对周期输入，该关系存在唯一循环稳态；$\rho\to0$ 时严格回到静态
-理论。其线性目标下的频率响应为
-
-\begin{equation}
-  H(e^{j\omega})=\frac{1-\rho}{1-\rho e^{-j\omega}}.
-\end{equation}
-
-若每个放大相位从固定复位状态开始，则同一终点建立精度会导出无记忆静态缩放，
-而非上述跨样本状态。终点精度本身不能识别这两种初值语义；因此“一阶循环状态
-已经验证”与“芯片确有这种记忆”是两个不同结论。
-
-\subsection{从输出过程到性能泛函}
-
-给定输出过程 $Y$，频谱对象同时包含两种口径：有限记录的离散谱
-$S_Y^{(M)}$，以及在适当平稳或周期条件下的极限谱 $S_Y$。观测协议 $\Pi$ 规定
-记录长度、窗函数、积分带宽、基波和谐波集合。性能指标统一写为
-
-\begin{equation}
-  \mathcal{J}=\Psi\!\left(S_Y;\Pi\right).
-\end{equation}
-
-因此“ADC 理论”与“指标协议”彼此独立但共同决定数值。改变 $\Pi$ 可能改变报告
-值，却不改变 ADC 本体；改变 $\theta$ 或状态动力学会改变输出过程本身。
-
-\section{阶段三：校准影响理论}
-
-\subsection{闭环中的四类对象}
-
-阶段三不把校准等同于一个孤立的参数估计问题，而是在阶段二 ADC 本体上加入四类
-对象：附加激励 $d_n$、可观测信息 $o_n$、校准状态 $a_n$ 和校正输出
-$\widetilde y_n$。抽象闭环为
-
-\begin{align}
-  (z_{n+1},y_n,o_n) &= \mathcal{G}(z_n,x_n,d_n;\theta),\\
-  a_{n+1} &= \mathcal{U}(a_n,o_n,d_n),\\
-  \widetilde y_n &= \mathcal{C}(y_n,a_n,d_n).
-\end{align}
-
-$\mathcal{U}$ 仅表示校准状态如何由可观测信息演化，$\mathcal{C}$ 仅表示校准状态
-如何作用于数字输出；本文不指定任何具体更新算法或数值实现。
-
-\begin{center}
-\begin{tikzpicture}[node distance=8mm and 8mm,scale=0.9,transform shape]
-  \node[stage,text width=29mm] (plant) {ADC 本体\\$(z_n,y_n,o_n)$};
-  \node[stage,text width=29mm,right=22mm of plant] (cal) {校准状态\\$a_n$};
-  \node[stage,text width=29mm,right=22mm of cal] (corr) {校正输出\\$\widetilde y_n$};
-  \node[block,text width=25mm,left=18mm of plant] (xin) {输入\\$x_n$};
-  \node[open,text width=25mm,below=13mm of plant] (din) {附加激励\\$d_n$};
-  \draw[flow] (xin) -- (plant);
-  \draw[flow] (plant) -- node[above,font=\small] {$o_n$} (cal);
-  \draw[flow] (cal) -- node[above,font=\small] {$a_n$} (corr);
-  \draw[flow] (plant) to[bend left=22] node[above,font=\small] {$y_n$} (corr);
-  \draw[influence] (din) -- (plant);
-  \draw[influence] (din) to[bend right=18] (cal);
-  \draw[influence] (din) to[bend right=25] (corr);
-  \draw[flow] (cal.south) to[bend left=30] node[below,font=\small] {闭环影响} (plant.south);
-\end{tikzpicture}
-\end{center}
-
-\subsection{校准性能不是参数误差的同义词}
-
-阶段三的目标是从校准状态的瞬态和稳态分布，推出校正输出的频谱与性能泛函：
-
-\begin{equation}
-  \Prob(a_n\mid\theta,X,D)
-  \quad\Longrightarrow\quad
-  \Prob(\widetilde Y\mid\theta,X,D)
-  \quad\Longrightarrow\quad
-  \Prob(\mathcal{J}_{\mathrm{cal}}).
-\end{equation}
-
-即使 $a_n$ 接近某个物理参数，最终性能仍取决于校正表示能力、参数误差如何经过
-非线性边界传播、附加激励的直接频谱代价，以及有限字长等实现约束。参数均方误差
-只能是中间诊断量，不能代替 ADC 性能。
-
-\subsection{五项理论分解}
-
-为避免把不同机制混为一谈，校准后的性能差距按概念分为：
-
-\begin{enumerate}
-  \item \textbf{表示能力：}即使真实参数完全已知，所选校正表示能否逆转目标非理想；
-  \item \textbf{估计偏差与波动：}校准状态相对可实现最优状态的系统偏差和随机波动；
-  \item \textbf{瞬态与跟踪：}参数变化时的收敛时间、滞后和非平稳误差；
-  \item \textbf{附加激励直接效应：}激励既改善可辨识性，也可能直接进入输出频谱；
-  \item \textbf{实现约束：}量化、舍入、饱和和有限更新速率改变闭环状态空间。
-\end{enumerate}
-
-这五项可以相互作用，因此不是强制的线性可加误差公式，而是理论归因和验证设计的
-最小分层。
-
-\section{阶段二与阶段三的统一关系}
-
-\begin{center}
-\begin{tikzpicture}[node distance=7mm and 7mm]
-  \node[block,text width=31mm] (phys) {物理参数与环境\\$\theta,e$};
-  \node[block,text width=31mm,right=of phys] (body) {阶段二 ADC 本体\\$\mathcal{G}_{\theta}$};
-  \node[block,text width=31mm,right=of body] (raw) {原始输出过程\\$Y$};
-  \node[stage,text width=31mm,below=13mm of body] (calstate) {阶段三校准状态\\$A$};
-  \node[stage,text width=31mm,right=of calstate] (corrected) {校正输出过程\\$\widetilde Y$};
-  \node[block,text width=31mm,right=of corrected] (performance) {频谱与性能\\$S,\mathcal{J}$};
-  \draw[flow] (phys) -- (body);
-  \draw[flow] (body) -- (raw);
-  \draw[flow] (raw) -- (calstate);
-  \draw[flow] (raw) -- (corrected);
-  \draw[flow] (calstate) -- (corrected);
-  \draw[flow] (corrected) -- (performance);
-  \draw[influence] (phys) to[bend right=22] (calstate);
-  \draw[influence] (body) -- (calstate);
-  \node[open,text width=31mm,below=13mm of phys] (inputlaw) {输入与激励规律\\$X,D$};
-  \draw[influence] (inputlaw) -- (body);
-  \draw[influence] (inputlaw) -- (calstate);
-\end{tikzpicture}
-\end{center}
-
-阶段二提供从物理参数、输入和动态状态到原始输出过程的结构化映射，是阶段三的
-“被校准对象理论”。阶段三研究校准状态如何形成、如何作用于输出，以及这种作用
-如何改变性能分布。若阶段二不能正确区分某种物理非理想，阶段三就无法可靠解释
-校准为何有效或失败。
-
-统一框架允许三种条件化视角：
-
-\begin{itemize}
-  \item \textbf{确定性视角：}固定 $\theta$、输入和初始状态，预测单次输出与指标；
-  \item \textbf{统计视角：}对失配、噪声、激励或校准状态取分布，预测性能分布；
-  \item \textbf{鲁棒视角：}只知道参数集合或误差界时，预测最坏情形和安全域。
-\end{itemize}
-
-\section{验证逻辑与证据层级}
-
-\subsection{验证阶梯}
-
-\noindent\begin{tabularx}{\textwidth}{>{\bfseries\color{FrameworkBlue}}p{27mm} X X}
-\toprule
-层级 & 需要回答的问题 & 典型证据 \\
-\midrule
-数学自洽 & 单位、符号、边界、守恒和极限是否正确 & 恒等式、特殊情形、上下界 \\
-结构独立性 & 理论是否独立于参考平台输出而成立 & 独立参数化、留出比较、反例 \\
-机制可分辨 & 多个机制能否由观测或干预区分 & 分层开关、条件对照、可识别性分析 \\
-参数稳健性 & 结论是否只依赖单一工作点 & 幅度、频率、失配、环境与初值留出 \\
-保真度外推 & 行为模型结论能否推广到电路或测量 & 高保真仿真、硅后数据、误差归因 \\
-\bottomrule
-\end{tabularx}
-
-\subsection{必须保持的极限关系}
-
-\begin{itemize}
-  \item 动态时间常数趋于零时，动态理论应回到已验证的静态理论；
-  \item 非理想参数趋于名义值时，应回到理想码制与重构关系；
-  \item 关闭校准作用时，阶段三应回到阶段二的原始输出过程；
-  \item 校准状态等于可实现真值时，应达到该校正表示的能力上限；
-  \item 附加激励为零时，其直接频谱效应和相应可辨识性贡献都应消失；
-  \item 记录长度或积分带宽变化时，应区分观测协议变化与系统本体变化。
-\end{itemize}
-
-\subsection{统一误差账本}
-
-理论与参考结果的差异按来源记录为
-
-\begin{equation}
-  \Delta_{\mathrm{total}}
-  \rightsquigarrow
-  \bigl(
-  \Delta_{\mathrm{structure}},
-  \Delta_{\mathrm{parameter}},
-  \Delta_{\mathrm{observation}},
-  \Delta_{\mathrm{numerical}},
-  \Delta_{\mathrm{reference}}
-  \bigr).
-\end{equation}
-
-箭头表示归因关系而非默认线性相加。结构误差来自理论遗漏机制；参数误差来自未知
-或不确定物理量；观测误差来自有限记录与指标协议；数值误差来自近似表示；参考
-误差来自实验平台、高保真仿真或测量本身的局限。
-
-\section{当前已经建立的理论版图}
-
-\noindent\begin{tabularx}{\textwidth}{p{33mm} X p{31mm}}
-\toprule
-理论层 & 当前内容 & 状态 \\
-\midrule
-架构与码制 & 逐级判决、残差、数字重构和冗余等价关系具有统一符号与物理边界 & \textcolor{FrameworkTeal}{已建立} \\
-静态可纠正域 & 阈值、路径失配、增益、CDAC 与附加激励共同决定安全输入集合 & \textcolor{FrameworkTeal}{已建立} \\
-静态传输测度 & 完整输入分割决定码宽、DNL、INL、缺失码及不可纠正测度 & \textcolor{FrameworkTeal}{已验证} \\
-静态频谱映射 & 周期输入的相位原像决定复谱线与功率；有限记录由观测协议定义 & \textcolor{FrameworkTeal}{已验证} \\
-动态状态层 & 首个一阶 residue 状态具有静态极限和唯一周期稳态；其他动态机制保留独立入口 & \textcolor{FrameworkTeal}{基线已验证} \\
-校准闭环层 & 校准观测、校准状态、校正作用与附加激励组成扩展闭环 & \textcolor{FrameworkGold}{框架已定义} \\
-校准性能传播 & 从校准状态分布传递到校正输出频谱和性能分布 & \textcolor{FrameworkRed}{尚待验证} \\
-高保真锚定 & 把行为理论误差与电路级或测量级证据连接 & \textcolor{FrameworkRed}{资料待补} \\
+直接借用 & 数学对象与原理论假设均保持不变，例如 Fourier 系数、随机逼近的局部线性化、特征函数条件 & 给出原始来源并逐项检查假设 \\
+适配改造 & 保留成熟理论的核心结构，但把 ADC 的逐级判决、冗余、饱和和观测协议显式嵌入 & 给出从原对象到本项目对象的映射，并验证退化极限 \\
+项目工作理论 & 成熟理论之间存在缺口时，由本项目提出的结构化关系、命题或分解 & 给出完整推导、可证伪条件和适用边界；不宣称已获外部普遍确认 \\
 \bottomrule
 \end{tabularx}
 
 \begin{statusbox}{FrameworkGreen}
-\textbf{当前边界：}阶段二的静态码域、静态频域与首个一阶动态状态链已经闭合。
-一阶状态的数学传播已经验证，但相位复位、跨样本保持或压摆受限哪一种更接近芯片
-仍未识别；阶段三已有统一接口和误差分层，但尚不能把先行的校准实验结果提升为
-完整的校准影响理论。
+\textbf{核心立场：}成熟理论提供可复用的局部结构，但不存在一个现成理论能够同时
+覆盖流水线 ADC 的硬判决、数字冗余、模拟记忆、确定性量化谱和自适应校准闭环。
+本文采用“分层拼接并保持接口可验证”的方式，而不是把某一种成熟模型套在整机上。
 \end{statusbox}
 
-\section{阅读方式与更新原则}
+\section{已有理论的适配性审查}
 
-本文是“理论地图”，不是算法说明书或实验日志。阅读时应沿以下顺序理解：
+\subsection{量化谱与统计量化理论}
+
+Bennett 对量化信号频谱的经典分析说明：确定性量化误差可以形成与输入相关的谱线，
+不能天然等同于白噪声 \cite{Bennett1948QuantizedSpectra}。对正弦量化，后续工作
+进一步给出了谐波与 SFDR 的解析关系
+\cite{Blachman1985QuantizedSinusoids,OudeAlink2009SFDR}。Widrow 等人以输入
+特征函数为基础给出统计量化定理，并明确了加性均匀白噪声模型成立所需的条件
+\cite{Widrow1996StatisticalQuantization,Gray1998Quantization}。
+
+这些理论对本项目的适配关系如下。
+
+\begin{itemize}
+  \item 对相干单音和固定 ADC 参数，输出是确定性周期码序列，应先计算精确谱线；
+  \item 对具有适当随机性、高分辨率或满足特征函数条件的输入，才可以使用统计量化近似；
+  \item Gu 架构不是单个均匀量化器，而是多个判决、residue 与数字重构的组合，
+        因此其等效阈值必须先从结构中推出，不能预先假定理想均匀阶梯。
+\end{itemize}
+
+Schuchman 条件说明，在无过载的减性 dither 量化中，适当 dither 的特征函数在
+量化频率的非零整数倍处为零时，量化误差可以与输入独立
+\cite{Schuchman1964Dither}。本项目中的校准 dither 同时进入模拟结构、参数观测
+和数字抵消，因而不能仅凭“使用了 dither”就套用独立白噪声结论。
+
+\subsection{分段仿射与混合系统}
+
+Sontag 的分段线性系统以有限多面体分区上的仿射状态和输出映射描述非线性系统
+\cite{Sontag1981PiecewiseLinear}。这与流水线 ADC 的判决路径天然相容：固定路径
+内 residue 传播常为仿射或分段仿射，路径切换由阈值不等式决定。
+
+但通用分段仿射理论不会自动给出：
 
 \begin{enumerate}
-  \item 先辨认输入、参数、内部状态、离散路径、输出过程和性能泛函；
-  \item 再判断当前问题属于静态退化情形、动态本体，还是校准闭环；
-  \item 检查所需结论依赖哪一层证据，以及哪些不确定性仍未被识别；
-  \item 最后查看项目规格和实验报告，了解某个理论关系如何被具体检验。
+  \item 逐级数字重构权重为何使不同内部路径等价；
+  \item 边界移动如何改变 DNL、INL 和频谱；
+  \item 可纠正域和模拟过载域如何区分；
+  \item 相干采样协议如何把连续周期谱映射为有限记录指标。
 \end{enumerate}
 
-阶段二或阶段三每完成一次实质性理论扩展，本文同步更新以下内容：新增或改变的
-理论对象、对象间依赖、适用假设、可验证极限、当前证据状态和开放层。具体算法、
-软件实现、运行参数与逐项数值结果继续保留在规格、实验和报告文档中，不进入本文。
+因此本文借用“胞腔内仿射、边界处切换”的语言，但路径胞腔递归、冗余等价类和
+边界到频谱的映射属于针对流水线 ADC 的适配理论。
 
-\subsection*{版本记录}
+\subsection{带记忆非线性与 Volterra 理论}
+
+Boyd 和 Chua 证明，满足连续性和衰减记忆条件的时不变非线性算子可以由 Volterra
+类算子逼近 \cite{Boyd1985FadingMemory}。Kautz--Volterra 模型也已被用于 ADC
+动态误差与后校正 \cite{Bjorsell2010KautzVolterraADC}。这些结果说明 Volterra
+框架适合描述输入缓冲器、采样网络或放大器中的弱非线性记忆。
+
+其直接套用于整台流水线 ADC 存在两个问题：
+
+\begin{itemize}
+  \item 理想量化器本身不连续，不满足全局光滑弱非线性假设；
+  \item 判决边界附近的有限小参数变化可以触发有限码跳变，有限阶光滑核展开不能
+        自动表示这种边界贡献。
+\end{itemize}
+
+因此本文只把 Volterra 或其他衰减记忆算子放在\textbf{硬判决之前的模拟子块}，
+再由混合系统路径映射把其输出传入量化结构。它是动态模拟前端的候选局部模型，
+不是整机理论的替代品。
+
+\subsection{采样抖动、孔径与随机逼近}
+
+采样抖动通过输入斜率产生误差，有限孔径相当于采样窗口滤波；两者可以共同分析
+\cite{Kobayashi2002JitterAperture}。这为 SHA-less 路径的采样时差、随机抖动和
+孔径效应提供成熟入口，但仍需连接到后续判决边界。
+
+阶段三的参数更新属于随机逼近问题。Robbins--Monro 理论建立了在带噪观测下求
+未知均值方程根的递推框架 \cite{Robbins1951StochasticApproximation}，Widrow
+和 Hoff 的工作奠定了 LMS 自适应更新 \cite{Widrow1960AdaptiveSwitching}。
+这些理论只能在均值场、持续激励、稳定性、步长和噪声条件可审计时使用。尤其是
+校准系数均方误差不是 ADC 性能；还必须把系数分布穿过硬判决边界传播到频谱。
+
+\section{流水线 ADC 的逐级数学对象}
+
+\subsection{\texorpdfstring{一般 $L$ 级结构}{一般 L 级结构}}
+
+设 $v_{0,n}=x_n$。前 $L-1$ 级各含辅助判决路径、主 residue 路径和可选附加
+激励。第 $i$ 级定义为
+
+\begin{align}
+  s_{i,n} &= a_i v_{i-1,n}+o_i, \label{eq:aux-path}\\
+  q_{i,n} &= Q_i(s_{i,n};\tau_i), \label{eq:stage-decision}\\
+  u_{i,n} &= A_i\!\left(v_{i-1,n}
+                -D_i(q_{i,n};\theta_{D,i})+d_{i,n};
+                \theta_{A,i}\right), \label{eq:static-residue-target}\\
+  v_{i,n} &= \mathcal M_i(u_{i,n},z_{i,n};\theta_{M,i}), \label{eq:dynamic-residue}\\
+  z_{i,n+1} &= \mathcal T_i(u_{i,n},z_{i,n};\theta_{M,i}). \label{eq:stage-state}
+\end{align}
+
+$Q_i$ 是阈值集合 $\tau_i$ 定义的有限状态判决；$D_i$ 是 CDAC 重构；
+$A_i$ 是放大器的静态目标映射；$\mathcal M_i,\mathcal T_i$ 描述有限建立或
+记忆。最后一级量化器给出 $b_n=Q_L(v_{L-1,n})$，数字输出为
+
+\begin{equation}
+  y_n=\mathcal R(q_{1,n},\ldots,q_{L-1,n},b_n)
+      -\sum_{i=1}^{L-1}\Gamma_i d_{i,n}^{(\mathrm{dig})}.
+  \label{eq:digital-reconstruction}
+\end{equation}
+
+Gu 架构的前两级、后端 TI-SAR、PWL 非线性校正和 gated-LMS 关系由原始论文
+给出 \cite{Gu2026PipelinedADC,Gu2025GatedLMS}。本文使用一般 $L$ 级符号，
+Gu 架构是 $L=3$ 的主要实例。
+
+\subsection{判决路径与路径胞腔}
+
+将一条完整离散路径记为
+
+\begin{equation}
+  p=(q_1,q_2,\ldots,q_{L-1},b).
+\end{equation}
+
+在静态情形 $v_i=u_i$ 下，路径 $p$ 对应的输入集合为
+
+\begin{equation}
+  \mathcal C_p(\theta)
+  =
+  \left\{
+    x\in\mathcal D:
+    \tau_{i,q_i}^{-}
+    \le a_i v_{i-1}(x;p,\theta)+o_i
+    <\tau_{i,q_i}^{+},\quad
+    i=1,\ldots,L
+  \right\}.
+  \label{eq:path-cell}
+\end{equation}
+
+这里 $v_{i-1}(x;p,\theta)$ 是假定前序路径已经固定后得到的内部值。路径胞腔不是
+简单的第一级阈值区间，而是所有后级判决不等式向原输入域的递归原像。
+
+\begin{definition}[结构路径胞腔]
+对固定参数 $\theta$，满足式 \eqref{eq:path-cell} 的最大连通输入集合称为路径
+胞腔。若不同路径在数字重构后给出同一输出码，则这些路径胞腔属于同一重构等价类。
+\end{definition}
+
+\begin{proposition}[静态路径胞腔内的仿射闭包]
+若每级辅助路径、CDAC 和局部放大器在固定分段内均为仿射映射，则对任意非空路径
+胞腔 $\mathcal C_p$，所有内部 residue 和未饱和数字输出均是输入 $x$ 的仿射函数。
+\end{proposition}
+
+\begin{proof}
+第一级判决路径固定后，$D_1(q_1)$ 为常数；局部放大器为仿射映射，因此
+$v_1(x)=\alpha_{1,p}x+\beta_{1,p}$。假设第 $i-1$ 级 residue 为
+$v_{i-1}(x)=\alpha_{i-1,p}x+\beta_{i-1,p}$，则第 $i$ 级 CDAC 在固定
+$q_i$ 下仍为常数，仿射放大器与仿射输入的复合仍为仿射函数。由数学归纳法，
+所有前级 residue 均为仿射函数。最后一级判决在路径胞腔内固定，线性数字重构
+是有限个固定码与权重的组合，因此未饱和输出在该胞腔内也是仿射函数；纯码输出
+则为常数。证毕。
+\end{proof}
+
+这个命题借用了分段仿射系统的闭包性质，但“逐级路径胞腔”及其与数字冗余的结合
+是本项目的结构化适配。
+
+\subsection{数字冗余是路径等价关系}
+
+考虑相邻两级的名义线性关系
+
+\begin{equation}
+  v_i=G_i\bigl(v_{i-1}-d_i(q_i)\bigr),
+  \qquad
+  y=W_i q_i+W_{i+1}\widehat v_i+\cdots .
+\end{equation}
+
+若后续数字表示 $\widehat v_i$ 的权重满足
+
+\begin{equation}
+  W_i\,\Delta q_i
+  +
+  W_{i+1}\,\Delta \widehat v_i
+  =0
+  \label{eq:redundancy-cancel}
+\end{equation}
+
+则边界两侧由不同 $q_i$ 引起的内部码变化在最终重构中抵消。式
+\eqref{eq:redundancy-cancel} 是数字冗余的代数条件；模拟 residue 是否仍落入
+后级量程则是独立的可纠正条件。于是
+
+\begin{equation}
+  \mathcal C_{\mathrm{safe}}
+  =
+  \bigcup_{p:\,\text{所有后级状态均未过载}}
+  \mathcal C_p,
+  \label{eq:safe-domain}
+\end{equation}
+
+而不是“所有最终码看起来连续的输入集合”。这一区分允许中间路径错误被数字冗余
+吸收，同时仍显式报告冗余失效的输入测度。
+
+\section{静态传输理论的完整推导}
+
+\subsection{从逐级不等式得到输入分割}
+
+在路径 $p$ 内，第 $i$ 级判决变量是
+
+\begin{equation}
+  s_i(x;p,\theta)
+  =
+  a_i\bigl(\alpha_{i-1,p}x+\beta_{i-1,p}\bigr)+o_i.
+\end{equation}
+
+每个阈值条件
+$\tau^-_{i,q_i}\le s_i<\tau^+_{i,q_i}$
+都可化为关于 $x$ 的线性不等式。若
+$a_i\alpha_{i-1,p}>0$，则
+
+\begin{equation}
+  \frac{\tau^-_{i,q_i}-o_i-a_i\beta_{i-1,p}}
+       {a_i\alpha_{i-1,p}}
+  \le x
+  <
+  \frac{\tau^+_{i,q_i}-o_i-a_i\beta_{i-1,p}}
+       {a_i\alpha_{i-1,p}}.
+  \label{eq:pullback-boundary}
+\end{equation}
+
+负斜率时不等号方向交换。一个路径胞腔是所有级约束与输入定义域的交：
+
+\begin{equation}
+  \mathcal C_p
+  =
+  \mathcal D
+  \cap
+  \bigcap_{i=1}^{L}
+  \mathcal I_{i,p}.
+  \label{eq:cell-intersection}
+\end{equation}
+
+一维输入下，$\mathcal C_p$ 是空集或有限区间；含动态状态时，它推广为
+$(x,z)$ 空间中的多面体或分段光滑区域。式 \eqref{eq:pullback-boundary}
+说明后级阈值必须通过前级 residue 斜率反推到原输入域。
+
+\subsection{码区域、转换电平与码宽}
+
+令最终整数码为 $k$，其输入原像为
+
+\begin{equation}
+  \mathcal B_k
+  =
+  \bigcup_{p:\,\mathcal R(p)=k}\mathcal C_p.
+  \label{eq:code-preimage}
+\end{equation}
+
+在单调、无缺失码条件下，$\mathcal B_k=[T_k,T_{k+1})$，$T_k$ 是码转换
+电平，码宽为
+
+\begin{equation}
+  w_k=T_{k+1}-T_k.
+\end{equation}
+
+若非单调或存在多个不相邻原像，码宽应推广为 Lebesgue 测度
+
+\begin{equation}
+  w_k=\lambda(\mathcal B_k).
+  \label{eq:general-code-width}
+\end{equation}
+
+设理想 LSB 为 $\Delta$，则
+
+\begin{align}
+  \mathrm{DNL}_k
+  &=\frac{w_k}{\Delta}-1, \label{eq:dnl}\\
+  \mathrm{INL}_k
+  &=\frac{T_k-T_k^{\mathrm{ideal}}}{\Delta}
+    -\mathcal L_k, \label{eq:inl}
+\end{align}
+
+其中 $\mathcal L_k$ 表示所采用的 offset/gain 去除直线。缺失码等价于
+$w_k=0$；负向步则对应存在 $x_1<x_2$ 但 $q_\theta(x_1)>q_\theta(x_2)$。
+这些定义与测试协议的具体端点约定相容，但理论对象首先是输入原像及其测度。
+
+\subsection{不可纠正输入测度}
+
+定义失效集合
+
+\begin{equation}
+  \mathcal U(\theta)
+  =
+  \mathcal D\setminus\mathcal C_{\mathrm{safe}}(\theta),
+\end{equation}
+
+其归一化测度
+
+\begin{equation}
+  \eta_{\mathrm{uncorr}}(\theta)
+  =
+  \frac{\lambda(\mathcal U(\theta))}
+       {\lambda(\mathcal D)}
+  \label{eq:uncorrectable-measure}
+\end{equation}
+
+是与输入网格无关的结构指标。网格实验只能估计该测度，不能定义它。这个定义也
+说明“未观察到失效样本”不等于失效集合为空。
+
+\section{从静态边界到精确频谱}
+
+\subsection{正弦输入的相位原像}
+
+令
+
+\begin{equation}
+  x(\varphi)=x_0+A\sin\varphi,\qquad \varphi\in[0,2\pi).
+  \label{eq:sine-input}
+\end{equation}
+
+对每个静态胞腔 $I_r=[\ell_r,u_r)$，定义相位原像
+
+\begin{equation}
+  \Phi_r
+  =
+  \{\varphi\in[0,2\pi):x(\varphi)\in I_r\}.
+  \label{eq:phase-preimage}
+\end{equation}
+
+当 $|(\ell_r-x_0)/A|<1$ 时，边界相位由
+
+\begin{equation}
+  \varphi_{\ell,r}^{(1)}
+  =\arcsin\frac{\ell_r-x_0}{A},
+  \qquad
+  \varphi_{\ell,r}^{(2)}
+  =\pi-\varphi_{\ell,r}^{(1)}
+  \pmod{2\pi}
+\end{equation}
+
+给出；上边界同理。将所有边界相位排序后，整个周期被划分成有限相位区间
+$[\phi_j,\phi_{j+1})$。每个区间内输出码固定为 $k_j$。
+
+\subsection{傅里叶系数的闭式表达}
+
+周期输出
+
+\begin{equation}
+  y(\varphi)=k_j,\qquad
+  \varphi\in[\phi_j,\phi_{j+1})
+\end{equation}
+
+的复 Fourier 系数为
+
+\begin{equation}
+  c_m
+  =
+  \frac{1}{2\pi}
+  \int_0^{2\pi}y(\varphi)e^{-\jj m\varphi}\dd\varphi.
+  \label{eq:fourier-definition}
+\end{equation}
+
+对 $m=0$，
+
+\begin{equation}
+  c_0
+  =
+  \frac{1}{2\pi}
+  \sum_j k_j(\phi_{j+1}-\phi_j).
+  \label{eq:dc-closed}
+\end{equation}
+
+对 $m\ne0$，逐段积分得到
+
+\begin{align}
+  c_m
+  &=
+  \frac{1}{2\pi}
+  \sum_j
+  k_j
+  \int_{\phi_j}^{\phi_{j+1}}
+  e^{-\jj m\varphi}\dd\varphi \notag\\
+  &=
+  \frac{1}{2\pi\jj m}
+  \sum_j
+  k_j
+  \left(
+    e^{-\jj m\phi_j}
+    -
+    e^{-\jj m\phi_{j+1}}
+  \right). \label{eq:fourier-closed}
+\end{align}
+
+式 \eqref{eq:fourier-closed} 是“结构边界到谱线”的核心桥梁：不需要把量化误差
+假设为噪声，也不需要对输出波形作时间步进近似。相邻区间整理后还可写成跳变量形式
+
+\begin{equation}
+  c_m
+  =
+  \frac{1}{2\pi\jj m}
+  \sum_j
+  \Delta k_j e^{-\jj m\phi_j},
+  \qquad
+  \Delta k_j=k_j-k_{j-1},
+  \quad m\ne0.
+  \label{eq:jump-spectrum}
+\end{equation}
+
+因此每个谱线由所有码跳变的幅度、相位和相干叠加共同决定。单个 DNL 最大值通常
+不足以预测 SFDR，因为不同边界贡献可能相消或相长。
+
+\subsection{功率恒等式与性能泛函}
+
+由 Parseval 恒等式，
+
+\begin{equation}
+  P_{\mathrm{tot}}
+  =
+  \frac{1}{2\pi}\int_0^{2\pi}|y(\varphi)|^2\dd\varphi
+  =
+  \sum_{m=-\infty}^{\infty}|c_m|^2.
+  \label{eq:parseval}
+\end{equation}
+
+对实输出，$c_{-m}=c_m^\ast$。去除 DC 后的总交流功率为
+
+\begin{equation}
+  P_{\mathrm{ac}}=P_{\mathrm{tot}}-|c_0|^2.
+\end{equation}
+
+若基波集合为 $\mathcal F$、谐波集合为 $\mathcal H$，则连续周期口径可写为
+
+\begin{align}
+  P_{\mathrm{sig}} &= \sum_{m\in\mathcal F}|c_m|^2,\\
+  P_{\mathrm{harm}} &= \sum_{m\in\mathcal H}|c_m|^2,\\
+  P_{\mathrm{rest}} &= P_{\mathrm{ac}}-P_{\mathrm{sig}},\\
+  \mathrm{SNDR} &= 10\log_{10}\frac{P_{\mathrm{sig}}}{P_{\mathrm{rest}}},\\
+  \mathrm{THD} &= 10\log_{10}\frac{P_{\mathrm{harm}}}{P_{\mathrm{sig}}}.
+  \label{eq:continuous-metrics}
+\end{align}
+
+由于阶梯函数一般含无限谱线，仅截断有限 $m$ 时不能声称得到连续全局 SFDR。
+有限记录的 SFDR 必须由观测协议指定的离散频点集合定义。
+
+\subsection{有限相干记录与连续周期的关系}
+
+令 $M$ 点相干记录的输入为
+
+\begin{equation}
+  x_n=x_0+A\sin\left(2\pi\frac{k_0 n}{M}+\phi_0\right),
+  \qquad \gcd(k_0,M)=1.
+\end{equation}
+
+若 ADC 无记忆，$n\mapsto k_0n\bmod M$ 是相位网格的排列，因此改变与 $M$
+互质的 $k_0$ 不改变采样相位集合，只改变顺序。于是所有仅依赖样本多重集合的
+静态统计量保持不变；DFT 谱线的位置按模 $M$ 重排。动态记忆一旦存在，顺序会
+影响状态轨迹，这个频率不变性即失效。
+
+有限记录 DFT 为
+
+\begin{equation}
+  Y_M[\ell]
+  =
+  \frac{1}{M}
+  \sum_{n=0}^{M-1}
+  y_n e^{-\jj2\pi \ell n/M}.
+  \label{eq:dft}
+\end{equation}
+
+它是对连续相位积分的周期梯形求积，同时包含谐波折叠。故连续谱与有限记录谱是
+两个相互关联但不等同的对象。
+
+\subsection{何时可以使用白量化噪声}
+
+均匀量化步长为 $\Delta$ 时，常见近似给出
+
+\begin{equation}
+  \E[e_q]=0,
+  \qquad
+  \Var(e_q)=\frac{\Delta^2}{12}.
+  \label{eq:quant-noise}
+\end{equation}
+
+式 \eqref{eq:quant-noise} 只有在量化误差近似均匀、与输入不相关且在所关心带宽
+内近似白时才可作为噪声模型。对相干正弦、少码摆幅、无 dither 或强静态 INL，
+误差通常与输入相关，必须优先使用式 \eqref{eq:fourier-closed} 或
+\eqref{eq:dft} 的确定性谱。由此得到本框架的双口径：
+
+\begin{equation}
+  \text{确定性周期输入}
+  \Longrightarrow
+  \text{精确线谱},
+  \qquad
+  \text{满足统计条件的随机输入}
+  \Longrightarrow
+  \text{谱密度与噪声功率}.
+\end{equation}
+
+\section{动态状态理论}
+
+\subsection{从连续时间建立到离散状态}
+
+设某一级静态 residue 目标在放大相位内保持为 $u_n$，实际输出 $r(t)$ 满足一阶
+小信号建立方程
+
+\begin{equation}
+  \frac{\dd r}{\dd t}
+  =
+  -\omega_p\bigl(r(t)-u_n\bigr),
+  \qquad 0\le t\le T_a.
+  \label{eq:continuous-settling}
+\end{equation}
+
+将误差定义为 $\varepsilon(t)=r(t)-u_n$，则
+
+\begin{equation}
+  \frac{\dd\varepsilon}{\dd t}=-\omega_p\varepsilon,
+  \qquad
+  \varepsilon(t)=\varepsilon(0)e^{-\omega_p t}.
+\end{equation}
+
+若相位起点保持前一样本末端状态 $r_{n-1}$，则
+
+\begin{align}
+  r_n-u_n
+  &=(r_{n-1}-u_n)e^{-\omega_pT_a},\\
+  r_n
+  &=(1-\rho)u_n+\rho r_{n-1},
+  \qquad
+  \rho=e^{-\omega_pT_a}.
+  \label{eq:first-order-recurrence}
+\end{align}
+
+对单极点 $3$ dB 带宽 $B=\omega_p/(2\pi)$，
+
+\begin{equation}
+  \rho=e^{-2\pi BT_a},
+  \qquad
+  N_{\mathrm{settle}}=-\log_2\rho
+  =\frac{2\pi BT_a}{\ln2}.
+  \label{eq:settling-bits}
+\end{equation}
+
+Gu 主路径的 11 GHz/100 ps 报告在这一候选模型下对应约 9.97 bit 建立精度；
+它们是同一终点条件的两种表达，而不是两个独立的动态识别量。
+
+\subsection{唯一周期稳态}
+
+对长度 $M$ 的周期目标 $u_{n+M}=u_n$，从周期开始前状态 $r_{-1}$ 出发，展开
+式 \eqref{eq:first-order-recurrence} 得
+
+\begin{equation}
+  r_{M-1}
+  =
+  \rho^M r_{-1}
+  +(1-\rho)
+  \sum_{k=0}^{M-1}\rho^{M-1-k}u_k.
+  \label{eq:one-cycle-map}
+\end{equation}
+
+\begin{proposition}[一阶建立的唯一循环稳态]
+当 $0\le\rho<1$ 时，任意有限周期目标存在唯一循环稳态，其周期边界为
+
+\begin{equation}
+  r_{-1}^{\star}
+  =
+  \frac{(1-\rho)
+  \sum_{k=0}^{M-1}\rho^{M-1-k}u_k}
+  {1-\rho^M}.
+  \label{eq:periodic-boundary}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+令周期首尾相等，即 $r_{M-1}=r_{-1}$，代入
+\eqref{eq:one-cycle-map} 并整理得到式 \eqref{eq:periodic-boundary}。
+由于 $0\le\rho<1$，故 $1-\rho^M>0$，解唯一。任意两个初值之差经过一个周期
+缩小为原来的 $\rho^M$，所以该解全局渐近稳定。证毕。
+\end{proof}
+
+\subsection{线性频率响应与静态极限}
+
+对式 \eqref{eq:first-order-recurrence} 作 $z$ 变换：
+
+\begin{equation}
+  R(z)(1-\rho z^{-1})=(1-\rho)U(z),
+\end{equation}
+
+故
+
+\begin{equation}
+  H(z)=\frac{R(z)}{U(z)}
+  =\frac{1-\rho}{1-\rho z^{-1}},
+  \qquad
+  H(e^{\jj\omega})
+  =\frac{1-\rho}{1-\rho e^{-\jj\omega}}.
+  \label{eq:settling-frequency-response}
+\end{equation}
+
+当 $\rho\to0$，$r_n\to u_n$，动态理论严格回到静态路径理论；当输入为常值，
+稳态 $r=u$。这些是动态模型必须满足的两个极限。
+
+但线性 $H(e^{\jj\omega})$ 只描述“静态目标到实际 residue”的局部状态传播。
+residue 随后穿过判决边界，最终 SNDR/SFDR 不必随频率单调变化。把线性幅频响应
+直接等同于 ADC 指标下降会忽略混合系统的路径切换。
+
+\subsection{级联动态成为分段仿射状态系统}
+
+以两级前端为例，定义状态
+$z_n=(r_{1,n-1},r_{2,n-1})^\mathsf T$。固定路径
+$p_n=(q_{1,n},q_{2,n})$ 后，
+
+\begin{align}
+  r_{1,n}
+  &=(1-\rho_1)
+    (\alpha_{1,p}x_n+\beta_{1,p})
+    +\rho_1 r_{1,n-1},\\
+  r_{2,n}
+  &=(1-\rho_2)
+    (\alpha_{2,p}r_{1,n}+\beta_{2,p})
+    +\rho_2 r_{2,n-1}.
+\end{align}
+
+整理为
+
+\begin{equation}
+  z_{n+1}
+  =
+  A_p z_n+B_p x_n+c_p,
+  \qquad
+  y_n=C_p z_n+D_p x_n+d_p,
+  \label{eq:pwa-dynamic-state}
+\end{equation}
+
+而路径 $p$ 由关于 $(x_n,z_n)$ 的阈值不等式决定。因此动态流水线 ADC 是
+“分段仿射状态系统加离散码读出”，而不是单一 LTI 滤波器。
+
+\subsection{复位模型与跨样本记忆不可由终点精度区分}
+
+若每次放大相位都从固定状态 $r_{\mathrm{reset}}$ 开始，则
+
+\begin{equation}
+  r_n
+  =
+  (1-\rho)u_n+\rho r_{\mathrm{reset}},
+  \label{eq:reset-model}
+\end{equation}
+
+它是无记忆静态映射。式 \eqref{eq:first-order-recurrence} 与
+\eqref{eq:reset-model} 在单次阶跃终点可以具有同一残余因子 $\rho$，但对同一
+当前目标、不同前序状态的实验给出不同结果。
+
+\begin{definition}[观测等价]
+给定输入实验族 $\mathfrak X$ 和观测算子 $\mathcal O$，若两个动态模型
+$\mathcal M_1,\mathcal M_2$ 满足
+
+\begin{equation}
+  \mathcal O[\mathcal M_1(x)]
+  =
+  \mathcal O[\mathcal M_2(x)],
+  \qquad \forall x\in\mathfrak X,
+\end{equation}
+
+则称它们在 $(\mathfrak X,\mathcal O)$ 下观测等价。
+\end{definition}
+
+这个定义是本项目用于管理物理语义不确定性的工作理论。11 GHz/100 ps 终点锚点
+使复位模型和保持模型处于同一观测等价类；加入“相同当前目标、不同前序 residue”
+的瞬态观测后，两者才可能被区分。
+
+\subsection{采样时差、随机抖动与孔径}
+
+若第 $i$ 条路径采样时刻为 $t_n+\tau_i$，则
+
+\begin{equation}
+  x_{i,n}=x(t_n+\tau_i).
+\end{equation}
+
+对足够光滑的输入，
+
+\begin{equation}
+  x(t_n+\tau_i)
+  =
+  x(t_n)+\dot x(t_n)\tau_i
+  +\frac{1}{2}\ddot x(t_n)\tau_i^2+\mathcal O(\tau_i^3).
+  \label{eq:timing-taylor}
+\end{equation}
+
+两路径时差 $\Delta\tau=\tau_a-\tau_b$ 的一阶差异为
+
+\begin{equation}
+  \Delta x_n\approx\dot x(t_n)\Delta\tau.
+  \label{eq:path-skew}
+\end{equation}
+
+对 $x(t)=A\sin(\omega t+\phi)$，精确差异为
+
+\begin{equation}
+  x(t+\tau_a)-x(t+\tau_b)
+  =
+  2A\sin\frac{\omega\Delta\tau}{2}
+  \cos\left(\omega t+\phi+\frac{\omega(\tau_a+\tau_b)}{2}\right).
+  \label{eq:sine-skew-exact}
+\end{equation}
+
+因此路径时差的等效误差随输入频率增长，并以判决输入扰动的形式移动阈值边界。
+
+若随机抖动 $\epsilon_n$ 独立、零均值、方差 $\sigma_t^2$，一阶采样误差为
+
+\begin{equation}
+  e_{t,n}\approx\dot x(t_n)\epsilon_n.
+\end{equation}
+
+对正弦输入，平均误差功率为
+
+\begin{equation}
+  \E[e_t^2]
+  \approx
+  \frac{A^2\omega^2\sigma_t^2}{2},
+\end{equation}
+
+理想正弦信号功率为 $A^2/2$，故仅受抖动限制时
+
+\begin{equation}
+  \mathrm{SNR}_{\mathrm{jitter}}
+  \approx
+  -20\log_{10}(\omega\sigma_t).
+  \label{eq:jitter-snr}
+\end{equation}
+
+式 \eqref{eq:jitter-snr} 是小抖动、无其他误差、误差与信号功率按均方分离时的
+局部结果。若抖动通过不同路径进入判决，仍需把误差传入路径胞腔。
+
+有限孔径窗口 $w_a(t)$ 使采样值成为
+
+\begin{equation}
+  x_{a,n}
+  =
+  \int x(t_n+\tau)w_a(\tau)\dd\tau,
+  \qquad
+  \int w_a(\tau)\dd\tau=1.
+  \label{eq:aperture}
+\end{equation}
+
+它在判决前表现为频率响应 $W_a(\jj\omega)$。因此孔径是输入侧线性记忆，随机
+抖动是随机时基，固定路径时差是确定性多路径误差，三者不应合并为一个经验
+“高频失真系数”。
+
+\subsection{弱非线性记忆的局部入口}
+
+对满足衰减记忆且在工作域内连续的模拟子块，可写局部 Volterra 展开
+
+\begin{equation}
+  v(t)
+  =
+  h_0
+  +\sum_{r=1}^{R}
+  \int\cdots\int
+  h_r(\tau_1,\ldots,\tau_r)
+  \prod_{\ell=1}^{r}x(t-\tau_\ell)
+  \dd\tau_1\cdots\dd\tau_r.
+  \label{eq:volterra}
+\end{equation}
+
+本文只把式 \eqref{eq:volterra} 用于输入缓冲器、采样网络或放大器目标映射，
+其输出仍要进入式 \eqref{eq:path-select} 的硬判决。这样既利用成熟的带记忆
+非线性理论，又避免用有限阶光滑展开掩盖量化边界。
+
+\section{项目工作理论：边界--内部谱灵敏度}
+
+\subsection{为什么普通光滑灵敏度不够}
+
+设参数 $\alpha$ 改变局部增益、阈值或校正系数。若输出在固定相位区间内为
+$y_j(\varphi,\alpha)$，同时区间边界
+$\phi_j(\alpha)$ 也随参数移动，则 Fourier 系数
+
+\begin{equation}
+  c_m(\alpha)
+  =
+  \frac{1}{2\pi}
+  \sum_j
+  \int_{\phi_j(\alpha)}^{\phi_{j+1}(\alpha)}
+  y_j(\varphi,\alpha)e^{-\jj m\varphi}\dd\varphi
+  \label{eq:param-fourier}
+\end{equation}
+
+同时包含两类变化：
+
+\begin{enumerate}
+  \item 区间内部映射 $y_j$ 的连续变化；
+  \item 判决边界移动造成的有限跳变面积变化。
+\end{enumerate}
+
+只在固定路径内求 Jacobian 会漏掉第二项。
+
+\begin{proposition}[边界--内部谱灵敏度分解]
+若各 $y_j(\varphi,\alpha)$ 在区间内部对 $\alpha$ 可微，边界
+$\phi_j(\alpha)$ 可微，且相邻区间单侧极限存在，则
+
+\begin{align}
+  \frac{\dd c_m}{\dd\alpha}
+  &=
+  \frac{1}{2\pi}
+  \sum_j
+  \int_{\phi_j}^{\phi_{j+1}}
+  \frac{\partial y_j}{\partial\alpha}
+  e^{-\jj m\varphi}\dd\varphi \notag\\
+  &\quad+
+  \frac{1}{2\pi}
+  \sum_j
+  \left(y_{j-1}(\phi_j^-)-y_j(\phi_j^+)\right)
+  e^{-\jj m\phi_j}
+  \frac{\dd\phi_j}{\dd\alpha}.
+  \label{eq:boundary-interior-sensitivity}
+\end{align}
+\end{proposition}
+
+\begin{proof}
+对式 \eqref{eq:param-fourier} 的每个积分应用 Leibniz 法则：
+
+\begin{align}
+  \frac{\dd}{\dd\alpha}
+  \int_{\phi_j}^{\phi_{j+1}}f_j(\varphi,\alpha)\dd\varphi
+  &=
+  \int_{\phi_j}^{\phi_{j+1}}
+  \frac{\partial f_j}{\partial\alpha}\dd\varphi
+  +f_j(\phi_{j+1}^-)\phi_{j+1}'\notag\\
+  &\quad-f_j(\phi_j^+)\phi_j'.
+\end{align}
+
+将相邻区间在共同边界 $\phi_j$ 的上端项和下端项合并，得到
+$[y_{j-1}(\phi_j^-)-y_j(\phi_j^+)]e^{-\jj m\phi_j}\phi_j'$。
+对全部边界求和即得式 \eqref{eq:boundary-interior-sensitivity}。证毕。
+\end{proof}
+
+式 \eqref{eq:boundary-interior-sensitivity} 是本项目为连接静态结构、参数变化和
+频谱而提出的工作理论。它不是把仿真差分拟合成 Jacobian，而是从移动边界积分
+直接推出。
+
+\subsection{边界相位的隐式导数}
+
+若第 $j$ 个边界由
+
+\begin{equation}
+  g_j(\phi_j,\alpha)=0
+  \label{eq:implicit-boundary}
+\end{equation}
+
+定义，且 $\partial g_j/\partial\phi\ne0$，则隐函数定理给出
+
+\begin{equation}
+  \frac{\dd\phi_j}{\dd\alpha}
+  =
+  -\frac{\partial g_j/\partial\alpha}
+         {\partial g_j/\partial\phi}.
+  \label{eq:boundary-derivative}
+\end{equation}
+
+对正弦阈值边界
+$g_j=x_0+A\sin\phi_j-T_j(\alpha)$，
+
+\begin{equation}
+  \frac{\dd\phi_j}{\dd\alpha}
+  =
+  \frac{\dd T_j/\dd\alpha}
+       {A\cos\phi_j}.
+  \label{eq:sine-boundary-derivative}
+\end{equation}
+
+当 $\cos\phi_j\to0$，边界接近正弦峰值，灵敏度放大并可能失去普通可微性。这正是
+满幅附近小阈值误差可能显著改变码占用的理论原因，也给出局部线性预测失效的
+明确判据。
+
+\subsection{功率与指标的一阶传播}
+
+谱线功率 $P_m=|c_m|^2$ 的微分为
+
+\begin{equation}
+  \dd P_m
+  =
+  2\operatorname{Re}\{c_m^\ast\dd c_m\}.
+  \label{eq:line-power-differential}
+\end{equation}
+
+若指标是正功率集合的可微函数
+$\mathcal J=\psi(P_1,\ldots,P_K)$，则
+
+\begin{equation}
+  \dd\mathcal J
+  =
+  \sum_{m=1}^{K}
+  \frac{\partial\psi}{\partial P_m}
+  2\operatorname{Re}\{c_m^\ast\dd c_m\}.
+  \label{eq:metric-differential}
+\end{equation}
+
+SFDR 含最大运算，在最大杂散频点唯一且不切换时可局部求导；若两个 spur 交叉，
+SFDR 只有方向导数或次梯度。因而“性能关于参数全局光滑”不是可接受的默认假设。
+
+\section{阶段三：校准闭环理论}
+
+\subsection{扩展闭环}
+
+令 $d_n$ 为附加激励，$o_n$ 为可观测校准量，$a_n$ 为校准状态，
+$\widetilde y_n$ 为校正输出。扩展系统为
+
+\begin{align}
+  (z_{n+1},y_n,o_n)
+  &=\mathcal G(z_n,x_n,d_n;\theta), \label{eq:cal-plant}\\
+  a_{n+1}
+  &=\mathcal U(a_n,o_n,d_n), \label{eq:cal-update}\\
+  \widetilde y_n
+  &=\mathcal C(y_n,a_n,d_n). \label{eq:cal-correction}
+\end{align}
+
+\begin{center}
+\begin{tikzpicture}[node distance=7mm and 8mm,scale=0.88,transform shape]
+  \node[block,text width=25mm] (x) {输入\\$x_n$};
+  \node[stage,text width=32mm,right=of x] (adc) {ADC 本体\\$z_n,y_n,o_n$};
+  \node[stage,text width=31mm,right=of adc] (state) {校准状态\\$a_n$};
+  \node[stage,text width=31mm,right=of state] (corr) {校正输出\\$\widetilde y_n$};
+  \draw[flow] (x) -- (adc);
+  \draw[flow] (adc) -- node[above,font=\small] {$o_n$} (state);
+  \draw[flow] (state) -- node[above,font=\small] {$a_n$} (corr);
+  \draw[flow] (adc) to[bend right=21] node[below,font=\small] {$y_n$} (corr);
+  \node[open,text width=28mm,below=14mm of adc] (d) {附加激励\\$d_n$};
+  \draw[influence] (d) -- (adc);
+  \draw[influence] (d) -- (state);
+  \draw[influence] (d) to[bend right=20] (corr);
+  \draw[flow] (state.south) to[bend left=32]
+    node[below,font=\small] {闭环作用} (adc.south);
+\end{tikzpicture}
+\end{center}
+
+\subsection{表示误差、估计误差和实现误差}
+
+设校正表示族为 $\{\mathcal C_a:a\in\mathcal A\}$。即使真实物理参数
+$\theta$ 已知，也未必存在 $a$ 使所有非理想完全消失。定义可实现最优状态
+
+\begin{equation}
+  a^\star(\theta)
+  \in
+  \arg\min_{a\in\mathcal A}
+  \mathfrak L\!\left(
+    \mathcal C_a\circ\mathcal G_\theta
+  \right),
+  \label{eq:oracle-state}
+\end{equation}
+
+其中 $\mathfrak L$ 是理论分析所用的目标泛函，不必等同于最终报告指标。于是校准
+影响至少分为：
+
+\begin{align}
+  \text{表示差距}&:
+  \mathcal C_{a^\star}\circ\mathcal G_\theta
+  \ \text{与理想 ADC 的差异},\\
+  \text{估计差距}&:
+  a_n-a^\star,\\
+  \text{激励直接效应}&:
+  d_n\ \text{直接进入输出谱},\\
+  \text{实现差距}&:
+  \text{量化、舍入、饱和与有限更新速率}.
+\end{align}
+
+因此参数 MSE 只是估计差距的诊断量，不能替代最终性能。
+
+\subsection{随机逼近的局部误差动力学}
+
+将一类校准更新抽象为
+
+\begin{equation}
+  a_{n+1}
+  =
+  a_n+\mu h(a_n,\xi_n),
+  \label{eq:sa-general}
+\end{equation}
+
+其中 $\xi_n$ 汇总输入、dither、判决状态和观测噪声。定义均值场
+
+\begin{equation}
+  \bar h(a)=\E[h(a,\xi_n)\mid a_n=a].
+\end{equation}
+
+若 $a^\star$ 满足 $\bar h(a^\star)=0$，令误差 $e_n=a_n-a^\star$。在局部可微
+且时间尺度分离近似成立时，
+
+\begin{equation}
+  \bar h(a^\star+e)
+  =
+  -He+\mathcal O(\|e\|^2),
+  \qquad
+  H=-\left.\frac{\partial\bar h}{\partial a}\right|_{a^\star}.
+\end{equation}
+
+把零均值梯度噪声记为 $\nu_n$，得到局部线性误差模型
+
+\begin{equation}
+  e_{n+1}
+  =
+  (I-\mu H)e_n+\mu\nu_n.
+  \label{eq:local-cal-error}
+\end{equation}
+
+若
+
+\begin{equation}
+  \spr(I-\mu H)<1,
+  \label{eq:mean-stability}
+\end{equation}
+
+则均值局部稳定。在 $\nu_n$ 近似平稳、与 $e_n$ 的高阶相关可忽略时，稳态协方差
+$P=\E[e_ne_n^\mathsf T]$ 满足离散 Lyapunov 方程
+
+\begin{equation}
+  P
+  =
+  (I-\mu H)P(I-\mu H)^\mathsf T
+  +\mu^2Q,
+  \qquad
+  Q=\Cov(\nu_n).
+  \label{eq:cal-covariance}
+\end{equation}
+
+式 \eqref{eq:local-cal-error}--\eqref{eq:cal-covariance} 是随机逼近理论在本项目
+中的局部适配。若门控使均值场不光滑、激励不足使 $H$ 降秩、定点更新形成极限环，
+则该近似必须缩小范围或换用有限状态 Markov 描述。
+
+\subsection{可辨识性与持续激励}
+
+设局部观测对参数误差的线性项为
+
+\begin{equation}
+  o_n-o_n^\star
+  \approx
+  \Phi_n e_n+\eta_n.
+\end{equation}
+
+定义观测信息矩阵
+
+\begin{equation}
+  R_\Phi=\E[\Phi_n^\mathsf T\Phi_n].
+\end{equation}
+
+若 $R_\Phi$ 在目标参数子空间上不满秩，则存在非零方向 $v$ 使
+$\Phi_nv=0$ 几乎处处，该方向不能由现有输入、dither 和门控状态识别。持续激励
+不是“出现过某个 PWL slice”，而是需要
+
+\begin{equation}
+  v^\mathsf R_\Phi v>0
+  \quad
+  \text{对所有待识别方向 }v\ne0.
+  \label{eq:persistent-excitation}
+\end{equation}
+
+这解释了路径访问、有效更新和参数可辨识性之间的区别。
+
+\subsection{从校准状态分布到谱线分布}
+
+令复谱线向量为
+
+\begin{equation}
+  \bm c(a)
+  =
+  (c_{m_1}(a),\ldots,c_{m_K}(a))^\mathsf T.
+\end{equation}
+
+使用式 \eqref{eq:boundary-interior-sensitivity} 构造包含边界项的灵敏度矩阵
+
+\begin{equation}
+  G_c
+  =
+  \left.
+  \frac{\partial\bm c}{\partial a^\mathsf T}
+  \right|_{a^\star}.
+\end{equation}
+
+若 $\E[e_n]=b$、$\Cov(e_n)=P$ 且一阶近似有效，则
+
+\begin{align}
+  \E[\bm c(a_n)]
+  &\approx
+  \bm c(a^\star)+G_cb, \label{eq:spectral-mean}\\
+  \Cov(\bm c(a_n))
+  &\approx
+  G_cPG_c^\mathsf H. \label{eq:spectral-cov}
+\end{align}
+
+对单个谱线 $c_m$，若对应行向量为 $g_m^\mathsf T$，则
+
+\begin{equation}
+  \E[|c_m(a_n)|^2]
+  \approx
+  |c_m^\star+g_m^\mathsf Tb|^2
+  +g_m^\mathsf T P g_m^\ast.
+  \label{eq:expected-line-power}
+\end{equation}
+
+式 \eqref{eq:expected-line-power} 把校准偏差和波动分别映射为相干谱线偏移与平均
+谱线功率增量。随后可把这些功率代入性能泛函；若最大 spur 身份切换，则必须使用
+分段或分布式 SFDR，而不能只传播均值。
+
+\subsection{dither 的间接收益与直接代价}
+
+dither 通过两个通道作用：
+
+\begin{equation}
+  d_n
+  \longrightarrow
+  \begin{cases}
+    R_\Phi,Q,H & \text{改变可辨识性与校准状态分布},\\
+    \widetilde Y & \text{直接产生残余谱线或噪声}.
+  \end{cases}
+  \label{eq:dither-two-paths}
+\end{equation}
+
+只有在减性抵消精确、无过载、dither 分布满足相应特征函数条件时，才可将量化误差
+视为与输入独立。Gu 架构中的模拟注入、局部数字副本和分段门控必须分别进入
+\eqref{eq:cal-plant}--\eqref{eq:cal-correction}，不能用通用 dither 定理直接
+宣布“无频谱代价”。
+
+\section{统一理论架构与项目原创接口}
+
+\subsection{六层依赖链}
+
+\begin{center}
+\begin{tikzpicture}[node distance=6mm,scale=0.90,transform shape]
+  \node[block,text width=118mm] (l1)
+    {第 1 层：物理结构与参数证据\\
+     采样、判决、CDAC、放大、路径差异、噪声与环境};
+  \node[stage,text width=118mm,below=of l1] (l2)
+    {第 2 层：结构路径胞腔\\
+     逐级不等式原像、冗余等价类、可纠正域与动态状态区域};
+  \node[stage,text width=118mm,below=of l2] (l3)
+    {第 3 层：输出过程\\
+     静态码映射、分段仿射状态系统、随机条件输出};
+  \node[stage,text width=118mm,below=of l3] (l4)
+    {第 4 层：谱测度\\
+     相位原像积分、有限记录 DFT、线谱与连续谱};
+  \node[block,text width=118mm,below=of l4] (l5)
+    {第 5 层：性能泛函\\
+     DNL、INL、缺失码、SNDR、THD、SFDR、ENOB 与其分布};
+  \node[open,text width=118mm,below=of l5] (l6)
+    {第 6 层：校准闭环与高保真锚定\\
+     表示能力、可辨识性、状态分布、边界传播、电路或测量验证};
+  \draw[flow] (l1) -- (l2);
+  \draw[flow] (l2) -- (l3);
+  \draw[flow] (l3) -- (l4);
+  \draw[flow] (l4) -- (l5);
+  \draw[flow] (l5) -- (l6);
+\end{tikzpicture}
+\end{center}
+
+依赖链的方向不能随意颠倒。例如，从若干性能数值拟合器件参数可能用于诊断，
+但不能代替从结构路径到输出过程的理论；校准状态 MSE 也不能跳过第 2--4 层直接
+作为 SFDR 的代理。
+
+\subsection{成熟理论与项目工作理论的接口}
+
+\begingroup
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{longtable}{
+>{\raggedright\arraybackslash}p{28mm}
+>{\raggedright\arraybackslash}p{40mm}
+>{\raggedright\arraybackslash}p{46mm}
+>{\raggedright\arraybackslash}p{26mm}}
+\toprule
+理论来源 & 可直接使用的对象 & 必须适配或补齐的部分 & 本文位置 \\
+\midrule
+\endhead
+Bennett--Widrow 量化理论 &
+量化误差谱、特征函数条件、统计矩 &
+多级非均匀等效阈值、冗余路径、相干单音的精确线谱 &
+第 4、5 节 \\
+分段仿射系统 &
+胞腔内仿射映射、离散路径切换 &
+逐级 residue 原像、数字等价类、可纠正测度 &
+第 3、4 节 \\
+Volterra 与衰减记忆 &
+连续弱非线性模拟子块的记忆表示 &
+硬量化边界和码跳变必须由混合系统承接 &
+第 6 节 \\
+采样抖动与孔径理论 &
+时基误差功率、采样窗口滤波 &
+多路径时差如何移动后级判决边界 &
+第 6 节 \\
+随机逼近/LMS &
+均值场、局部稳定、误差协方差 &
+门控、dither、量化边界与最终频谱传播 &
+第 8 节 \\
+\textbf{本项目工作理论} &
+路径胞腔递归、观测等价类 &
+边界--内部谱灵敏度、校准协方差到谱线功率的连接 &
+第 3、6--9 节 \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\subsection{工作理论的可证伪条件}
+
+\begin{enumerate}
+  \item \textbf{路径胞腔理论：}若固定路径内存在未建模的非仿射、多值或随机映射，
+        则仿射闭包结论失效，必须扩大状态或改变局部函数族；
+  \item \textbf{边界谱灵敏度：}若边界相切、合并、产生或消失，普通导数失效，
+        必须使用单侧导数或有限变化分析；
+  \item \textbf{周期稳态：}若状态映射不收缩、存在多稳态或亚谐波，唯一周期解
+        不再成立；
+  \item \textbf{校准协方差传播：}若误差过大以致频繁跨越多个边界拓扑，局部
+        一阶传播不足，必须直接传播参数分布或建立分段概率模型；
+  \item \textbf{观测等价类：}只要出现一个经审查实验使两个候选模型产生可重复
+        差异，它们就不再属于该实验族下的同一等价类。
+\end{enumerate}
+
+\section{验证逻辑、误差账本与当前边界}
+
+\subsection{必须保持的极限}
+
+\begin{itemize}
+  \item $\rho_i\to0$ 时，有限建立理论回到静态路径胞腔与静态频谱；
+  \item 所有非理想参数回到名义值时，结构回到理想码制和冗余恒等式；
+  \item 关闭校准作用时，阶段三回到阶段二原始输出过程；
+  \item $a_n=a^\star$ 时，达到所选校正表示的能力上限，而非自动达到理想 ADC；
+  \item $d_n=0$ 时，dither 的直接频谱效应和相应可辨识性贡献同时消失；
+  \item 当统计量化条件不满足时，白噪声近似必须退回确定性或条件谱描述；
+  \item 改变记录长度、窗函数或积分带宽时，应标记为观测协议变化，而非 ADC
+        本体变化。
+\end{itemize}
+
+\subsection{统一误差账本}
+
+理论预测与参考结果的差异按来源分解为
+
+\begin{equation}
+  \Delta_{\mathrm{total}}
+  \rightsquigarrow
+  \left(
+  \Delta_{\mathrm{structure}},
+  \Delta_{\mathrm{parameter}},
+  \Delta_{\mathrm{state}},
+  \Delta_{\mathrm{observation}},
+  \Delta_{\mathrm{approximation}},
+  \Delta_{\mathrm{reference}}
+  \right).
+  \label{eq:error-ledger}
+\end{equation}
+
+箭头表示归因结构而非默认线性相加。结构误差来自遗漏机制；参数误差来自未知
+或不确定物理量；状态误差来自初值、记忆语义或非平稳性；观测误差来自有限记录
+与协议；近似误差来自截断、局部线性化或统计假设；参考误差来自行为平台、
+电路仿真或测量本身。
+
+\subsection{验证阶梯}
+
+\noindent\begin{tabularx}{\textwidth}{>{\bfseries\color{FrameworkBlue}}p{28mm} X X}
+\toprule
+层级 & 要回答的问题 & 证据 \\
+\midrule
+数学自洽 & 单位、边界、恒等式、存在唯一性和极限是否正确 & 证明、反例、上下界 \\
+结构独立 & 理论是否不依赖参考平台输出而成立 & 独立参数化和留出比较 \\
+机制可辨识 & 不同物理语义能否由观测或干预区分 & 观测等价类与区分实验 \\
+参数稳健 & 结论是否只依赖单一工作点 & 幅度、频率、失配、环境、初值留出 \\
+近似有效 & 局部线性、白噪声、Volterra 或时间尺度分离是否成立 & 假设诊断和失效边界 \\
+保真度外推 & 行为结论能否推广到电路或硅后数据 & 高保真瞬态、PVT 与测量 \\
+\bottomrule
+\end{tabularx}
+
+\subsection{当前理论版图}
+
+\noindent\begin{tabularx}{\textwidth}{p{34mm} X p{31mm}}
+\toprule
+理论层 & 当前结论 & 状态 \\
+\midrule
+逐级结构与冗余 & 路径、residue、数字重构和可纠正域具有统一数学表示 & \textcolor{FrameworkTeal}{已建立} \\
+静态路径胞腔 & 逐级边界原像决定完整输入分割与码域测度 & \textcolor{FrameworkTeal}{已验证} \\
+静态频谱 & 相位原像闭式积分连接码跳变和连续谱线；有限记录单列 & \textcolor{FrameworkTeal}{已验证} \\
+有限建立状态 & 一阶保持模型具有连续时间来源、唯一周期稳态和静态极限 & \textcolor{FrameworkTeal}{基线已验证} \\
+动态物理语义 & 固定复位、跨样本保持、压摆和高阶模型尚未由外部证据区分 & \textcolor{FrameworkGold}{待识别} \\
+边界谱灵敏度 & 内部变化与边界移动的解析分解已经给出 & \textcolor{FrameworkGold}{工作理论} \\
+校准状态理论 & 均值场、局部协方差、可辨识性和谱线传播已经连成理论链 & \textcolor{FrameworkGold}{待实验验证} \\
+高保真锚定 & 行为理论尚缺电路瞬态、PVT 和硅后数据的系统锚定 & \textcolor{FrameworkRed}{资料待补} \\
+\bottomrule
+\end{tabularx}
+
+\begin{statusbox}{FrameworkGreen}
+\textbf{当前边界：}阶段二已经建立静态码域、静态频谱和一阶动态状态的闭环理论。
+新版框架补齐了连续时间来源、路径胞腔证明、精确频谱推导、动态误差入口和校准
+状态到频谱的理论接口。其中边界谱灵敏度和观测等价类是本项目工作理论，尚需专门
+实验验证；复位、保持、压摆或高阶动态哪一种更接近 Gu 芯片仍未识别。
+\end{statusbox}
+
+\section{阅读顺序与后续扩展}
+
+建议按以下顺序使用本文：
+
+\begin{enumerate}
+  \item 从第 3 节确认结构、路径、状态和数字重构对象；
+  \item 用第 4 节得到静态胞腔、码域测度和可纠正域；
+  \item 用第 5 节把胞腔边界变为连续谱或有限记录指标；
+  \item 在存在记忆时使用第 6 节扩展状态，并检查动态语义是否可识别；
+  \item 参数或校准状态变化时，用第 7 节同时传播内部项和边界项；
+  \item 阶段三再用第 8 节连接校准状态分布、dither 和性能分布；
+  \item 最后按第 10 节检查理论假设和证据等级。
+\end{enumerate}
+
+后续每一次阶段二或阶段三扩展都应补充四项内容：物理入口、数学对象、与既有理论
+的接口、可证伪条件。具体数值方法、软件实现和运行配置仍保留在规格与实验文档中。
+
+\appendix
+\section{符号表}
+
+\noindent\begin{tabularx}{\textwidth}{p{28mm}X}
+\toprule
+符号 & 含义 \\
+\midrule
+$x(t),x_n$ & 连续时间输入及第 $n$ 个样本对应的输入 \\
+$\theta,e_n$ & 固定物理参数及环境或慢变参数 \\
+$p_n$ & 完整离散判决路径 \\
+$z_n$ & 有限建立、记忆和其他动态内部状态 \\
+$q_{i,n},b_n$ & 第 $i$ 个前级判决状态和末级后端码 \\
+$u_{i,n},r_{i,n}$ & 第 $i$ 级静态 residue 目标和相位末端实际 residue \\
+$\mathcal C_p,\mathcal B_k$ & 路径胞腔与最终码的输入原像 \\
+$T_k,w_k$ & 码转换电平与广义码宽 \\
+$c_m,Y_M[\ell]$ & 连续周期 Fourier 系数与有限记录 DFT \\
+$\Pi$ & 记录、带宽、窗、基波和谐波约定组成的观测协议 \\
+$a_n,a^\star$ & 校准状态与所选表示族中的可实现最优状态 \\
+$H,Q,P$ & 校准均值场局部矩阵、梯度噪声协方差和状态误差协方差 \\
+$G_c$ & 含判决边界移动项的谱线灵敏度矩阵 \\
+\bottomrule
+\end{tabularx}
+
+\section{版本记录}
 
 \noindent\begin{tabularx}{\textwidth}{p{20mm}p{27mm}X}
 \toprule
 版本 & 日期 & 主要变化 \\
 \midrule
-v0.2 & 2026-09-16 & 加入一阶 residue 状态、周期稳态、静态极限及相位复位替代语义的理论位置。 \\
-v0.1 & 2026-09-16 & 建立阶段二/三统一对象、静态--动态关系、校准闭环、验证阶梯与当前理论版图。 \\
+v1.0 & 2026-09-16 & 改写为完整推导稿；加入文献适配性审查、逐级路径胞腔证明、精确频谱、连续时间动态来源、采样动态、边界--内部谱灵敏度及校准状态到性能的传播。 \\
+v0.2 & 2026-09-16 & 加入一阶 residue 状态、周期稳态、静态极限及相位复位替代语义。 \\
+v0.1 & 2026-09-16 & 建立阶段二/三统一对象、静态--动态关系、校准闭环和验证阶梯。 \\
 \bottomrule
 \end{tabularx}
+
+\clearpage
+\begingroup
+\small
+\bibliographystyle{IEEEtran}
+\bibliography{references/bibliography}
+\endgroup
 
 \end{document}
