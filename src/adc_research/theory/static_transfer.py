@@ -1,8 +1,9 @@
 """Independent interval predictor for a memoryless three-stage pipeline ADC.
 
 The predictor composes quantizer boundaries, CDAC levels, affine residue gain,
-optional odd-symmetric PWL amplifier maps, and backend SAR thresholds.  It does
-not import or call the sample-wise reference platform.  Its output is an exact
+optional PWL approximations of analog amplifier transfer, and backend SAR
+thresholds. These approximations are separate from digital PWL correction.
+It does not import or call the sample-wise reference platform. Its output is an exact
 partition of the ADC input domain up to floating-point boundary arithmetic.
 """
 

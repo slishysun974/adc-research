@@ -2,6 +2,7 @@
 \usepackage[left=23mm,right=23mm,top=22mm,bottom=24mm]{geometry}
 \usepackage{amsmath,amssymb,mathtools,amsthm,bm}
 \usepackage{booktabs,tabularx,array,longtable}
+\usepackage{needspace}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc}
@@ -31,7 +32,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small 流水线 ADC 结构化性能预测理论框架}
-\fancyhead[R]{\small v1.1\quad 2026-09-16}
+\fancyhead[R]{\small v1.2\quad 2026-09-16}
 \fancyfoot[C]{\small \thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 
@@ -142,7 +143,7 @@
   \end{scopebox}
 
   \vfill
-  {\large 版本 v1.1}\par
+  {\large 版本 v1.2}\par
   \vspace{2mm}
   {\large 2026-09-16}\par
   \vspace{13mm}
@@ -154,8 +155,8 @@
 本文建立一条从流水线 ADC 结构到性能指标的可解释理论链。ADC 首先被表示为
 带离散判决路径和连续内部状态的混合系统；在静态极限下，逐级判决与 residue
 传播与局部分段边界把输入域划分为细化路径胞腔，每个胞腔内部具有确定的仿射或
-光滑映射。码宽、
-DNL、INL、缺失码与不可纠正测度由这些胞腔的测度导出。对周期输入，输入胞腔
+光滑映射。码宽、DNL、累计码密度偏差、单调条件下的转换电平 INL、缺失码与
+不可纠正测度由这些胞腔的测度导出。对周期输入，输入胞腔
 的相位原像给出精确的傅里叶系数，从而把码域边界连接到确定性谱线和 ADC 性能
 泛函。动态层从连续时间建立方程推导离散状态递推、唯一周期稳态及静态极限，
 并把采样时差、随机抖动、孔径和弱非线性记忆放在相互可区分的物理入口中。
@@ -177,7 +178,8 @@ DNL、INL、缺失码与不可纠正测度由这些胞腔的测度导出。对�
 本课题研究的不是一个从器件参数到 SNDR 或 SFDR 的黑箱函数，而是一组按因果
 顺序连接的数学对象。设连续时间输入为 $x(t)$，第 $n$ 个采样对应的外部输入为
 $x_n$，固定物理参数为 $\theta$，环境或慢变参数为 $e_n$，内部模拟状态为
-$z_n$，离散判决路径为 $p_n$，最终原始码为 $y_n$。无校准 ADC 本体写为
+$z_n$，离散判决路径为 $p_n$，未启用数字后台校正时的最终码为 $y_n$。
+无校准 ADC 本体写为
 
 \begin{align}
   p_n &= \mathcal P(x_n,z_n;\theta,e_n), \label{eq:path-select}\\
@@ -330,7 +332,7 @@ Boyd 和 Chua 证明，满足连续性和衰减记忆条件的时不变非线性
 \end{align}
 
 $Q_i$ 是阈值集合 $\tau_i$ 定义的有限状态判决；$D_i$ 是 CDAC 重构；
-$A_i$ 是放大器的静态目标映射；$\mathcal M_i,\mathcal T_i$ 描述有限建立或
+$A_i$ 表示物理放大器未知静态传输 $g_i$ 的模型；$\mathcal M_i,\mathcal T_i$ 描述有限建立或
 记忆。最后一级量化器给出 $b_n=Q_L(v_{L-1,n})$，数字输出为
 
 \begin{equation}
@@ -339,14 +341,55 @@ $A_i$ 是放大器的静态目标映射；$\mathcal M_i,\mathcal T_i$ 描述有�
   \label{eq:digital-reconstruction}
 \end{equation}
 
-Gu 架构的前两级、后端 TI-SAR、PWL 非线性校正和 gated-LMS 关系由原始论文
-给出 \cite{Gu2026PipelinedADC,Gu2025GatedLMS}。本文使用一般 $L$ 级符号，
+式 \eqref{eq:digital-reconstruction} 中的减法是已注入模拟 dither 的数字副本，
+并非要保留在输出中的附加信号。Gu 架构的前两级、后端 TI-SAR、
+\emph{量化之后的数字 PWL 非线性校正}和 gated-LMS 关系由原始论文给出
+\cite{Gu2026PipelinedADC,Gu2025GatedLMS}。数字校正函数 $f_i$ 与未知模拟
+传输 $g_i$ 是不同对象；前者不属于放大器电路。本文使用一般 $L$ 级符号，
 Gu 架构是 $L=3$ 的主要实例。
+
+\subsection{Gu 候选 A 的理想 dither 抵消}
+
+为看清最终码为何显式减去 dither，考虑无模拟误差、无过载和无数字裁剪的
+候选 A。令两个前级模拟注入量为 $d_1,d_2$，理想 residue 与末级 centered
+SAR 码满足
+
+\begin{align}
+  r_1&=4(x-q_1/4+d_1),\\
+  r_2&=4(r_1-q_2/4+d_2),\\
+  c_3&=\lfloor128r_2\rfloor.
+\end{align}
+
+因此
+
+\begin{equation}
+  512q_1+128q_2+c_3
+  =\lfloor2048x+2048d_1+512d_2\rfloor.
+  \label{eq:gu-raw-dither}
+\end{equation}
+
+冻结的 dither 档位使数字副本 $D_1^{(\mathrm{dig})}=2048d_1$、
+$D_2^{(\mathrm{dig})}=512d_2$ 为整数，故利用
+$\lfloor u+k\rfloor-k=\lfloor u\rfloor$，未启用数字 PWL 校正的输出为
+
+\begin{equation}
+  y^{(0)}=512q_1+128q_2+c_3-D_1^{(\mathrm{dig})}
+    -D_2^{(\mathrm{dig})}+2048
+  =\lfloor2048x\rfloor+2048.
+  \label{eq:gu-ideal-dither-cancel}
+\end{equation}
+
+该恒等式说明：在这些明确条件下，输出不含所注入的 dither，公式中的数字减法
+正是抵消步骤。非线性、校正误差、量化规则不匹配或过载会破坏这些条件，残余的
+dither 相关误差成为后台校准可利用的观测量。启用数字 PWL 后，局部减法须按
+校正级联的顺序进行，不能把式 \eqref{eq:gu-ideal-dither-cancel} 当作校正后链路的
+一般运算式。
 
 \subsection{判决路径与路径胞腔}
 
-将前级判决、各级局部模拟分段和末级量化结果组成完整路径。令
-$\sigma_i$ 为第 $i$ 级静态映射 $A_i$ 的局部仿射分段标签，
+将前级判决、各级局部模拟模型分段和末级量化结果组成完整路径。令
+$\sigma_i$ 为第 $i$ 级模拟静态映射 $A_i$ 在分段仿射\emph{模型}中的
+局部分段标签，
 $J_{i,\sigma_i}$ 为该分段的输入域，且
 $w_i=v_{i-1}-D_i(q_i)+d_i$。在不需要分段的级，$\sigma_i$ 只有一个取值。
 完整路径记为
@@ -372,8 +415,10 @@ $w_i=v_{i-1}-D_i(q_i)+d_i$。在不需要分段的级，$\sigma_i$ 只有一个�
 
 这里 $v_{i-1}(x;p,\theta)$ 是假定前序路径和局部分段已固定后得到的内部值；
 $\tau_{L,b}^{\pm}$ 是末级量化器的码区间端点。路径胞腔由所有后级判决及局部
-分段不等式向原输入域的递归原像共同确定。同一判决码路径可能跨越 PWL 拐点，
-此时必须进一步细分，不能在未细分的整条判决路径上宣称仿射闭包。
+分段不等式向原输入域的递归原像共同确定。同一判决码路径可能跨越所选模拟
+近似模型的拐点，此时必须进一步细分，不能在未细分的整条判决路径上宣称
+仿射闭包。$\sigma_i$ 不是后续数字校正函数 $f_i$ 的 PWL 段号；真实放大器
+$g_i$ 也不因此被断言为物理上恰好分段线性。
 
 \begin{definition}[结构路径胞腔]
 对固定参数 $\theta$，满足式 \eqref{eq:path-cell} 的最大连通输入集合称为路径
@@ -381,13 +426,14 @@ $\tau_{L,b}^{\pm}$ 是末级量化器的码区间端点。路径胞腔由所有�
 \end{definition}
 
 \begin{proposition}[静态路径胞腔内的仿射闭包]
-若每级辅助路径、CDAC 和局部放大器在路径 $p$ 指定的分段内均为仿射映射，则
+若每级辅助路径、CDAC 和所选模拟放大映射模型在路径 $p$ 指定的分段内均为
+仿射映射，则
 对任意非空路径胞腔 $\mathcal C_p$，所有内部 residue 均是输入 $x$ 的仿射函数；
 固定末级码后的未裁剪数字输出为常数。
 \end{proposition}
 
 \begin{proof}
-第一级判决与局部分段固定后，$D_1(q_1)$ 为常数；所选放大器分段为仿射映射，因此
+第一级判决与局部分段固定后，$D_1(q_1)$ 为常数；所选模拟映射分段为仿射映射，因此
 $v_1(x)=\alpha_{1,p}x+\beta_{1,p}$。假设第 $i-1$ 级 residue 为
 $v_{i-1}(x)=\alpha_{i-1,p}x+\beta_{i-1,p}$，则第 $i$ 级 CDAC 在固定
 $q_i$ 下仍为常数，所选局部分段与仿射输入的复合仍为仿射函数。由数学归纳法，
@@ -396,7 +442,9 @@ $q_i$ 下仍为常数，所选局部分段与仿射输入的复合仍为仿射�
 \end{proof}
 
 这个命题借用了分段仿射系统的闭包性质，但“逐级路径胞腔”及其与数字冗余的结合
-是本项目的结构化适配。
+是本项目的结构化适配。若物理 $g_i$ 是一般平滑非线性，式
+\eqref{eq:path-cell} 仍可定义原像，但上述\emph{精确}仿射闭包只适用于所选
+分段仿射近似；对真实 $g_i$ 须传播非线性原像或给出近似误差界。
 
 \subsection{数字冗余是路径等价关系}
 
@@ -558,12 +606,7 @@ $x_1<x_2$ 但 $q_\theta(x_1)>q_\theta(x_2)$。报告时必须同时列出码密�
 
 \subsection{正弦输入的相位原像}
 
-令
-
-\begin{equation}
-  x(\varphi)=x_0+A\sin\varphi,\qquad \varphi\in[0,2\pi).
-  \label{eq:sine-input}
-\end{equation}
+令正弦输入为 $x(\varphi)=x_0+A\sin\varphi$，其中 $\varphi\in[0,2\pi)$。
 
 对当前正局部斜率、左闭右开约定下的每个静态胞腔
 $I_r=[\ell_r,u_r)$，定义相位原像
@@ -591,6 +634,7 @@ $I_r=[\ell_r,u_r)$，定义相位原像
 扩展到负局部斜率并精确预测有限记录中恰落边界的样本，必须保留原判决的开闭规则，
 不能一律以左闭右开区间查询。
 
+\Needspace{6\baselineskip}
 \subsection{傅里叶系数的闭式表达}
 
 周期输出
@@ -863,7 +907,7 @@ residue 随后穿过判决边界，最终 SNDR/SFDR 不必随频率单调变化�
 
 以两级前端为例，定义状态
 $z_n=(r_{1,n-1},r_{2,n-1})^\mathsf T$。固定包含两级判决、
-各级局部放大器分段及末级 SAR 码的完整路径
+各级模拟模型局部分段及末级 SAR 码的完整路径
 $p_n=(q_{1,n},\sigma_{1,n},q_{2,n},\sigma_{2,n},b_n)$ 后，
 
 \begin{align}
@@ -1165,27 +1209,48 @@ SFDR 只有方向导数或次梯度。因而“性能关于参数全局光滑”
 \subsection{扩展闭环}
 
 令 $d_n$ 为附加激励，$o_n$ 为可观测校准量，$a_n$ 为校准状态，
-$\widetilde y_n$ 为校正输出。扩展系统为
+$\mathbf h_n$ 为各级未经数字校正的原始码元组，$\widetilde y_n$ 为校正输出。
+扩展系统为
 
 \begin{align}
-  (z_{n+1},y_n,o_n)
+  (z_{n+1},\mathbf h_n,o_n)
   &=\mathcal G(z_n,x_n,d_n;\theta), \label{eq:cal-plant}\\
   a_{n+1}
   &=\mathcal U(a_n,o_n,d_n), \label{eq:cal-update}\\
   \widetilde y_n
-  &=\mathcal C(y_n,a_n,d_n). \label{eq:cal-correction}
+  &=\mathcal C(\mathbf h_n,a_n,d_n). \label{eq:cal-correction}
 \end{align}
+
+这里 $\mathcal C$ 作用于各级原始码，而非只作用于已把各级码相加并扣除
+dither 的单个 $y_n$；否则无法表达两级数字 PWL 与局部 dither 扣除的次序。
+用 Gu 候选 A 的简化码制说明，设 $f_{2,a_{2,n}}$、$f_{1,a_{1,n}}$
+分别是第二级和第一级的数字 PWL 校正，$c_{3,n}$ 是末级 centered 码，则
+
+\begin{align}
+  t_{2,n}&=f_{2,a_{2,n}}(c_{3,n})-D_{2,n}^{(\mathrm{dig})},\\
+  t_{1,n}&=f_{1,a_{1,n}}(128q_{2,n}+t_{2,n})
+              -D_{1,n}^{(\mathrm{dig})},\\
+  \widetilde y_n&=512q_{1,n}+t_{1,n}+2048.
+  \label{eq:gu-nested-digital-correction}
+\end{align}
+
+最终输出仍按允许范围处理裁剪。$f_i$ 的输入是量化后的数字码，系数由
+后台估计；它所尝试逆转的是模拟放大传输 $g_i$ 在码域上的影响，不能把
+$f_i$ 与 $g_i$ 视为同一个 PWL 对象。若两级 $f_i$ 均为恒等映射，式
+\eqref{eq:gu-nested-digital-correction} 才退化为未校正的
+式 \eqref{eq:gu-ideal-dither-cancel} 左侧。真实 $g_i$ 未知，有限分段表示、
+末级量化、CDAC 误差和有限字长都可能使复合映射只能近似目标线性增益。
 
 \begin{center}
 \begin{tikzpicture}[node distance=7mm and 8mm,scale=0.88,transform shape]
   \node[block,text width=25mm] (x) {输入\\$x_n$};
-  \node[stage,text width=32mm,right=of x] (adc) {ADC 本体\\$z_n,y_n,o_n$};
+  \node[stage,text width=32mm,right=of x] (adc) {ADC 本体\\$z_n,\mathbf h_n,o_n$};
   \node[stage,text width=31mm,right=of adc] (state) {校准状态\\$a_n$};
   \node[stage,text width=31mm,right=of state] (corr) {校正输出\\$\widetilde y_n$};
   \draw[flow] (x) -- (adc);
   \draw[flow] (adc) -- node[above,font=\small] {$o_n$} (state);
   \draw[flow] (state) -- node[above,font=\small] {$a_n$} (corr);
-  \draw[flow] (adc) to[bend right=21] node[below,font=\small] {$y_n$} (corr);
+  \draw[flow] (adc) to[bend right=21] node[below,font=\small] {$\mathbf h_n$} (corr);
   \node[open,text width=28mm,below=14mm of adc] (d) {附加激励\\$d_n$};
   \draw[influence] (d) -- (adc);
   \draw[influence] (d) -- (state);
@@ -1583,8 +1648,10 @@ Volterra 与衰减记忆 &
 \midrule
 $x(t),x_n$ & 连续时间输入及第 $n$ 个样本对应的输入 \\
 $\theta,e_n$ & 固定物理参数及环境或慢变参数 \\
-$p_n$ & 含前级判决、局部模拟分段标签和末级码的完整路径 \\
-$\sigma_i,J_{i,\sigma_i}$ & 第 $i$ 级局部分段标签及其输入域 \\
+$p_n$ & 含前级判决、模拟近似模型局部分段标签和末级码的完整路径 \\
+$\sigma_i,J_{i,\sigma_i}$ & 第 $i$ 级模拟近似模型的局部分段标签及其输入域 \\
+$g_i,f_i$ & 未知模拟放大传输与量化后数字 PWL 校正函数 \\
+$\mathbf h_n$ & 各级数字校正前的原始码元组 \\
 $z_n$ & 有限建立、记忆和其他动态内部状态 \\
 $q_{i,n},b_n$ & 第 $i$ 个前级判决状态和末级后端码 \\
 $u_{i,n},r_{i,n}$ & 第 $i$ 级静态 residue 目标和相位末端实际 residue \\
@@ -1604,6 +1671,7 @@ $G_c$ & 含判决边界移动项的谱线灵敏度矩阵 \\
 \toprule
 版本 & 日期 & 主要变化 \\
 \midrule
+v1.2 & 2026-09-16 & 区分未知模拟放大传输与数字 PWL 校正；推导理想 dither 抵消并明确两级局部校正、扣除的运算次序及最终码的频谱对象。 \\
 v1.1 & 2026-09-16 & 审查并修正细化路径胞腔与动态码读出；限定周期稳态证明范围，区分非单调码密度偏差和转换电平 INL，补齐安全域与谱灵敏度正则条件。 \\
 v1.0 & 2026-09-16 & 改写为完整推导稿；加入文献适配性审查、逐级路径胞腔证明、精确频谱、连续时间动态来源、采样动态、边界--内部谱灵敏度及校准状态到性能的传播。 \\
 v0.2 & 2026-09-16 & 加入一阶 residue 状态、周期稳态、静态极限及相位复位替代语义。 \\

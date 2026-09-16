@@ -90,7 +90,7 @@ Q-008 在浮点行为级关闭：`b0=128/32` 的代码单位、段边界、连�
 - 芯片第二级 PWL 前是否把 8-bit SAR 码缩放到公共 10-bit 单位；
 - 11-bit `k_i`、10 fractional bits 和全链 3 fractional bits 的逐操作舍入；
 - 正负独立系数对偶次失真的扩展；
-- PWL truth amplifier 与两级校正级联、dither 扣除的完整集成。
+- 合成模拟 PWL truth 与两级数字校正级联、dither 扣除的完整集成。
 
 下一实验应建立已知 PWL truth，通过“先第二级、再第一级”的数字级联检查
 校正结构表达能力；此时仍不引入 LMS 估计误差。

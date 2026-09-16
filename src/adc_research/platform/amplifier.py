@@ -17,14 +17,15 @@ class AmplifierResult:
 
 @dataclass(frozen=True)
 class StaticPwlTruthConfig:
-    """Odd-symmetric, monotone PWL truth in normalized output coordinates.
+    """Synthetic PWL model of the analog amplifier transfer.
 
     ``ideal_output_edges`` describe the output of the nominal linear amplifier;
-    ``distorted_output_edges`` describe the corresponding physical output after
+    ``distorted_output_edges`` describe the corresponding modeled analog output after
     gain error and nonlinearity.  Both tuples cover the nonnegative half only
     and must start at zero.  Defining the truth through paired edges keeps it
     independent of the digital correction implementation while making its
-    exact inverse identifiable.
+    exact inverse identifiable. Physical amplifier breakpoints are not
+    asserted; this is a controlled behavioral truth for tests.
     """
 
     ideal_output_edges: tuple[float, ...]
