@@ -21,3 +21,4 @@
 - `EXP_016_STAGE2_STATIC_SPECTRUM_V0_1.md`：正弦相位闭式积分、有限相干复频谱、动态指标留出验证及连续/有限记录误差分解。
 - `EXP_017_STAGE2_FINITE_SETTLING_V0_1.md`：一阶 residue 状态、精确周期稳态、静态极限及频率/幅度/建立强度留出验证。
 - `EXP_018_STAGE2_BOUNDARY_SENSITIVITY_PHASE1_V0_1.md`：单阈值连续谱线边界导数的手算、平台和独立积分差分第一验证门。
+- `EXP_019_DUAL_PATH_SETTLING_V0_1.md`：独立辅路静态边界、前馈三状态周期建立、旧约简退化条件及物理证据边界。

@@ -1,0 +1,49 @@
+experiment_id: EXP_019
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+nonideality_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+
+tone:
+  sample_rate_hz: 3.0e9
+  sample_count: 8192
+  coherent_tone_bins: [251, 3019]
+  amplitude_peaks_normalized: [0.901, 0.999]
+  phase_radians: 0.2718281828459045
+  harmonic_orders: [2, 3, 4, 5]
+  full_scale_peak_codes: 2048.0
+
+auxiliary_gain_ratios: [0.97, 1.03]
+platform_validation:
+  initial_outputs: [0.73, -0.41, 0.22]
+  warmup_periods: 1
+
+main_bandwidth_hz: 1.1e10
+main_phase_duration_s: 1.0e-10
+
+cases:
+  matched_paths:
+    provenance: research_control_equal_main_and_auxiliary_factors
+    auxiliary_bandwidth_hz: 1.1e10
+    auxiliary_phase_duration_s: 1.0e-10
+  split_paper_endpoints:
+    provenance: paper_reported_endpoints_plus_assumed_one_pole_hold
+    auxiliary_bandwidth_hz: 7.0e9
+    auxiliary_phase_duration_s: 8.0e-11
+  slower_auxiliary_stress:
+    provenance: research_stress_case
+    auxiliary_bandwidth_hz: 5.0e9
+    auxiliary_phase_duration_s: 8.0e-11
+
+static_grid:
+  sample_count: 8192
+  auxiliary_gain_ratio: 1.03
+  enabled_effects: [static_pwl_truth]
+
+acceptance:
+  maximum_theory_platform_code_disagreements: 0
+  maximum_theory_platform_decision_disagreements: 0
+  maximum_theory_platform_correctable_disagreements: 0
+  maximum_analog_absolute_error: 1.0e-13
+  maximum_matched_reduced_code_disagreements: 0
+  minimum_split_decision_disagreements: 1
+  maximum_static_grid_disagreements: 0
+  minimum_static_pwl_decision_disagreements: 1

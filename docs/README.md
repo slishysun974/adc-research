@@ -19,6 +19,7 @@
 - `reports/STAGE1_PLATFORM_ACCEPTANCE_V1.md`：阶段一平台的验收证据与适用范围。
 - `reports/STAGE1_SIGNAL_CHAIN_STAGE2_DEPENDENCY_AUDIT_V1.md`：逐段核查阶段一信号链和主/辅路径约简对阶段二理论的影响。
 - `reports/STAGE2_THEORY_INDEPENDENT_AUDIT_V1.md`：阶段二数学与证据独立审查的发现、修订和未决问题。
+- `reports/experiments/EXP_019_DUAL_PATH_SETTLING_V0_1.md`：独立辅路候选的判决、周期建立和旧约简对照。
 - `reports/THEORY_LITERATURE_AND_ADAPTATION_REVIEW_V1.md`：理论文献的适用条件与本课题的改写范围。
 
 动态生成的 trace、日志和批量结果不放入本目录，而保存在 `artifacts/runs/`。

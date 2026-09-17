@@ -234,6 +234,8 @@ class _AffinePiece:
     symbols: tuple[int, ...] = ()
     pwl_slices: tuple[int | None, ...] = ()
     correctable: bool = True
+    auxiliary_slope: float | None = None
+    auxiliary_intercept: float | None = None
 
     def value_at(self, input_value: float) -> float:
         return self.slope * input_value + self.intercept
@@ -242,12 +244,18 @@ class _AffinePiece:
 def _split_by_output_boundaries(
     piece: _AffinePiece,
     boundaries: Sequence[float],
+    *,
+    use_auxiliary: bool = False,
 ) -> tuple[_AffinePiece, ...]:
-    if piece.slope <= 0:
+    slope = piece.auxiliary_slope if use_auxiliary else piece.slope
+    intercept = piece.auxiliary_intercept if use_auxiliary else piece.intercept
+    if slope is None or intercept is None:
+        raise ValueError("requested auxiliary path has no affine mapping")
+    if slope <= 0:
         raise ValueError("static predictor currently requires positive local slopes")
     cuts = [piece.lower, piece.upper]
     for boundary in boundaries:
-        crossing = (boundary - piece.intercept) / piece.slope
+        crossing = (boundary - intercept) / slope
         if (
             crossing > piece.lower + _BOUNDARY_TOLERANCE
             and crossing < piece.upper - _BOUNDARY_TOLERANCE
@@ -270,11 +278,15 @@ def _split_by_output_boundaries(
 def _split_many(
     pieces: Sequence[_AffinePiece],
     boundaries: Sequence[float],
+    *,
+    use_auxiliary: bool = False,
 ) -> tuple[_AffinePiece, ...]:
     return tuple(
         child
         for piece in pieces
-        for child in _split_by_output_boundaries(piece, boundaries)
+        for child in _split_by_output_boundaries(
+            piece, boundaries, use_auxiliary=use_auxiliary
+        )
     )
 
 
@@ -321,29 +333,56 @@ def _apply_pwl(
 def _propagate_front_stage(
     pieces: Sequence[_AffinePiece],
     config: FrontStageTheoryConfig,
+    *,
+    record_auxiliary: tuple[float, float] | None = None,
+    decide_from_recorded_auxiliary: bool = False,
 ) -> tuple[_AffinePiece, ...]:
-    main_boundaries = tuple(
-        (threshold - config.auxiliary_offset) / config.auxiliary_gain_ratio
-        for threshold in config.effective_thresholds
-    )
-    decision_pieces = _split_many(
-        pieces,
-        (*main_boundaries, *config.input_range),
-    )
+    if decide_from_recorded_auxiliary:
+        decision_pieces = _split_many(pieces, config.input_range)
+        decision_pieces = _split_many(
+            decision_pieces, config.effective_thresholds, use_auxiliary=True
+        )
+    else:
+        main_boundaries = tuple(
+            (threshold - config.auxiliary_offset) / config.auxiliary_gain_ratio
+            for threshold in config.effective_thresholds
+        )
+        decision_pieces = _split_many(
+            pieces,
+            (*main_boundaries, *config.input_range),
+        )
     after_gain = []
     actual_dac_levels = config.actual_dac_levels
     for piece in decision_pieces:
         midpoint = (piece.lower + piece.upper) / 2
         main_value = piece.value_at(midpoint)
-        auxiliary_value = (
-            config.auxiliary_gain_ratio * main_value + config.auxiliary_offset
-        )
+        if decide_from_recorded_auxiliary:
+            if piece.auxiliary_slope is None or piece.auxiliary_intercept is None:
+                raise ValueError("stage-2 decision requires an auxiliary mapping")
+            auxiliary_value = (
+                piece.auxiliary_slope * midpoint + piece.auxiliary_intercept
+            )
+        else:
+            auxiliary_value = (
+                config.auxiliary_gain_ratio * main_value + config.auxiliary_offset
+            )
         region = bisect_right(config.effective_thresholds, auxiliary_value)
         symbol = config.output_symbols[region]
         actual_dac = actual_dac_levels[region]
         input_correctable = (
             config.input_range[0] <= main_value < config.input_range[1]
         )
+        auxiliary_slope = piece.auxiliary_slope
+        auxiliary_intercept = piece.auxiliary_intercept
+        if record_auxiliary is not None:
+            ratio, offset = record_auxiliary
+            auxiliary_slope = ratio * config.gain * piece.slope
+            auxiliary_intercept = (
+                ratio
+                * config.gain
+                * (piece.intercept - actual_dac + config.dither_value)
+                + offset
+            )
         after_gain.append(
             replace(
                 piece,
@@ -354,6 +393,8 @@ def _propagate_front_stage(
                 ),
                 symbols=piece.symbols + (symbol,),
                 correctable=piece.correctable and input_correctable,
+                auxiliary_slope=auxiliary_slope,
+                auxiliary_intercept=auxiliary_intercept,
             )
         )
 
@@ -461,13 +502,34 @@ def _merge_equivalent_segments(
 
 def predict_static_transfer(
     config: StaticPipelineTheoryConfig,
+    *,
+    independent_stage1_auxiliary: bool = False,
 ) -> StaticTransferPrediction:
-    """Compose the full input partition and derive exact code-width metrics."""
+    """Compose the input partition under a specified auxiliary-path hypothesis.
+
+    The default keeps the frozen affine copy of the stage-1 main output. When
+    ``independent_stage1_auxiliary`` is true, the stage-2 flash observes a
+    separate linear transfer of the stage-1 CDAC summing node, prior to any
+    synthetic main-amplifier PWL distortion.
+    """
 
     input_low, input_high = config.input_range
     pieces = (_AffinePiece(input_low, input_high, 1.0, 0.0),)
-    stage1 = _propagate_front_stage(pieces, config.stage1)
-    stage2 = _propagate_front_stage(stage1, config.stage2)
+    if independent_stage1_auxiliary:
+        stage1 = _propagate_front_stage(
+            pieces,
+            config.stage1,
+            record_auxiliary=(
+                config.stage2.auxiliary_gain_ratio,
+                config.stage2.auxiliary_offset,
+            ),
+        )
+        stage2 = _propagate_front_stage(
+            stage1, config.stage2, decide_from_recorded_auxiliary=True
+        )
+    else:
+        stage1 = _propagate_front_stage(pieces, config.stage1)
+        stage2 = _propagate_front_stage(stage1, config.stage2)
     segments = _merge_equivalent_segments(_backend_segments(stage2, config))
 
     if not segments:

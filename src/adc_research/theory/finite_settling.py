@@ -237,3 +237,160 @@ def predict_periodic_settling(
         output_codes=tuple(output_codes),
         correctable=tuple(correctable),
     )
+
+
+@dataclass(frozen=True)
+class DualPathPeriodicSettlingConfig:
+    """One-pole candidate factors for stage-1 main/aux and stage-2 main."""
+
+    stage1_main_factor: float
+    stage1_auxiliary_factor: float
+    stage2_main_factor: float
+
+    def __post_init__(self) -> None:
+        if any(
+            not isfinite(value) or value < 0 or value >= 1
+            for value in (
+                self.stage1_main_factor,
+                self.stage1_auxiliary_factor,
+                self.stage2_main_factor,
+            )
+        ):
+            raise ValueError("dual-path settling factors must lie in [0,1)")
+
+
+@dataclass(frozen=True)
+class DualPathPeriodicPrediction:
+    """Closed-cycle trace of the independent auxiliary settling hypothesis."""
+
+    input_values: tuple[float, ...]
+    stage1_symbols: tuple[int, ...]
+    stage1_main_targets: tuple[float, ...]
+    stage1_main_outputs: tuple[float, ...]
+    stage1_auxiliary_targets: tuple[float, ...]
+    stage1_auxiliary_outputs: tuple[float, ...]
+    stage2_symbols: tuple[int, ...]
+    stage2_main_targets: tuple[float, ...]
+    stage2_main_outputs: tuple[float, ...]
+    backend_centered_codes: tuple[int, ...]
+    unclipped_output_codes: tuple[int, ...]
+    output_codes: tuple[int, ...]
+    correctable: tuple[bool, ...]
+
+
+def predict_periodic_dual_path_settling(
+    input_values: Iterable[float],
+    config: StaticPipelineTheoryConfig,
+    settling: DualPathPeriodicSettlingConfig,
+) -> DualPathPeriodicPrediction:
+    """Solve three feedforward periodic states without a sample-wise warm-up.
+
+    The auxiliary static target is linear in the stage-1 CDAC summing node.
+    It does not inherit a selected synthetic main-amplifier PWL distortion.
+    This is a conditional behavioral candidate, not a fitted silicon model.
+    """
+
+    values = tuple(float(value) for value in input_values)
+    if not values:
+        raise ValueError("input record must be nonempty")
+    if any(
+        not isfinite(value)
+        or value < config.input_range[0]
+        or value >= config.input_range[1]
+        for value in values
+    ):
+        raise ValueError("input record lies outside the pipeline domain")
+
+    first = config.stage1
+    second = config.stage2
+    first_evaluated = tuple(_stage_target(value, first) for value in values)
+    q1 = tuple(item[0] for item in first_evaluated)
+    main_targets = tuple(item[1] for item in first_evaluated)
+    first_input_ok = tuple(item[2] for item in first_evaluated)
+    auxiliary_targets = []
+    for value in values:
+        flash_input = first.auxiliary_gain_ratio * value + first.auxiliary_offset
+        region = bisect_right(first.effective_thresholds, flash_input)
+        preamp = value - first.actual_dac_levels[region] + first.dither_value
+        auxiliary_targets.append(
+            second.auxiliary_gain_ratio * first.gain * preamp
+            + second.auxiliary_offset
+        )
+
+    main_outputs = periodic_first_order_response(
+        main_targets, settling.stage1_main_factor
+    )
+    auxiliary_outputs = periodic_first_order_response(
+        auxiliary_targets, settling.stage1_auxiliary_factor
+    )
+
+    q2 = []
+    second_targets = []
+    second_input_ok = []
+    for main, auxiliary in zip(main_outputs, auxiliary_outputs, strict=True):
+        region = bisect_right(second.effective_thresholds, auxiliary)
+        q2.append(second.output_symbols[region])
+        preamp = main - second.actual_dac_levels[region] + second.dither_value
+        second_targets.append(_pwl_value(second.gain * preamp, second))
+        second_input_ok.append(second.input_range[0] <= main < second.input_range[1])
+    second_outputs = periodic_first_order_response(
+        second_targets, settling.stage2_main_factor
+    )
+
+    backend_low, backend_high = config.backend_input_range
+    backend_count = 1 << config.backend_bits
+    backend_step = (backend_high - backend_low) / backend_count
+    output_low, output_high = config.output_range
+    dither_copy = sum(config.digital_dither_copies)
+    backend_codes = []
+    unclipped_codes = []
+    output_codes = []
+    correctable = []
+    for index, residue in enumerate(second_outputs):
+        raw_unclipped = floor((residue - backend_low) / backend_step)
+        raw = min(max(raw_unclipped, 0), backend_count - 1)
+        centered = raw - backend_count // 2
+        unclipped = (
+            config.front_stage_weights[0] * q1[index]
+            + config.front_stage_weights[1] * q2[index]
+            + config.backend_weight * centered
+            - dither_copy
+            + config.output_offset
+        )
+        stage1_output_ok = (
+            first.next_stage_range[0]
+            <= main_outputs[index]
+            < first.next_stage_range[1]
+        )
+        stage2_output_ok = (
+            second.next_stage_range[0]
+            <= residue
+            < second.next_stage_range[1]
+        )
+        backend_codes.append(centered)
+        unclipped_codes.append(unclipped)
+        output_codes.append(min(max(unclipped, output_low), output_high))
+        correctable.append(
+            first_input_ok[index]
+            and stage1_output_ok
+            and second_input_ok[index]
+            and stage2_output_ok
+            and backend_low <= residue < backend_high
+            and output_low <= unclipped <= output_high
+        )
+
+    return DualPathPeriodicPrediction(
+        input_values=values,
+        stage1_symbols=q1,
+        stage1_main_targets=main_targets,
+        stage1_main_outputs=main_outputs,
+        stage1_auxiliary_targets=tuple(auxiliary_targets),
+        stage1_auxiliary_outputs=auxiliary_outputs,
+        stage2_symbols=tuple(q2),
+        stage2_main_targets=tuple(second_targets),
+        stage2_main_outputs=second_outputs,
+        backend_centered_codes=tuple(backend_codes),
+        unclipped_output_codes=tuple(unclipped_codes),
+        output_codes=tuple(output_codes),
+        correctable=tuple(correctable),
+    )
