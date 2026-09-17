@@ -5,6 +5,8 @@
 > 本版目标：先完成理想静态信号链与冗余证明，再逐项增加非理想和校准
 > 验收记录：`docs/reports/STAGE1_PLATFORM_ACCEPTANCE_V1.md`
 
+> 阅读说明：本文件是阶段一历史实现规格，`Gate A` 至 `Gate E` 为内部验收阶段编号；`truth` 与 `oracle` 是测试模型及已知传输下理想逆校正的代码旧名。现行表述见[研究文档术语约定](../TECHNICAL_WRITING_CONVENTIONS_V1.md)。
+
 ## 1. 目标与非目标
 
 平台必须逐样本复现：采样值、flash 判决、CDAC 重构、残差、后端 SAR 量化、数字冗余重构和最终输出码；每一级中间量均可观察、可保存、可独立测试。

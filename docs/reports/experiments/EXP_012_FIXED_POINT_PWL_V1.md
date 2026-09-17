@@ -5,6 +5,8 @@
 > PWL truth：`gu_gate_d_static_v0_1`  
 > 正式运行：`artifacts/runs/EXP_012/fixed_point_pwl_v1_20260915_r2`
 
+> 术语说明：本报告的 `oracle` 仅指已知预设模拟传输下的浮点逆校正参考，并非可直接由芯片获得的系数。数字 PWL 与模拟传输分开讨论。见[研究文档术语约定](../../TECHNICAL_WRITING_CONVENTIONS_V1.md)。
+
 ## 1. 论文给出的定点信息
 
 Gu et al. 在 OJSSCS 扩展论文 Sec. II-A 中说明：示例 PWL 校正器的原始码为
@@ -120,4 +122,3 @@ EXP-012 在行为级范围内完成了以下工作：
 更新量小于一个系数最低有效位而无法累积的问题。
 
 [^1]: Mingyang Gu, Yi Zhong, Lu Jie, and Nan Sun, “A 12-b 3-GS/s Pipelined ADC With Piecewise-Linear Gain Nonlinearity Calibration,” *IEEE Open Journal of the Solid-State Circuits Society*, 2026, Sec. II-A, Eqs. (1)-(3), and Sec. III-C, DOI: 10.1109/OJSSCS.2026.3656850；本地副本 `references/local/OJSSCS2026_Gu.pdf`。
-

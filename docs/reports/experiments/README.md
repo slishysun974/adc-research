@@ -2,15 +2,17 @@
 
 本目录只保存经过审查的实验设计、结果摘要、结论和限制。原始运行产物及大规模数据保存在 `artifacts/runs/`。
 
+阅读历史报告时，先按[研究文档术语约定](../../TECHNICAL_WRITING_CONVENTIONS_V1.md)区分预设模拟传输（旧文中 `truth`）、已知传输下的理想逆校正（`oracle`）、数字 PWL 校正和物理放大器。`Gate A` 至 `Gate E` 是阶段一验收编号；`slice occupancy` 是分段访问次数，不能代替 LMS 系数的有效更新次数。文件名、运行编号和代码字段保持原样以便复现。
+
 ## 当前报告
 
 - `EXP_001_002_GATE_AB_HYPOTHESIS_A_V0_1.md`：候选 A 的 residue 覆盖、联合冗余窗口和 Gate A/B 验收。
 - `EXP_003_GATE_C_HYPOTHESIS_A_V0_1.md`：候选 A 的三级理想链、双 dither 数字抵消和 Gate C 验收。
 - `EXP_004_Q007_DUAL_PATH_MARGIN_V1.md`：双路径增益/offset 的联合冗余余量、反例和 Q-007 行为级关闭。
 - `EXP_005_Q008_PWL_CODE_CONTINUITY_V1.md`：4-slice PWL 的 `b0=128/32`、累计连续性和负满量程端点审计。
-- `EXP_006_TWO_STAGE_PWL_TRUTH_V1.md`：两级静态 PWL truth、oracle 反函数、局部 dither 扣除顺序及量化残差审计。
+- `EXP_006_TWO_STAGE_PWL_TRUTH_V1.md`：两级预设模拟传输、已知传输下的理想逆校正、局部 dither 扣除顺序及量化残差审计。
 - `EXP_007_GATE_D_STATIC_NONIDEALITIES_V1.md`：四类静态非理想的独立开关、零值恒等、trace 隔离与组合顺序验证。
-- `EXP_008_PWL_SLICE4_REACHABILITY_V1.md`：第 4 个 PWL slice 的解析/穷举可达性，以及一致内部码缩放的不变性审计。
+- `EXP_008_PWL_SLICE4_REACHABILITY_V1.md`：预设模拟传输与数字校正第 4 段的解析/穷举可访问性，以及一致内部码缩放的不变性审计。
 - `EXP_009_ADAPTIVE_GATED_LMS_IDENTIFIABILITY_V1.md`：论文 gated-LMS 的自适应下门限、分段有效更新次数及高段可辨识性审计。
 - `EXP_010_TWO_STAGE_ADAPTIVE_PWL_V1.md`：两级局部 LMS 观测、嵌套自适应校正、码域改善和量化后固定点差异。
 - `EXP_011_RANDOM_UPDATE_SCHEDULES_V1.md`：两个独立伪随机序列、逐样本/按 30 抽取/分块平均相关更新的收敛与稳态方差比较。

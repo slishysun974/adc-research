@@ -1,13 +1,15 @@
-# EXP-009：自适应门限 gated-LMS 与高段可辨识性
+# EXP-009：自适应门限 LMS 与高段系数可辨识性
 
 > 状态：方程级浮点原语通过；两级联合随机调度尚未实施  
 > 架构配置：`gu_behavioral_v1`  
 > PWL truth：`gu_gate_d_static_v0_1`  
 > 正式运行：`artifacts/runs/EXP_009/adaptive_gated_lms_v1_20260915`
 
+> 术语说明：本报告的 `truth` 是预设模拟传输，`oracle` 是已知传输下的理想逆校正。分段访问次数表示模拟输出落入该段；门控有效更新次数表示该段系数实际获得的非零更新机会，两者必须分别统计。代码字段保持原名。见[研究文档术语约定](../../TECHNICAL_WRITING_CONVENTIONS_V1.md)。
+
 ## 1. 结论
 
-Gu 的 4-slice gated-LMS 不是按 raw-code slice 是否被访问来判断系数能否
+Gu 的四段门控 LMS 不能仅按原始码是否访问该段来判断系数能否
 更新。`k1` 使用全部样本；`k2...k4` 使用校正并扣除对应数字 dither 后的
 `Dout`，只施加由前序系数形成的自适应下门限：
 
@@ -93,4 +95,3 @@ expanded profile 的最终自适应门限与 truth 的理想边界相符：
 下一实验应把 stage2 校正/扣 dither 后的局部输出先用于 stage2 LMS，再按已
 冻结的嵌套顺序形成 stage1 输出并更新 stage1 LMS；同时保留 oracle 基线、
 每段有效样本计数和未激励系数冻结三组对照。
-

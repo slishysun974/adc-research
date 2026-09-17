@@ -1,9 +1,11 @@
-# EXP-008：第 4 个 PWL slice 可达性与内部码缩放
+# EXP-008：预设模拟传输与数字校正的第 4 段可访问性
 
 > 状态：行为级可达性审计通过；硅 linearization dither 映射仍未决  
 > 架构配置：`gu_behavioral_v1`  
 > 非理想配置：`gu_gate_d_static_v0_1` 的 PWL truth  
 > 正式运行：`artifacts/runs/EXP_008/slice4_reachability_v1_20260915`
+
+> 术语说明：本报告的 `truth` 是预设模拟传输，`oracle` 是已知传输下的理想逆校正；`slice occupancy` 指样本进入某分段的次数，不等于 LMS 对该分段系数的有效更新次数。见[研究文档术语约定](../../TECHNICAL_WRITING_CONVENTIONS_V1.md)。
 
 ## 1. 结论
 
@@ -111,4 +113,3 @@ dither `+/-0.25/+/-0.75` 的实现复刻，也没有恢复 PRNG 到 CDAC 电容�
 
 下一步进入浮点到定点的 PWL 实现：11-bit `k_i`、10 fractional bits、全链
 3 fractional bits，以及各操作的舍入、饱和和负满量程端点。
-

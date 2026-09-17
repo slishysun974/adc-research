@@ -5,6 +5,8 @@
 - `PROJECT_CHARTER.md`：当前研究章程；
 - `STATUS.md`：当前进度、下一项工作和阻塞；
 - `DECISIONS.md`：影响范围、方法和验证标准的重要决定。
+- `TECHNICAL_WRITING_CONVENTIONS_V1.md`：电路量、数学术语和实验内部名称的统一写法。
+- `reports/DOCUMENT_LANGUAGE_AUDIT_V1.md`：全仓库研究文档的可读性审查范围、问题和处理记录。
 
 ## 研究内容
 

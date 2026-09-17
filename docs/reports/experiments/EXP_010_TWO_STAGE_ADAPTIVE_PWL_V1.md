@@ -5,6 +5,8 @@
 > PWL truth：`gu_gate_d_static_v0_1`  
 > 正式运行：`artifacts/runs/EXP_010/two_stage_adaptive_v1_20260915`
 
+> 术语说明：`truth` 为预设模拟传输，`oracle` 为由已知传输反推的理想逆校正参考；表内 `gate counts` 为各段系数的有效更新次数。代码和运行字段沿用原名。见[研究文档术语约定](../../TECHNICAL_WRITING_CONVENTIONS_V1.md)。
+
 ## 1. 结论
 
 EXP-009 的自适应下门限 gated-LMS 已按既定嵌套顺序接入完整两级 pipeline：
@@ -100,4 +102,3 @@ mu_code = mu_normalized / code_full_scale^2
 下一实验应使用独立随机 PRNG，比较逐样本、每 30 样本抽取和块相关估计，
 同时报告每段有效更新数、系数均值/方差、相关残差、MAE 和最大误差。第四段
 仍必须保持冻结，除非另有受控持续激励。
-
