@@ -1,0 +1,275 @@
+{
+  "date": "2026-10-10",
+  "scope": "Main/auxiliary paths and two-stage PWL calibration audit; no model computation or research protocol changes",
+  "paper_source": {
+    "doi": "10.1109/OJSSCS.2026.3656850",
+    "url": "https://www.researchgate.net/publication/400043468_A_12-b_3-GSs_Pipelined_ADC_With_Piecewise-Linear_Gain_Nonlinearity_Calibration/fulltext/69746450ac604d40d0e5388d/A-12-b-3-GS-s-Pipelined-ADC-With-Piecewise-Linear-Gain-Nonlinearity-Calibration.pdf",
+    "version": "14-page accepted author manuscript",
+    "relevant_pdf_pages": [
+      3,
+      4,
+      5,
+      7,
+      9,
+      10
+    ],
+    "local_pdf_available": false,
+    "text_inspected": true,
+    "page_images_verified": false,
+    "publisher_final_edited_version_inspected": false
+  },
+  "model_audit": {
+    "passed": true,
+    "embedded_functions": 16,
+    "stimulus_sources": 4,
+    "feedback_delays": 5,
+    "model_blocks": 293,
+    "signal_topology_edges": 42,
+    "pwl_stages": 2,
+    "coefficient_banks": 2,
+    "coefficients_per_bank": 4,
+    "default_digital_mode": 3,
+    "default_auxiliary_mode": 0
+  },
+  "python_regression": {
+    "tests": 24,
+    "passed": true,
+    "patterns": [
+      "test_adaptive_two_stage.py",
+      "test_gated_lms.py",
+      "test_gu_two_stage_pwl_truth.py",
+      "test_gu_q007_dual_path.py"
+    ]
+  },
+  "fingerprint_audit": {
+    "checked_files": 53,
+    "all_unchanged": true,
+    "files": {
+      "src/adc_research/platform/amplifier.py": {
+        "sha256": "ea53443e244875ea4cf1269bb426eec3106067571f55b577c2cf93207b95c0e4",
+        "unchanged": true
+      },
+      "src/adc_research/platform/backend_sar.py": {
+        "sha256": "5ec30a65835a50124996392112d8ec19a4fa14186af9457aa7db48f3b732690e",
+        "unchanged": true
+      },
+      "src/adc_research/platform/cdac.py": {
+        "sha256": "826487042e046555034964c4403ef609493f366e414aac5ae525e11e2e85f0a9",
+        "unchanged": true
+      },
+      "src/adc_research/platform/dual_path_settling.py": {
+        "sha256": "0e8b25f83393f6dc3936252811dd35a16bcc6758f4e9fa9bf2e61361e3e22a67",
+        "unchanged": true
+      },
+      "src/adc_research/platform/finite_settling.py": {
+        "sha256": "1a70651ce0e3b77429ff6484445e1095850ae2bbdf9dcd3d915907efa4220b46",
+        "unchanged": true
+      },
+      "src/adc_research/platform/pipeline.py": {
+        "sha256": "4c6093c5b8ae8b580eb33ec4fa421e983775d1674caac48ca17330aff88bfaa6",
+        "unchanged": true
+      },
+      "src/adc_research/platform/presets.py": {
+        "sha256": "825c7c3f54c292f786090ba3adbc647f760035440c34edcb13a044bdb77ecae2",
+        "unchanged": true
+      },
+      "src/adc_research/platform/quantizer.py": {
+        "sha256": "573defb4efe88d9129c1fdc9ccca21783ff628c9151e85b7b2e2d9e3a23c83c8",
+        "unchanged": true
+      },
+      "src/adc_research/platform/reconstruct.py": {
+        "sha256": "1106d4408c69e3d4dcd7a7e380b5971ccaae8b6d98dfe2652a17dbd25e4fcd64",
+        "unchanged": true
+      },
+      "src/adc_research/platform/stage.py": {
+        "sha256": "1b6a799ab5aa676da9783c881326279b11b3142a93d1111b3996f70171491651",
+        "unchanged": true
+      },
+      "src/adc_research/platform/stimulus.py": {
+        "sha256": "03d29547e407f9103ca6953c64b374a7f1d31d0f2a751ea7b68c1cfe46d3523b",
+        "unchanged": true
+      },
+      "src/adc_research/platform/two_phase_dual_path.py": {
+        "sha256": "043019351277eb298ff474839e18ab62d741c47584ceba2bcee191cd8a834a82",
+        "unchanged": true
+      },
+      "src/adc_research/platform/__init__.py": {
+        "sha256": "323c78976f61d8d0ff04936c8cf5577feb18db735afd2d84144d9ea8acd0d197",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/adaptive_two_stage.py": {
+        "sha256": "aaf1b82ac817ff87824ba99a0caa4a6b284401c2c653ca9153dae949df05c161",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/fixed_adaptive_two_stage.py": {
+        "sha256": "cb0cd909506df64c4ffabbadfd559dff517ec79c79abd01972ee85ae3ef0f7a6",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/fixed_commit_broadcast.py": {
+        "sha256": "cc23112fadfb9c656a7008438a5a7c0452822d6aa60b4853121e8a7e1c8944bc",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/fixed_filtered_window.py": {
+        "sha256": "16dfc77be374db55e30ddc4fa485acd05bd87cecdd489fcc5e48f4d19e808eb6",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/fixed_four_lane_window.py": {
+        "sha256": "9574c12d753d6d9bcc73a808c4fb8beb3abbf20533ff4e2205205f50b4992dcc",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/fixed_gated_lms.py": {
+        "sha256": "9523e05e11ad4c66c9722f44fcff016c89e2660bdcc2a4c5aa8724d24d6ed3a9",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/fixed_point.py": {
+        "sha256": "d23df708d1a0df86677c8c2807aef0ece29995242d423e80a92febcd37346109",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/fixed_pwl.py": {
+        "sha256": "bc885c7a15307dced343230d2ddfa51ef203514263eecad8bbbd15597572e72b",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/flash_interface.py": {
+        "sha256": "65e66333bce623c816c021b44a3e75424e3d8720a929d1eecdd6672fbefda343",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/gated_lms.py": {
+        "sha256": "65b9bd9f816181edb7bccf0632bfc074da206aa4e04414970eab7a7152050311",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/gu_baseline.py": {
+        "sha256": "9d76b882fc27b50122bc4a75c46c4195248868f741e7ca52cde4aee9073d1ff5",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/known_truth.py": {
+        "sha256": "404a872df762b0b7a7eb190177fbdb899603f353d785d30176a9e837b72b1df7",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/observation.py": {
+        "sha256": "d491f4525bd8d2d0069e69420a812cbb84548eac16834b73a2f77a8177e6363e",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/pwl.py": {
+        "sha256": "01fedab980f6de31d4fef70dae3f63ae2ea368f1ac5ddd478d86a4fb0766c22a",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/two_stage.py": {
+        "sha256": "d4994a99a8f4e9a4e0bb625bb4a9309d02c55982ce8436eeaf124bb8162287fc",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/window_phase_selection.py": {
+        "sha256": "f54f84fd36965e6239775ec71cc0eb8b779f0c524be617adb8c8d5d9ba1657c6",
+        "unchanged": true
+      },
+      "src/adc_research/calibration/__init__.py": {
+        "sha256": "c34cff698a4f95ed216b1fd8a91b763d9f5e478127a0df149fa9a8df3179ae92",
+        "unchanged": true
+      },
+      "configs/architectures/gu_behavioral_v1.yaml": {
+        "sha256": "5d7c1a2afd17275068fe92f082b5960c5e2facd88a161b7a722a2dbdab0a10b8",
+        "unchanged": true
+      },
+      "configs/nonidealities/gu_gate_d_static_v0_1.yaml": {
+        "sha256": "58b8712024a4f26c1878f27336261144a06f99a29f59053b021eb2070d44fd83",
+        "unchanged": true
+      },
+      "experiments/exp_057_static_two_stage_million/protocol.json": {
+        "sha256": "189587f5681c8184f6532e5e9e2b38d0e23d92121ed736341175e258e7f317b8",
+        "unchanged": true
+      },
+      "simulink_adc/validation_protocol.json": {
+        "sha256": "c3852110444dcfbaaa4c382a78e2e88a1ea1b907877c5afaaab0cd5b571029bf",
+        "unchanged": true
+      },
+      "simulink_adc/python_reference.py": {
+        "sha256": "6d6e54e62d5db70c7084666dc833f18824af51edd173c4b0fc1b5199d6b7206c",
+        "unchanged": true
+      },
+      "simulink_adc/adc_load_case.m": {
+        "sha256": "4704b99c2ffda2cad3e5719c4cc99a3ec814f7b6aa2623cbb3c21aa56b2f587a",
+        "unchanged": true
+      },
+      "simulink_adc/build_adc_model.m": {
+        "sha256": "cd1e300e3ecf2be5b64e22d2b0a48cbcf0f0fd611ae390920c5912440f4d586e",
+        "unchanged": true
+      },
+      "simulink_adc/open_adc_demo.m": {
+        "sha256": "0cbc096bb54a1616a380cc692092468d11f9e49c65a39c0b14ed0dc1a480eda8",
+        "unchanged": true
+      },
+      "simulink_adc/render_adc_previews.m": {
+        "sha256": "d44be06607c2a9b6f1d3bdb08bdc41dc49302df1b1d0924f4a19ef236707de33",
+        "unchanged": true
+      },
+      "simulink_adc/render_adc_results.m": {
+        "sha256": "93ce14b45b2af741870416e8013982d0a92070fc21276434fe8a8933b05a9be2",
+        "unchanged": true
+      },
+      "simulink_adc/run_adc_validation.m": {
+        "sha256": "525db88fa3890511f1e0c81c54dd93fcd3f41ad5b2d098342ae864e00503d494",
+        "unchanged": true
+      },
+      "simulink_adc/validate_adc_primitives.m": {
+        "sha256": "aaf1718e3dcedd06e2b79d0e19284827815422de17910b465f1c8b8dff79a271",
+        "unchanged": true
+      },
+      "simulink_adc/blocks/adc_analog.m": {
+        "sha256": "9c5c377fc98f0467865d55cbbff3b1181d5a2c5f9b92d43cdcfa3574063904e4",
+        "unchanged": true
+      },
+      "simulink_adc/blocks/adc_auxiliary.m": {
+        "sha256": "61b33fc400c77cc35331c3379177302441b2c6d9b52b1fbbf98fd0fa1ad639e0",
+        "unchanged": true
+      },
+      "simulink_adc/blocks/adc_cdac.m": {
+        "sha256": "158788f7e71279db35cc7980bdfdd14e780f3175d39c7ec203c82dac9ebd6b3b",
+        "unchanged": true
+      },
+      "simulink_adc/blocks/adc_flags.m": {
+        "sha256": "2b2406502f571a5cd0d2b25f4e4e2b62ea9c5cd191b4259d32a24b4e5443ae71",
+        "unchanged": true
+      },
+      "simulink_adc/blocks/adc_flash.m": {
+        "sha256": "fc84e21f4af328547b03be1dc8f1292fa3f1b79c20395b7b4aa9c5d635be3e1f",
+        "unchanged": true
+      },
+      "simulink_adc/blocks/adc_gate.m": {
+        "sha256": "d6158c3542feca9c2ff8a2c897a93b21cd196488d9b7823d9b51ceb4eef8f9f0",
+        "unchanged": true
+      },
+      "simulink_adc/blocks/adc_pwl.m": {
+        "sha256": "a3f1f54312b141e77a2d02ad1d3b8b712da99fbb7340cd41fb991ab397580f6d",
+        "unchanged": true
+      },
+      "simulink_adc/blocks/adc_sar.m": {
+        "sha256": "29886ba2dfc27453564bf9e466e1571f5eeaf9260e6c262090c52a0a36e717d6",
+        "unchanged": true
+      },
+      "simulink_adc/blocks/adc_settle.m": {
+        "sha256": "7d12969a564f517e6d21f034d8f53714026a7e30e2081d52ee4191a9dabeedd1",
+        "unchanged": true
+      },
+      "simulink_adc/blocks/adc_update.m": {
+        "sha256": "3633917eb672dc6a5e6b77450241515c2c4eaf3df9be116fa29a4388d081ab83",
+        "unchanged": true
+      },
+      "simulink_adc/adc_behavioral.slx": {
+        "sha256": "2aee5f28f6a870afd5c86d96fd0748a71747a1e35e4a2fe277d01f7c58fc0c61",
+        "unchanged": true
+      }
+    },
+    "audit_script_excluded_from_unchanged_claim": true
+  },
+  "current_audit_script_sha256": "c762de279fdb6babbae2eea29b8eea448a6186d72341c3b2ddeb71156e38d87a",
+  "prior_numerical_parity_record": "validation_summary.json",
+  "two_stage_structure_matches_paper": true,
+  "full_chip_equivalence_claimed": false,
+  "not_reproduced": [
+    "foreground auxiliary/Flash offset trimming",
+    "foreground capacitor weight extraction and digital mismatch correction",
+    "SAR channel/capacitor mismatch calibration",
+    "Q3/Q1.10 arithmetic and actual parallel hardware scheduling",
+    "undisclosed decimation selection, merge, commit and broadcast details",
+    "identified physical main/auxiliary transfer and timing"
+  ]
+}

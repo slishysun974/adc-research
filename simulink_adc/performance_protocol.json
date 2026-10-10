@@ -1,0 +1,56 @@
+{
+  "version": "adc-simulink-performance-v1",
+  "declared_date": "2026-10-10",
+  "purpose": "User-requested performance and visualization demonstration of the existing native Simulink model, independently checked against the original Python core; not a new algorithm or a chip reproduction.",
+  "physical_case": "EXP-057 both_smooth; static matched auxiliary; ideal flash, CDAC and SAR; no noise, jitter, settling or channel mismatch",
+  "stage1_truth": [0.975, -0.055],
+  "stage2_truth": [0.98, -0.04],
+  "truth_equation": "r_s=a_s*z_s+b_s*z_s^3; z_s=4*(main_s-q_s/4+tag_s/32)",
+  "training": {
+    "conversions": 1000080,
+    "chunk_samples": 12000,
+    "input_distribution": "uniform[-0.82,0.82]",
+    "input_seed": 2026101011,
+    "dither_seed": 2026101012,
+    "rng": "numpy.default_rng PCG64; generate entire input and then entire two-column dither record before chunking",
+    "digital_mode": 4,
+    "method": "full120, all 120 observations selected; both banks simultaneously commit after slot119; next sample uses new banks",
+    "initial_coefficients": [1,1,1,1,1,1,1,1],
+    "step_numerators": [1,3,6,12],
+    "stage1_step_denominator": 262144000,
+    "stage2_step_denominator": 16384000,
+    "checkpoints": [0,12000,60000,120000,300000,600000,1000080],
+    "chunk_contract": "Static analog only. Chunks end at complete120 windows. Each implementation carries its OWN eight coefficients; local counters are aggregated offline. No residual/window state is lost at these boundaries."
+  },
+  "test": {
+    "samples": 30720,
+    "fundamental_bin": 10241,
+    "sample_rate_hz": 3000000000,
+    "amplitude": 0.82,
+    "dither_seed": 2026101013,
+    "digital_mode": 1,
+    "policy": "Same coherent tone and fixed dither at all checkpoints; freeze the independently learned banks; no adaptation during test"
+  },
+  "scoring": {
+    "primary": "Original floating corrected output; raw branch is original integer reconstruction",
+    "additional_integer": "Offline-only clip(floor(output+0.5),0,4095), explicitly labeled; no change to model arithmetic",
+    "fft": "Existing analyze_coherent_tone; rectangular coherent FFT, remove DC, SNDR all nonfundamental nonDC power, SFDR largest spur, harmonics2..5 for SNR/THD; full_scale_peak2048",
+    "ideal_target": "2048*(x+1), offline MSE/DC/code-error display only",
+    "paper_comparison": "Fig21: 1GHz,0dBFS, gain-only calibrated baseline54.0/62.7dB and PWL60.3/76.0dB. Our unity baseline includes gain error, input is -1.724dBFS, full-rate spectrum unlike paper's decimated readout. Fig24 about1e7 conversions; our full120 budget and update schedule differ. Compare trend and structure, not exact chip reproduction."
+  },
+  "preflight": "480-conversion record: continuous run versus two240-conversion chunks for both implementations; compare physical/digital outputs and after banks exactly. Then compare all original-core and native-model traces.",
+  "acceptance": {
+    "field_limits": "Reuse python_reference.tolerance; all scalar fields of all conversions retained and compared, plus independently carried checkpoint banks",
+    "nonfinite_allowed": 0,
+    "analog_overloads_allowed": 0,
+    "output_clipping_allowed": 0,
+    "performance": "Outcome only; keep this seed, steps and horizon even if improvement is small or paper numbers are not reached",
+    "source_unchanged": "Original Python platform/calibration and adc_behavioral.slx must retain recorded hashes"
+  },
+  "sources": {
+    "parameters_and_steps": "experiments/exp_057_static_two_stage_million/protocol.json",
+    "paper_doi": "10.1109/OJSSCS.2026.3656850",
+    "paper_figures": [21,24],
+    "paper_scope": "Public accepted author manuscript text; local publisher PDF and rendered original figures unavailable"
+  }
+}

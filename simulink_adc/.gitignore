@@ -1,0 +1,12 @@
+.deps/
+slprj/
+*.slxc
+outputs/
+validation_runs/
+performance_runs/
+
+# Publish only the latest performance figures; preserve older copies locally.
+performance_figures/*
+!performance_figures/reduced_*.png
+!performance_figures/reduced_*.svg
+python_simulink_comparison.png

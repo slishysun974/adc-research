@@ -1,0 +1,152 @@
+{
+  "version": "adc-simulink-harmonics-v1",
+  "declared_date": "2026-10-10",
+  "purpose": "User-authorized rerun with cubic gain nonlinearity multiplied by3 and explicit harmonic suppression; no learning retuning.",
+  "physical_case": "Static matched auxiliary; new assumed stronger cubic truth; ideal flash/CDAC/SAR; no noise or dynamics",
+  "stage1_truth": [
+    0.975,
+    -0.165
+  ],
+  "stage2_truth": [
+    0.98,
+    -0.12
+  ],
+  "truth_equation": "r_s=a_s*z_s+b_s*z_s^3; z_s=4*(main_s-q_s/4+tag_s/32)",
+  "training": {
+    "conversions": 1000080,
+    "chunk_samples": 12000,
+    "input_distribution": "uniform[-0.82,0.82]",
+    "input_seed": 2026101011,
+    "dither_seed": 2026101012,
+    "rng": "numpy.default_rng PCG64; generate entire input and then entire two-column dither record before chunking",
+    "digital_mode": 4,
+    "method": "full120, all 120 observations selected; both banks simultaneously commit after slot119; next sample uses new banks",
+    "initial_coefficients": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "step_numerators": [
+      1,
+      3,
+      6,
+      12
+    ],
+    "stage1_step_denominator": 262144000,
+    "stage2_step_denominator": 16384000,
+    "checkpoints": [
+      0,
+      12000,
+      60000,
+      120000,
+      300000,
+      600000,
+      1000080
+    ],
+    "chunk_contract": "Static analog only. Chunks end at complete120 windows. Each implementation carries its OWN eight coefficients; local counters are aggregated offline. No residual/window state is lost at these boundaries."
+  },
+  "test": {
+    "samples": 30720,
+    "fundamental_bin": 1001,
+    "sample_rate_hz": 3000000000,
+    "amplitude": 0.82,
+    "dither_seed": 2026101013,
+    "digital_mode": 1,
+    "policy": "Same coherent tone and fixed dither at all checkpoints; freeze the independently learned banks; no adaptation during test"
+  },
+  "scoring": {
+    "primary": "Original floating corrected output; raw branch is original integer reconstruction",
+    "additional_integer": "Offline-only clip(floor(output+0.5),0,4095), explicitly labeled; no change to model arithmetic",
+    "fft": "Existing analyze_coherent_tone; rectangular coherent FFT, remove DC, SNDR all nonfundamental nonDC power, SFDR largest spur, harmonics2..5 for SNR/THD; full_scale_peak2048",
+    "ideal_target": "2048*(x+1), offline MSE/DC/code-error display only",
+    "paper_comparison": "This is a harmonic visualization test at97.75390625MHz, not the1GHz chip measurement. Do not compare absolute scores with the previous different-frequency test."
+  },
+  "preflight": "480-conversion record: continuous run versus two240-conversion chunks for both implementations; compare physical/digital outputs and after banks exactly. Then compare all original-core and native-model traces.",
+  "acceptance": {
+    "field_limits": "Reuse python_reference.tolerance; all scalar fields of all conversions retained and compared, plus independently carried checkpoint banks",
+    "nonfinite_allowed": 0,
+    "analog_overloads_allowed": 0,
+    "output_clipping_allowed": 0,
+    "performance": "Outcome only; keep this seed, steps and horizon even if improvement is small or paper numbers are not reached",
+    "source_unchanged": "Original Python platform/calibration and adc_behavioral.slx must retain recorded hashes"
+  },
+  "sources": {
+    "parameters_and_steps": "New cubic coefficients are assumed3x stress conditions; original steps fromEXP057. No source, model or learning algorithm modification.",
+    "paper_doi": "10.1109/OJSSCS.2026.3656850",
+    "paper_figures": [
+      21,
+      24
+    ],
+    "paper_scope": "Public accepted author manuscript text; local publisher PDF and rendered original figures unavailable"
+  },
+  "summary_file": "harmonic_summary.json",
+  "harmonic_analysis": {
+    "orders": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "plotted_odd_orders": [
+      3,
+      5,
+      7,
+      9,
+      11,
+      13,
+      15,
+      17,
+      19,
+      21,
+      23,
+      25,
+      27,
+      29,
+      31
+    ],
+    "zoom_selection": "Largest BEFORE odd harmonic amongHD3..HD31; keep the same bin after calibration, never select by suppression",
+    "zoom_radius_bins": 10,
+    "previous_stage1_truth": [
+      0.975,
+      -0.055
+    ],
+    "previous_stage2_truth": [
+      0.98,
+      -0.04
+    ],
+    "thd_policy": "Additional THD2..31 distinct from original metrics THD2..5; explicit folded bins and dBFS/dBc before/after/suppression; also retain integer results",
+    "expectation": "Odd-symmetric cubic compression is expected to create odd harmonics; quantization and fixed finite dither may leave even harmonics. Outcomes, including any worsened harmonic, are retained.",
+    "monotonicity": "dg/dz=a+3*b*z^2; positive on declared domain[-1,1], minimum0.480 and0.620"
+  }
+}

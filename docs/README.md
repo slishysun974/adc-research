@@ -18,6 +18,7 @@
 | 任务 | 先读 | 再读 |
 |---|---|---|
 | 理解四阶段与代码位置 | [阶段导航](stages/README.md) | 对应阶段README及相关源码入口 |
+| 查看或复算 Simulink 行为模型 | [Simulink 使用说明](../simulink_adc/README.md) | [与原 Python 的一致性验收](../simulink_adc/VALIDATION.md)、[校准前后性能与论文对标](../simulink_adc/PERFORMANCE_DEMO.md)，不等同定点／芯片验收 |
 | 未知增益、信息与性能关系 | [完整链路理论框架](theory/UNKNOWN_GAIN_END_TO_END_FRAMEWORK_V0_1.md) | 对应理论文档、证据表、独立验证 |
 | 长期Gu统计与静态两级 | EXP-055—057的报告和理论，见索引 | 实验目录README、冻结协议、验证记录及状态数据 |
 | 码制、来源、测量口径 | [规格索引](specifications/README.md) | Gu架构／码制约定、ADC指标协议和原始文献 |

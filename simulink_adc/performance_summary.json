@@ -1,0 +1,556 @@
+{
+  "protocol_version": "adc-simulink-performance-v1",
+  "training_conversions": 1000080,
+  "training_windows": 8334,
+  "observations_per_bank": 1000080,
+  "gate_counts": [
+    1000080,
+    452371,
+    0,
+    0,
+    1000080,
+    470991,
+    0,
+    0
+  ],
+  "training_overload_clip_counts": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "test_overload_clip_counts": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "checkpoints": {
+    "0": {
+      "floating": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.508984375,
+        "fundamental_rms": 1186.81451415551,
+        "fundamental_dbfs": -1.728642111748873,
+        "sndr_db": 46.474087701894405,
+        "snr_db": 46.71524853980442,
+        "thd_db": -59.14888542752355,
+        "sfdr_dbc": 53.9608859941668,
+        "enob_bits": 7.427589319251563,
+        "worst_spur_bin": 10259,
+        "worst_spur_frequency_hz": 1001855468.75
+      },
+      "integer": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.508984375,
+        "fundamental_rms": 1186.81451415551,
+        "fundamental_dbfs": -1.728642111748873,
+        "sndr_db": 46.474087701894405,
+        "snr_db": 46.71524853980442,
+        "thd_db": -59.14888542752355,
+        "sfdr_dbc": 53.9608859941668,
+        "enob_bits": 7.427589319251563,
+        "worst_spur_bin": 10259,
+        "worst_spur_frequency_hz": 1001855468.75
+      },
+      "mse_code2": 32.41581324238349,
+      "dc_error_code": -0.4910156250018885
+    },
+    "12000": {
+      "floating": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.5021664418168,
+        "fundamental_rms": 1186.9044641056169,
+        "fundamental_dbfs": -1.7279838237652436,
+        "sndr_db": 48.177886993635035,
+        "snr_db": 48.43916841931435,
+        "thd_db": -60.514630497841175,
+        "sfdr_dbc": 55.6460821913733,
+        "enob_bits": 7.7106124574144586,
+        "worst_spur_bin": 10259,
+        "worst_spur_frequency_hz": 1001855468.75
+      },
+      "integer": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.5007161458334,
+        "fundamental_rms": 1186.9023163083198,
+        "fundamental_dbfs": -1.7279995415822462,
+        "sndr_db": 48.116996115133546,
+        "snr_db": 48.37480282138061,
+        "thd_db": -60.51016283122492,
+        "sfdr_dbc": 55.576471234253574,
+        "enob_bits": 7.700497693543779,
+        "worst_spur_bin": 10259,
+        "worst_spur_frequency_hz": 1001855468.75
+      },
+      "mse_code2": 22.018513643691467,
+      "dc_error_code": -0.49783355818503416
+    },
+    "60000": {
+      "floating": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.4969652559105,
+        "fundamental_rms": 1187.2878607160342,
+        "fundamental_dbfs": -1.725178540772939,
+        "sndr_db": 55.61857540233418,
+        "snr_db": 55.74682133149831,
+        "thd_db": -70.97994780219736,
+        "sfdr_dbc": 64.31497305284739,
+        "enob_bits": 8.946607209690065,
+        "worst_spur_bin": 10259,
+        "worst_spur_frequency_hz": 1001855468.75
+      },
+      "integer": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.49873046875,
+        "fundamental_rms": 1187.3193809147526,
+        "fundamental_dbfs": -1.7249479502460896,
+        "sndr_db": 55.65174324896003,
+        "snr_db": 55.74713775475165,
+        "thd_db": -72.28196268371362,
+        "sfdr_dbc": 64.47170359548495,
+        "enob_bits": 8.952116818764125,
+        "worst_spur_bin": 10259,
+        "worst_spur_frequency_hz": 1001855468.75
+      },
+      "mse_code2": 4.158599381717401,
+      "dc_error_code": -0.5030347440915406
+    },
+    "120000": {
+      "floating": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.482455517472,
+        "fundamental_rms": 1187.4099672813586,
+        "fundamental_dbfs": -1.7242852867859082,
+        "sndr_db": 60.80449790640138,
+        "snr_db": 60.83949364831856,
+        "thd_db": -81.75967508962798,
+        "sfdr_dbc": 74.48216929049255,
+        "enob_bits": 9.80805613063146,
+        "worst_spur_bin": 10253,
+        "worst_spur_frequency_hz": 1001269531.25
+      },
+      "integer": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.48193359375,
+        "fundamental_rms": 1187.39808077742,
+        "fundamental_dbfs": -1.7243722368545487,
+        "sndr_db": 60.494942022863576,
+        "snr_db": 60.541503129882166,
+        "thd_db": -80.21581191619094,
+        "sfdr_dbc": 74.71539612329158,
+        "enob_bits": 9.756634887518867,
+        "worst_spur_bin": 10253,
+        "worst_spur_frequency_hz": 1001269531.25
+      },
+      "mse_code2": 1.4453418662810749,
+      "dc_error_code": -0.5175444825296887
+    },
+    "300000": {
+      "floating": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.4653927353672,
+        "fundamental_rms": 1187.7697381498301,
+        "fundamental_dbfs": -1.7216539658165628,
+        "sndr_db": 56.66312511548093,
+        "snr_db": 57.05782484078938,
+        "thd_db": -67.27415530738085,
+        "sfdr_dbc": 63.16218602183726,
+        "enob_bits": 9.120120451076568,
+        "worst_spur_bin": 10259,
+        "worst_spur_frequency_hz": 1001855468.75
+      },
+      "integer": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.466015625,
+        "fundamental_rms": 1187.7678396488607,
+        "fundamental_dbfs": -1.7216678491329565,
+        "sndr_db": 56.505608018755595,
+        "snr_db": 56.88648704995841,
+        "thd_db": -67.26462829293445,
+        "sfdr_dbc": 63.11537008727037,
+        "enob_bits": 9.093954820391296,
+        "worst_spur_bin": 10259,
+        "worst_spur_frequency_hz": 1001855468.75
+      },
+      "mse_code2": 3.4078717213211505,
+      "dc_error_code": -0.5346072646348656
+    },
+    "600000": {
+      "floating": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.4692005574354,
+        "fundamental_rms": 1187.8444910501075,
+        "fundamental_dbfs": -1.721107332079343,
+        "sndr_db": 56.57774020785088,
+        "snr_db": 57.159086496011014,
+        "thd_db": -65.59866545292293,
+        "sfdr_dbc": 63.51192802026696,
+        "enob_bits": 9.105936911603138,
+        "worst_spur_bin": 10259,
+        "worst_spur_frequency_hz": 1001855468.75
+      },
+      "integer": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.466796875,
+        "fundamental_rms": 1187.8376369833575,
+        "fundamental_dbfs": -1.7211574512991334,
+        "sndr_db": 56.50836709832352,
+        "snr_db": 57.061919694506486,
+        "thd_db": -65.72845815757306,
+        "sfdr_dbc": 63.50053429856664,
+        "enob_bits": 9.0944131392564,
+        "worst_spur_bin": 10259,
+        "worst_spur_frequency_hz": 1001855468.75
+      },
+      "mse_code2": 3.5124014793110776,
+      "dc_error_code": -0.5307994425665903
+    },
+    "1000080": {
+      "floating": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.4677756310969,
+        "fundamental_rms": 1187.7451565476006,
+        "fundamental_dbfs": -1.72183372733654,
+        "sndr_db": 58.33807061428692,
+        "snr_db": 58.80093356479715,
+        "thd_db": -68.29076574162313,
+        "sfdr_dbc": 64.94779842194058,
+        "enob_bits": 9.398350600379889,
+        "worst_spur_bin": 10259,
+        "worst_spur_frequency_hz": 1001855468.75
+      },
+      "integer": {
+        "sample_count": 30720,
+        "sample_rate_hz": 3000000000,
+        "fundamental_bin": 10241,
+        "fundamental_frequency_hz": 1000097656.25,
+        "harmonic_orders": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "harmonic_bins": [
+          10238,
+          3,
+          10244,
+          10235
+        ],
+        "dc_code": 2047.4677083333333,
+        "fundamental_rms": 1187.7499799235115,
+        "fundamental_dbfs": -1.721798454428419,
+        "sndr_db": 58.11023040920692,
+        "snr_db": 58.57102619138626,
+        "thd_db": -68.0813495098677,
+        "sfdr_dbc": 64.87277758103018,
+        "enob_bits": 9.360503390233708,
+        "worst_spur_bin": 10259,
+        "worst_spur_frequency_hz": 1001855468.75
+      },
+      "mse_code2": 2.418445080100305,
+      "dc_error_code": -0.5322243689047454
+    }
+  },
+  "final_coefficients": [
+    1.0371181469905113,
+    1.0642919437788416,
+    1,
+    1,
+    1.0316577379013343,
+    1.0563854389416931,
+    1,
+    1
+  ],
+  "all_traces_exact": false,
+  "scalar_comparisons": 158090400,
+  "checkpoint_max_error": 0.0,
+  "source_hash_count": 38,
+  "max_trace_error": 4.440892098500626e-16,
+  "preflight_conversions": 960,
+  "test_conversions": 215040,
+  "delivery": {
+    "run_directory": "simulink_adc\\performance_runs\\20261010_performance_v1",
+    "previews": {
+      "simulink_adc\\performance_figures\\performance_overview.png": {
+        "sha256": "f4732aab1e545dec37bb2364d47875623dfc45ba2721821532a9a31baca2c938",
+        "bytes": 230034
+      },
+      "simulink_adc\\performance_figures\\performance_overview.svg": {
+        "sha256": "a79d157c23d9d472ff41a62882649e09851aa4b3ba8572a7980352e07834fad1",
+        "bytes": 551598
+      },
+      "simulink_adc\\performance_figures\\coefficient_evolution.png": {
+        "sha256": "5cb97a78861784c2c20055ccc02052be8ed2c28735dfc5d5333036d7527c1255",
+        "bytes": 275274
+      },
+      "simulink_adc\\performance_figures\\coefficient_evolution.svg": {
+        "sha256": "10e106dc0c9d68eee2f6e8eb778c5ee378d9387b8da6b69a147d4d73379f9e4b",
+        "bytes": 1110753
+      },
+      "simulink_adc\\performance_figures\\signals_and_parity.png": {
+        "sha256": "861499fad1ebcb0de3b0492da4427c8554365edd1d7904fff5efd83725294e94",
+        "bytes": 383542
+      },
+      "simulink_adc\\performance_figures\\signals_and_parity.svg": {
+        "sha256": "6c6109501dd26f797dd17396799c76841edaad71d09655be798e00635113e853",
+        "bytes": 750250
+      }
+    },
+    "fft_verification": {
+      "passed": true,
+      "tolerance_db": 1e-06,
+      "max_sndr_error_db": 7.3329147198819555e-09,
+      "max_sfdr_error_db": 2.2737367544323206e-13
+    },
+    "support_statistics": {
+      "slice_readout_counts": [
+        [
+          533633,
+          371318,
+          95129,
+          0
+        ],
+        [
+          520983,
+          378757,
+          100340,
+          0
+        ]
+      ],
+      "coefficient_boundary_rows": 0,
+      "selected_conversions": 1000080,
+      "window_commits": 8334,
+      "coefficient_min": 0.9972441036673457,
+      "coefficient_max": 1.1053933022234552
+    },
+    "render_revision": {
+      "reason": "Visual QA only: explicit title/subtitle colors and font sizes, reference label color/alignment",
+      "original_sha256": "74a7b0b3918f4f93eeb3a80e3c250abeba8407454bef50e56e890f7b31e567f1",
+      "current_sha256": "e42a3535b10208da31293d8afcdba472a8b0966570df5c00131c90e15677e38e",
+      "original_source": "source_snapshot/simulink_adc/render_adc_performance.m",
+      "arithmetic_or_model_changes": false
+    },
+    "immutable_source_snapshots_verified": 38,
+    "raw_artifact_files": 849,
+    "raw_artifact_bytes": 2568258446,
+    "scoring_verifier_sha256": "4989e8985d53ff3ceeeaf2416d64b614d1c06ce7a22bc6eaec1ef2e1fa4079d4",
+    "metrics_unit_tests_passed": 6,
+    "figures_visually_reviewed": 3
+  }
+}
