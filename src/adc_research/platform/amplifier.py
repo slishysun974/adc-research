@@ -66,6 +66,43 @@ class StaticPwlTruthConfig:
 
 
 @dataclass(frozen=True)
+class StaticCubicTruthConfig:
+    """Synthetic smooth analog transfer in the nominal-output coordinate.
+
+    For ``z = actual_gain * residue_input``, the modeled output is
+    ``linear_scale * z + cubic_coefficient * z**3`` on the declared domain.
+    This is an offline test circuit, not a calibration basis or chip fit.
+    """
+
+    linear_scale: float
+    cubic_coefficient: float
+    maximum_ideal_output_magnitude: float = 1.0
+
+    def __post_init__(self) -> None:
+        radius = self.maximum_ideal_output_magnitude
+        if not all(isfinite(value) for value in (
+            self.linear_scale, self.cubic_coefficient, radius
+        )) or radius <= 0:
+            raise ValueError("cubic truth parameters must be finite with positive domain")
+        minimum_derivative = self.linear_scale + 3 * min(
+            self.cubic_coefficient, 0.0
+        ) * radius * radius
+        if minimum_derivative <= 0:
+            raise ValueError("cubic truth must be strictly increasing on its domain")
+
+
+@dataclass(frozen=True)
+class CubicAmplifierResult:
+    input_value: float
+    nominal_output_value: float
+    ideal_output_value: float
+    output_value: float
+    nominal_gain: float
+    actual_gain: float
+    local_derivative: float
+
+
+@dataclass(frozen=True)
 class PwlAmplifierResult:
     input_value: float
     nominal_output_value: float
@@ -151,4 +188,36 @@ def amplify_static_pwl_truth(
         local_ideal_output=local_ideal,
         distorted_slice_offset=distorted_offset,
         forward_slope=slope,
+    )
+
+
+def amplify_static_cubic_truth(
+    residue_input: float,
+    *,
+    nominal_gain: float,
+    truth: StaticCubicTruthConfig,
+    actual_gain: float | None = None,
+) -> CubicAmplifierResult:
+    """Apply a strictly increasing smooth test transfer after linear gain."""
+
+    if not isfinite(residue_input):
+        raise ValueError("amplifier input must be finite")
+    gain = nominal_gain if actual_gain is None else actual_gain
+    if any(not isfinite(value) or value <= 0 for value in (nominal_gain, gain)):
+        raise ValueError("amplifier gains must be finite and positive")
+    ideal_output = gain * residue_input
+    if abs(ideal_output) > truth.maximum_ideal_output_magnitude:
+        raise ValueError("ideal amplifier output lies outside the cubic truth domain")
+    output = (
+        truth.linear_scale * ideal_output
+        + truth.cubic_coefficient * ideal_output**3
+    )
+    return CubicAmplifierResult(
+        input_value=residue_input,
+        nominal_output_value=nominal_gain * residue_input,
+        ideal_output_value=ideal_output,
+        output_value=output,
+        nominal_gain=nominal_gain,
+        actual_gain=gain,
+        local_derivative=truth.linear_scale + 3 * truth.cubic_coefficient * ideal_output**2,
     )

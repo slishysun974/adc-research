@@ -13,13 +13,13 @@ from adc_research.calibration.gated_lms import (
     update,
     update_block_mean,
 )
-from adc_research.calibration.known_truth import (
+from adc_research.calibration.observation import DigitalCalibrationSample
+from adc_research.calibration.two_stage import (
     TwoStagePwlCalibrationConfig,
     TwoStagePwlCalibrationResult,
-    correct_two_stage,
+    correct_two_stage_observed,
 )
 from adc_research.calibration.pwl import PwlConfig
-from adc_research.platform.pipeline import PipelineResult
 
 
 @dataclass(frozen=True)
@@ -104,7 +104,7 @@ def cascade_from_state(
 
 
 def correct_and_update(
-    raw: PipelineResult,
+    observed: DigitalCalibrationSample,
     state: TwoStageAdaptiveState,
     config: TwoStageAdaptiveConfig,
 ) -> TwoStageAdaptiveResult:
@@ -116,7 +116,7 @@ def correct_and_update(
     the current sample; their updates become visible on the next sample.
     """
 
-    observation = observe(raw, state, config)
+    observation = observe(observed, state, config)
     calibration = observation.calibration
     dither1 = calibration.stage1_dither_copy
     dither2 = calibration.stage2_dither_copy
@@ -149,14 +149,14 @@ def correct_and_update(
 
 
 def observe(
-    raw: PipelineResult,
+    observed: DigitalCalibrationSample,
     state: TwoStageAdaptiveState,
     config: TwoStageAdaptiveConfig,
 ) -> TwoStageAdaptiveObservation:
     """Form both local LMS observations without updating either bank."""
 
     dynamic = cascade_from_state(config.cascade, state)
-    calibration = correct_two_stage(raw, dynamic)
+    calibration = correct_two_stage_observed(observed, dynamic)
     dither1 = calibration.stage1_dither_copy
     dither2 = calibration.stage2_dither_copy
     if dither1 == 0 or dither2 == 0:

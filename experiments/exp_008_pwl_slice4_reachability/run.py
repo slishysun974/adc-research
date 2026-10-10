@@ -334,6 +334,11 @@ def main() -> None:
         ROOT / "src" / "adc_research" / "platform" / "stage.py",
         ROOT / "src" / "adc_research" / "calibration" / "pwl.py",
         ROOT / "src" / "adc_research" / "calibration" / "known_truth.py",
+        ROOT / "src" / "adc_research" / "calibration" / "two_stage.py",
+        ROOT / "src" / "adc_research" / "calibration" / "observation.py",
+        ROOT / "src" / "adc_research" / "evaluation" / "oracle.py",
+        ROOT / "src" / "adc_research" / "evaluation" / "observations.py",
+        ROOT / "src" / "adc_research" / "evaluation" / "scoring.py",
     ]
     environment = {
         "python": sys.version,

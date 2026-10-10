@@ -1,0 +1,23 @@
+experiment_id: EXP_022
+source_experiment: EXP_021
+source_case: cubic_compression
+source_checkpoint_epoch: 64
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+stage1_truth: {linear_scale: 1.0, cubic_coefficient: -0.08}
+stage2_truth: {linear_scale: 1.0, cubic_coefficient: -0.06}
+stage1_coefficients: [1.01168878264259, 1.03792457179386, 1.0, 1.0]
+stage2_coefficients: [1.02070586527574, 1.00805655023342, 1.0733237273582, 1.0]
+epoch32_stage1_k1: 1.00891225987743
+code_centers: 4096
+dither_symbol_pairs:
+  - [-1, -1]
+  - [-1, 1]
+  - [1, -1]
+  - [1, 1]
+off_grid_jitter:
+  seed: 20261005
+  max_fraction_of_half_bin: 0.9
+validation_random:
+  seed: 20261002
+  sample_count: 2048
+  input_range: [-0.95, 0.95]

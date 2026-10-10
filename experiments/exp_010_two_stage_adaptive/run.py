@@ -18,11 +18,13 @@ from adc_research.calibration.adaptive_two_stage import (
     correct_and_update,
 )
 from adc_research.calibration.gated_lms import GatedLmsConfig, GatedLmsState
-from adc_research.calibration.known_truth import (
+from adc_research.calibration.gu_baseline import build_gu_two_stage_baseline
+from adc_research.calibration.two_stage import (
     TwoStagePwlCalibrationConfig,
-    build_two_stage_oracle,
-    correct_two_stage,
 )
+from adc_research.evaluation.oracle import build_two_stage_oracle
+from adc_research.evaluation.observations import digital_sample
+from adc_research.evaluation.scoring import correct_two_stage
 from adc_research.platform.pipeline import PipelineResult, process
 from adc_research.platform.presets import (
     build_gu_gate_d_nonidealities,
@@ -113,24 +115,25 @@ def main() -> None:
         enabled_effects=("static_pwl_truth",),
     )
     oracle = build_two_stage_oracle(pipeline, nonidealities)
+    baseline = build_gu_two_stage_baseline(pipeline, architecture["pwl_implications"])
     normalized_steps = tuple(experiment["training"]["normalized_step_sizes"])
     bounds = tuple(experiment["training"]["coefficient_bounds"])
     adaptive_config = TwoStageAdaptiveConfig(
-        cascade=oracle,
+        cascade=baseline,
         stage1_lms=GatedLmsConfig(
-            oracle.stage1_pwl.slice_width,
-            scaled_steps(normalized_steps, oracle.stage1_pwl.full_scale_magnitude),
+            baseline.stage1_pwl.slice_width,
+            scaled_steps(normalized_steps, baseline.stage1_pwl.full_scale_magnitude),
             bounds,
         ),
         stage2_lms=GatedLmsConfig(
-            oracle.stage2_pwl.slice_width,
-            scaled_steps(normalized_steps, oracle.stage2_pwl.full_scale_magnitude),
+            baseline.stage2_pwl.slice_width,
+            scaled_steps(normalized_steps, baseline.stage2_pwl.full_scale_magnitude),
             bounds,
         ),
     )
     state = TwoStageAdaptiveState(
-        stage1=GatedLmsState.unity(oracle.stage1_pwl.slice_count),
-        stage2=GatedLmsState.unity(oracle.stage2_pwl.slice_count),
+        stage1=GatedLmsState.unity(baseline.stage1_pwl.slice_count),
+        stage2=GatedLmsState.unity(baseline.stage2_pwl.slice_count),
     )
 
     samples: list[tuple[int, tuple[int, int], PipelineResult]] = []
@@ -147,7 +150,7 @@ def main() -> None:
             )
             samples.append((expected, pair, raw))
 
-    unity_cascade = cascade_from_state(oracle, state)
+    unity_cascade = cascade_from_state(baseline, state)
     convergence = []
 
     def append_checkpoint(epoch: int) -> None:
@@ -183,11 +186,11 @@ def main() -> None:
         rng.shuffle(training_order)
         for sample_index in training_order:
             raw = samples[sample_index][2]
-            state = correct_and_update(raw, state, adaptive_config).state
+            state = correct_and_update(digital_sample(raw), state, adaptive_config).state
         if epoch in checkpoint_epochs:
             append_checkpoint(epoch)
 
-    final_cascade = cascade_from_state(oracle, state)
+    final_cascade = cascade_from_state(baseline, state)
     evaluations = {
         "unity": evaluate(samples, unity_cascade),
         "adaptive": evaluate(samples, final_cascade),
@@ -234,6 +237,7 @@ def main() -> None:
         "architecture_config": architecture["config_id"],
         "truth_config": truth_profile["config_id"],
         "mode": "two_stage_floating_adaptive_block_balanced",
+        "online_geometry_source": "architecture_pwl_implications_not_analog_truth",
         "claim_exclusion": (
             "not_hardware_prng_decimation_not_bit_true_not_outer_slice_convergence"
         ),
@@ -294,7 +298,13 @@ def main() -> None:
         ROOT / "src" / "adc_research" / "calibration" / "pwl.py",
         ROOT / "src" / "adc_research" / "calibration" / "gated_lms.py",
         ROOT / "src" / "adc_research" / "calibration" / "adaptive_two_stage.py",
+        ROOT / "src" / "adc_research" / "calibration" / "gu_baseline.py",
+        ROOT / "src" / "adc_research" / "calibration" / "two_stage.py",
+        ROOT / "src" / "adc_research" / "evaluation" / "oracle.py",
         ROOT / "src" / "adc_research" / "calibration" / "known_truth.py",
+        ROOT / "src" / "adc_research" / "calibration" / "observation.py",
+        ROOT / "src" / "adc_research" / "evaluation" / "observations.py",
+        ROOT / "src" / "adc_research" / "evaluation" / "scoring.py",
     ]
     (output_dir / "environment.json").write_text(
         json.dumps(

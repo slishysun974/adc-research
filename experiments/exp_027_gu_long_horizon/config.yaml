@@ -1,0 +1,14 @@
+experiment_id: EXP_027
+parent_summary: artifacts/runs/EXP_025/frozen_v1_20261001/summary.json
+reference_protocol: experiments/exp_023_full_chain_protocol/config.yaml
+parent_schedule: every_sample
+auxiliary_model: independent_linear_zero_memory
+start_sample: 131072
+total_samples: 524288
+checkpoints: [131072, 196608, 262144, 327680, 393216, 458752, 524288]
+spectral_checkpoints: [131072, 262144, 393216, 524288]
+cases: [cubic_new_a, cubic_new_b]
+training_seeds: [20261011, 20261021, 20261031, 20261041]
+acceptance:
+  maximum_physical_overloads: 0
+  maximum_heldout_digital_saturations: 0

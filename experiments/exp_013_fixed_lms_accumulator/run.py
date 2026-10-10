@@ -35,7 +35,9 @@ from adc_research.calibration.fixed_pwl import (
     correct_two_stage_fixed,
     quantize_two_stage_config,
 )
-from adc_research.calibration.known_truth import build_two_stage_oracle
+from adc_research.calibration.gu_baseline import build_gu_two_stage_baseline
+from adc_research.evaluation.oracle import build_two_stage_oracle
+from adc_research.evaluation.observations import digital_sample
 from adc_research.platform.pipeline import PipelineResult, process
 from adc_research.platform.presets import (
     build_gu_gate_d_nonidealities,
@@ -278,6 +280,7 @@ def main() -> None:
         enabled_effects=("static_pwl_truth",),
     )
     oracle = build_two_stage_oracle(pipeline, nonidealities)
+    baseline = build_gu_two_stage_baseline(pipeline, architecture["pwl_implications"])
     fixed = experiment["fixed_point"]
     coefficient_format = UnsignedFixedFormat(
         fixed["coefficient_total_bits"],
@@ -291,6 +294,7 @@ def main() -> None:
         offset_rounding=fixed["offset_rounding"],
     )
     fixed_oracle = quantize_two_stage_config(oracle, arithmetic)
+    fixed_baseline = quantize_two_stage_config(baseline, arithmetic)
     normalized_steps = tuple(
         Fraction(str(value)) for value in experiment["training"]["normalized_step_sizes"]
     )
@@ -314,7 +318,7 @@ def main() -> None:
     checkpoint_epochs = set(experiment["training"]["checkpoint_epochs"])
     for accumulator_fractional_bits in fixed["accumulator_fractional_bits"]:
         adaptive_config = build_adaptive_config(
-            fixed_oracle,
+            fixed_baseline,
             normalized_steps,
             accumulator_fractional_bits,
             fixed,
@@ -339,7 +343,7 @@ def main() -> None:
             rng.shuffle(training_order)
             for sample_index in training_order:
                 state = correct_and_update_fixed(
-                    samples[sample_index][2],
+                    digital_sample(samples[sample_index][2]),
                     state,
                     adaptive_config,
                 ).state
@@ -431,6 +435,7 @@ def main() -> None:
         "experiment_id": experiment["experiment_id"],
         "architecture_config": architecture["config_id"],
         "truth_config": truth_profile["config_id"],
+        "online_geometry_source": "architecture_pwl_implications_not_analog_truth",
         "paper_reported": {
             "coefficient_total_bits": 11,
             "coefficient_fractional_bits": 10,
@@ -479,7 +484,7 @@ def main() -> None:
                     "stage1": tuple(
                         str(value)
                         for value in build_adaptive_config(
-                            fixed_oracle,
+                            fixed_baseline,
                             normalized_steps,
                             fixed["accumulator_fractional_bits"][0],
                             fixed,
@@ -488,7 +493,7 @@ def main() -> None:
                     "stage2": tuple(
                         str(value)
                         for value in build_adaptive_config(
-                            fixed_oracle,
+                            fixed_baseline,
                             normalized_steps,
                             fixed["accumulator_fractional_bits"][0],
                             fixed,
@@ -508,7 +513,13 @@ def main() -> None:
         ROOT / "src" / "adc_research" / "calibration" / "fixed_pwl.py",
         ROOT / "src" / "adc_research" / "calibration" / "fixed_gated_lms.py",
         ROOT / "src" / "adc_research" / "calibration" / "fixed_adaptive_two_stage.py",
+        ROOT / "src" / "adc_research" / "calibration" / "gu_baseline.py",
+        ROOT / "src" / "adc_research" / "calibration" / "two_stage.py",
+        ROOT / "src" / "adc_research" / "evaluation" / "oracle.py",
         ROOT / "src" / "adc_research" / "calibration" / "known_truth.py",
+        ROOT / "src" / "adc_research" / "calibration" / "observation.py",
+        ROOT / "src" / "adc_research" / "evaluation" / "observations.py",
+        ROOT / "src" / "adc_research" / "evaluation" / "scoring.py",
     ]
     (output_dir / "environment.json").write_text(
         json.dumps(

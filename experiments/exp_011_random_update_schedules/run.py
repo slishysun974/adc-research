@@ -24,11 +24,13 @@ from adc_research.calibration.adaptive_two_stage import (
     update_block_mean_observations,
 )
 from adc_research.calibration.gated_lms import GatedLmsConfig, GatedLmsState
-from adc_research.calibration.known_truth import (
+from adc_research.calibration.gu_baseline import build_gu_two_stage_baseline
+from adc_research.calibration.two_stage import (
     TwoStagePwlCalibrationConfig,
-    build_two_stage_oracle,
-    correct_two_stage,
 )
+from adc_research.evaluation.oracle import build_two_stage_oracle
+from adc_research.evaluation.observations import digital_sample
+from adc_research.evaluation.scoring import correct_two_stage
 from adc_research.platform.pipeline import PipelineResult, process
 from adc_research.platform.presets import (
     build_gu_gate_d_nonidealities,
@@ -146,27 +148,27 @@ def evaluate(
 
 
 def build_adaptive_config(
-    oracle: TwoStagePwlCalibrationConfig,
+    baseline: TwoStagePwlCalibrationConfig,
     normalized_steps: tuple[float, ...],
     bounds: tuple[float, float],
     step_scale: float,
 ) -> TwoStageAdaptiveConfig:
     return TwoStageAdaptiveConfig(
-        cascade=oracle,
+        cascade=baseline,
         stage1_lms=GatedLmsConfig(
-            oracle.stage1_pwl.slice_width,
+            baseline.stage1_pwl.slice_width,
             scaled_steps(
                 normalized_steps,
-                oracle.stage1_pwl.full_scale_magnitude,
+                baseline.stage1_pwl.full_scale_magnitude,
                 step_scale,
             ),
             bounds,
         ),
         stage2_lms=GatedLmsConfig(
-            oracle.stage2_pwl.slice_width,
+            baseline.stage2_pwl.slice_width,
             scaled_steps(
                 normalized_steps,
-                oracle.stage2_pwl.full_scale_magnitude,
+                baseline.stage2_pwl.full_scale_magnitude,
                 step_scale,
             ),
             bounds,
@@ -175,22 +177,22 @@ def build_adaptive_config(
 
 
 def initial_state(
-    oracle: TwoStagePwlCalibrationConfig,
+    baseline: TwoStagePwlCalibrationConfig,
     coefficients: dict | None = None,
 ) -> TwoStageAdaptiveState:
     if coefficients is None:
         return TwoStageAdaptiveState(
-            stage1=GatedLmsState.unity(oracle.stage1_pwl.slice_count),
-            stage2=GatedLmsState.unity(oracle.stage2_pwl.slice_count),
+            stage1=GatedLmsState.unity(baseline.stage1_pwl.slice_count),
+            stage2=GatedLmsState.unity(baseline.stage2_pwl.slice_count),
         )
     return TwoStageAdaptiveState(
         stage1=GatedLmsState(
             coefficients=tuple(coefficients["stage1"]),
-            gate_counts=(0,) * oracle.stage1_pwl.slice_count,
+            gate_counts=(0,) * baseline.stage1_pwl.slice_count,
         ),
         stage2=GatedLmsState(
             coefficients=tuple(coefficients["stage2"]),
-            gate_counts=(0,) * oracle.stage2_pwl.slice_count,
+            gate_counts=(0,) * baseline.stage2_pwl.slice_count,
         ),
     )
 
@@ -230,6 +232,7 @@ def train_case(
     schedule: dict,
     replication: int,
     training: dict,
+    baseline: TwoStagePwlCalibrationConfig,
     oracle: TwoStagePwlCalibrationConfig,
     sample_lookup: dict[tuple[int, int, int], PipelineResult],
     evaluation_samples: list[tuple[int, tuple[int, int], PipelineResult]],
@@ -247,12 +250,12 @@ def train_case(
     normalized_steps = tuple(training["normalized_step_sizes"])
     bounds = tuple(training["coefficient_bounds"])
     config = build_adaptive_config(
-        oracle,
+        baseline,
         normalized_steps,
         bounds,
         float(schedule["step_scale"]),
     )
-    state = initial_state(oracle, training.get("initial_coefficients"))
+    state = initial_state(baseline, training.get("initial_coefficients"))
     seed_base = int(training["base_seed"]) + 1009 * replication
     rng_signal = random.Random(seed_base ^ 0x13579BDF)
     rng_dither1 = random.Random(seed_base ^ 0x2468ACE1)
@@ -309,7 +312,7 @@ def train_case(
         raw = sample_lookup[(expected, dither1, dither2)]
 
         if kind == "instantaneous":
-            result = correct_and_update(raw, state, config)
+            result = correct_and_update(digital_sample(raw), state, config)
             observation = TwoStageAdaptiveObservation(
                 calibration=result.calibration,
                 stage1_local_learning_output=result.stage1_local_learning_output,
@@ -318,7 +321,7 @@ def train_case(
             state = result.state
             update_events += 1
         else:
-            observation = observe(raw, state, config)
+            observation = observe(digital_sample(raw), state, config)
             if kind == "subsampled_instantaneous" and adc_sample % period == 0:
                 state = update_block_mean_observations(
                     state,
@@ -374,7 +377,7 @@ def train_case(
     if block:
         raise AssertionError("block-mean schedule ended with a partial block")
 
-    final_cascade = cascade_from_state(oracle, state)
+    final_cascade = cascade_from_state(baseline, state)
     evaluation = evaluate(evaluation_samples, final_cascade)
     threshold = float(training["low_slice_error_threshold"])
     time_to_threshold = next(
@@ -504,6 +507,7 @@ def main() -> None:
         enabled_effects=("static_pwl_truth",),
     )
     oracle = build_two_stage_oracle(pipeline, nonidealities)
+    baseline = build_gu_two_stage_baseline(pipeline, architecture["pwl_implications"])
     evaluation_samples: list[tuple[int, tuple[int, int], PipelineResult]] = []
     sample_lookup: dict[tuple[int, int, int], PipelineResult] = {}
     for dither1 in (-1, 1):
@@ -521,11 +525,11 @@ def main() -> None:
                 evaluation_samples.append((expected, pair, raw))
                 sample_lookup[(expected, dither1, dither2)] = raw
 
-    unity = initial_state(oracle)
+    unity = initial_state(baseline)
     reference_evaluations = {
         "unity": evaluate(
             evaluation_samples,
-            cascade_from_state(oracle, unity),
+            cascade_from_state(baseline, unity),
         ),
         "oracle": evaluate(evaluation_samples, oracle),
     }
@@ -537,6 +541,7 @@ def main() -> None:
                 schedule=schedule,
                 replication=replication,
                 training=experiment["training"],
+                baseline=baseline,
                 oracle=oracle,
                 sample_lookup=sample_lookup,
                 evaluation_samples=evaluation_samples,
@@ -600,6 +605,7 @@ def main() -> None:
         "architecture_config": architecture["config_id"],
         "truth_config": truth_profile["config_id"],
         "mode": "two_stage_floating_random_schedule_comparison",
+        "online_geometry_source": "architecture_pwl_implications_not_analog_truth",
         "claim_exclusion": (
             "software_prng_not_hardware_prng_not_bit_true_decimator_or_coefficient_extractor"
         ),
@@ -702,7 +708,13 @@ def main() -> None:
         ROOT / "src" / "adc_research" / "calibration" / "pwl.py",
         ROOT / "src" / "adc_research" / "calibration" / "gated_lms.py",
         ROOT / "src" / "adc_research" / "calibration" / "adaptive_two_stage.py",
+        ROOT / "src" / "adc_research" / "calibration" / "gu_baseline.py",
+        ROOT / "src" / "adc_research" / "calibration" / "two_stage.py",
+        ROOT / "src" / "adc_research" / "evaluation" / "oracle.py",
         ROOT / "src" / "adc_research" / "calibration" / "known_truth.py",
+        ROOT / "src" / "adc_research" / "calibration" / "observation.py",
+        ROOT / "src" / "adc_research" / "evaluation" / "observations.py",
+        ROOT / "src" / "adc_research" / "evaluation" / "scoring.py",
     ]
     (output_dir / "environment.json").write_text(
         json.dumps(

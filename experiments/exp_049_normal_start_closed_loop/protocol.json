@@ -1,0 +1,28 @@
+{
+  "version": "EXP-049-preregistered-v1",
+  "declared_date": "2026-10-10",
+  "purpose": "Diagnose actual unit-start Gu windows before selecting an algorithm modification.",
+  "prior_records": "artifacts/runs/EXP_039/window_v1",
+  "methods": ["all_products", "point_products"],
+  "training_samples": 15360,
+  "sine_samples": 3840,
+  "window_size": 120,
+  "checkpoints_windows": [0, 32, 64, 96, 128],
+  "curves": [
+    {"name": "weak_compression", "stage1": [0.995, -0.03], "stage2": [0.99, -0.025], "auxiliary": [1.0, 0.01]},
+    {"name": "expansion", "stage1": [0.975, 0.04], "stage2": [0.98, 0.035], "auxiliary": [1.0, -0.015]}
+  ],
+  "inputs": [
+    {"name": "uniform", "distribution": "uniform", "training_peak": 0.82, "sine_peak": 0.82, "sine_dc": 0.0, "tone_bin": 97, "input_seed": 20261071, "dither_seed": 20261081},
+    {"name": "central", "distribution": "triangular", "training_peak": 0.82, "sine_peak": 0.65, "sine_dc": 0.1, "tone_bin": 83, "input_seed": 20261072, "dither_seed": 20261082}
+  ],
+  "histories": [
+    {"name": "reset", "tracking_factor": 0.0},
+    {"name": "hold", "tracking_factor": 1.0}
+  ],
+  "amplification_factors": [0.002, 0.04, 0.002],
+  "holdout_dither": "iid, shared seeds across curves and histories",
+  "evaluation": "all eight cells and both methods; unit coefficients, frozen training endpoint and continued-online sine; every checkpoint uses the same sine record; exact integer-code errors and approximate FFT",
+  "rejection_policy": "retain failures and overload counts; no parameter or seed replacement",
+  "limitations": "synthetic cubic families with new parameters, inputs, seeds and histories; no chip claim, global convergence claim or new algorithm comparison"
+}

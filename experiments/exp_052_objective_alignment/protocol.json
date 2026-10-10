@@ -1,0 +1,15 @@
+{
+  "version": "EXP-052-prespecified-v1",
+  "declared_date": "2026-10-10",
+  "source": "artifacts/runs/EXP_051/filter_v1",
+  "source_method": "baseline",
+  "scope": "Offline finite-record direction audit of every normal unit-start baseline window in the 24 EXP-051 cells; no learner change or new analog conversion.",
+  "windows_per_cell": 160,
+  "training_windows": 128,
+  "samples_per_window": 120,
+  "fixed_context": "For each window freeze its actual pre-update stage2 state and all other stage1 coefficients; first inspect the actual joint stage1 Q22 update against the continuous digital-basis code objective, then score its exported Q1.10 coefficients on the same 120 observations.",
+  "direction_rule": "A nonzero continuous directional term is locally favorable iff its sign is negative; report neutral separately. Exact finite continuous SSE change includes the quadratic term. Integer-code SSE uses the actual Q3 PWL, nearest-even final rounding and saturation.",
+  "evaluation": "Report training and online-sine separately, per coordinate and joint; count exported no-change windows, favorable and adverse directional terms, exact continuous and integer-code SSE changes, and cross-tabulate first-coordinate direction with actual target/error correlation terms.",
+  "controls": "Independent reconstruction of source baseline integer codes, coefficient transitions and offline selected-product attribution; source SHA256 checked before analysis.",
+  "limits": "Same-record local frozen-state diagnostic, not a causal long-run intervention, online gradient, new calibration method, general curve theorem or chip result. Offline ideal code is forbidden from learner input."
+}

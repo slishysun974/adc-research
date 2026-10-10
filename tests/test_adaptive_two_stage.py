@@ -11,7 +11,8 @@ from adc_research.calibration.adaptive_two_stage import (
     update_block_mean_observations,
 )
 from adc_research.calibration.gated_lms import GatedLmsConfig, GatedLmsState
-from adc_research.calibration.known_truth import build_two_stage_oracle
+from adc_research.calibration.gu_baseline import build_gu_two_stage_baseline
+from adc_research.evaluation.observations import digital_sample
 from adc_research.platform.pipeline import process
 from adc_research.platform.presets import (
     build_gu_gate_d_nonidealities,
@@ -40,15 +41,17 @@ class AdaptiveTwoStageTests(unittest.TestCase):
             effects,
             enabled_effects=("static_pwl_truth",),
         )
-        oracle = build_two_stage_oracle(cls.pipeline, cls.nonidealities)
+        baseline = build_gu_two_stage_baseline(
+            cls.pipeline, architecture["pwl_implications"]
+        )
         cls.config = TwoStageAdaptiveConfig(
-            cascade=oracle,
+            cascade=baseline,
             stage1_lms=GatedLmsConfig(
-                oracle.stage1_pwl.slice_width,
+                baseline.stage1_pwl.slice_width,
                 (1e-9, 1e-9, 1e-9, 1e-9),
             ),
             stage2_lms=GatedLmsConfig(
-                oracle.stage2_pwl.slice_width,
+                baseline.stage2_pwl.slice_width,
                 (1e-9, 1e-9, 1e-9, 1e-9),
             ),
         )
@@ -64,7 +67,7 @@ class AdaptiveTwoStageTests(unittest.TestCase):
             dither_symbols=(1, -1),
             nonidealities=self.nonidealities,
         )
-        result = correct_and_update(raw, self.state, self.config)
+        result = correct_and_update(digital_sample(raw), self.state, self.config)
         calibration = result.calibration
         self.assertEqual(
             result.stage2_local_learning_output,
@@ -88,7 +91,7 @@ class AdaptiveTwoStageTests(unittest.TestCase):
             dither_symbols=(-1, 1),
             nonidealities=self.nonidealities,
         )
-        result = correct_and_update(raw, self.state, self.config)
+        result = correct_and_update(digital_sample(raw), self.state, self.config)
         self.assertEqual(
             result.calibration.stage1_pwl.selected_slope,
             self.state.stage1.coefficients[
@@ -112,7 +115,7 @@ class AdaptiveTwoStageTests(unittest.TestCase):
             nonidealities=self.nonidealities,
         )
         with self.assertRaises(ValueError):
-            correct_and_update(raw, self.state, self.config)
+            correct_and_update(digital_sample(raw), self.state, self.config)
 
     def test_mismatched_lms_and_cascade_dimensions_fail(self) -> None:
         with self.assertRaises(ValueError):
@@ -136,8 +139,8 @@ class AdaptiveTwoStageTests(unittest.TestCase):
             nonidealities=self.nonidealities,
         )
         observations = (
-            observe(raw1, self.state, self.config),
-            observe(raw2, self.state, self.config),
+            observe(digital_sample(raw1), self.state, self.config),
+            observe(digital_sample(raw2), self.state, self.config),
         )
         self.assertEqual(self.state.stage1.sample_count, 0)
         self.assertEqual(self.state.stage2.sample_count, 0)

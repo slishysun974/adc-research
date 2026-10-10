@@ -1,0 +1,29 @@
+experiment_id: EXP_020
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+
+training:
+  input_code_centers: 4096
+  dither_symbol_pairs:
+    - [-1, -1]
+    - [-1, 1]
+    - [1, -1]
+    - [1, 1]
+
+# Synthetic stage-2 analog transfer only. These edges are deliberately between
+# the stage-2 outputs visited by the finite training set, not chip parameters.
+counterexample:
+  support_edges: [0.50390625, 0.5078125, 0.51171875]
+  peak_output_perturbation: 0.0005
+
+heldout_tone:
+  sample_rate_hz: 3.0e9
+  sample_count: 8192
+  tone_bin: 251
+  amplitude_peak: 0.901
+  phase_radians: 0.2718281828459045
+
+acceptance:
+  maximum_training_digital_mismatches: 0
+  maximum_training_output_mismatches: 0
+  minimum_heldout_output_mismatches: 1
+  minimum_heldout_sndr_difference_db: 0.0

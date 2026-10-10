@@ -19,7 +19,7 @@
 | 项目 | v1 取值 | 来源类别 | 执行处理 |
 |---|---|---|---|
 | 总体结构 | SHA-less 三级，12 bit，3 GS/s | paper_reported | 静态 v1 不模拟 SHA-less 时序 |
-| 前两级 | 各为 3-bit flash + 开环 MDAC，增益约 4，1-bit 冗余 | paper_reported | 码表由下节候选层给出 |
+| 前两级 | 各为 3-bit flash + 开环 MDAC，增益约 4，1-bit 冗余；Fig. 14 另画 `Vth[7:0]`、`D[7:0]` 原始八线 | paper_reported | 码表由下节候选层给出；三位标签不指定内部编码 |
 | 后端 | 4-channel、8-bit TI-SAR | paper_reported | 理想 midrise，通道为 `n mod 4` |
 | 双路径 | 前一级主路径驱动第二级 CDAC，辅助路径驱动第二级 flash | paper_reported | 3% 失配只进入第二级 flash 判决坐标 |
 | 辅助系统增益差 | 约 3% | paper_reported | Q-007 扫描正负方向，不假设论文给出符号 |
@@ -45,7 +45,7 @@
 
 下列内容继续为显式开放问题：
 
-- flash 内部 thermometer-to-binary 编码；
+- flash 原始八线判决到 MDAC／数字引擎的映射、端部状态和可能的 thermometer-to-binary 编码；
 - CDAC 元件级权重与物理开关真值表；
 - PRNG `0/1` 到 dither 电容的物理开关映射；
 - `1/16 backend FSR` 是否被作者另行定义为总峰峰值；

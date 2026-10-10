@@ -1,0 +1,69 @@
+experiment_id: EXP_023
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+historical_truth_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+
+model_conditions:
+  signal_chain: static_memoryless_gu_behavioral_v1
+  auxiliary_paths: affine_proxies_with_architecture_ratios_and_offsets
+  noise: disabled
+  dither_timing: iid_symbol_pairs_per_conversion
+  online_bus_evidence: candidate_not_verified_on_chip
+  hyperparameter_source: EXP_021_frozen_configuration
+  curve_split: historical_pwl_development_control_and_two_new_synthetic_shapes
+
+online_observation_fields:
+  - stage1_symbol
+  - stage2_symbol
+  - backend_centered_code
+  - stage1_dither_symbol
+  - stage2_dither_symbol
+
+training:
+  sample_count: 131072
+  seed: 20261011
+  input_range: [-0.95, 0.95]
+  dither_symbol_pairs: [[-1, -1], [-1, 1], [1, -1], [1, 1]]
+  normalized_step_sizes: [0.001, 0.003, 0.006, 0.012]
+  coefficient_bounds: [0.0, 2.0]
+  checkpoint_samples: [0, 4096, 16384, 32768, 65536, 131072]
+
+validation:
+  sample_count: 2048
+  seed: 20261012
+  input_range: [-0.95, 0.95]
+
+heldout_random:
+  sample_count: 4096
+  seed: 20261013
+  input_range: [-0.95, 0.95]
+
+heldout_tone:
+  sample_rate_hz: 3.0e9
+  sample_count: 8192
+  tone_bin: 251
+  amplitude_peak: 0.901
+  phase_radians: 0.2718281828459045
+  dither_seed: 20261014
+
+convergence:
+  validation_mae_fraction_of_unity: 0.5
+  require_all_later_checkpoints: true
+
+cases:
+  historical_pwl:
+    kind: historical_pwl
+    role: development_control
+  cubic_new_a:
+    kind: cubic
+    role: new_synthetic_shape
+    stage1: {linear_scale: 0.99, cubic_coefficient: -0.05}
+    stage2: {linear_scale: 1.01, cubic_coefficient: -0.03}
+  cubic_new_b:
+    kind: cubic
+    role: new_synthetic_shape
+    stage1: {linear_scale: 1.01, cubic_coefficient: 0.03}
+    stage2: {linear_scale: 0.99, cubic_coefficient: -0.02}
+
+acceptance:
+  maximum_physical_overloads: 0
+  maximum_heldout_digital_saturations: 0

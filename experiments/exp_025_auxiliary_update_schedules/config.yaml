@@ -1,0 +1,13 @@
+experiment_id: EXP_025
+reference_protocol: experiments/exp_023_full_chain_protocol/config.yaml
+auxiliary_model: independent_linear_zero_memory
+training_seeds: [20261011, 20261021, 20261031, 20261041]
+decimation_period: 30
+schedules:
+  - every_sample
+  - one_sample_per_30
+  - block_mean_30
+periodic_step_scale: 30.0
+cases: [cubic_new_a, cubic_new_b]
+acceptance:
+  maximum_physical_overloads: 0

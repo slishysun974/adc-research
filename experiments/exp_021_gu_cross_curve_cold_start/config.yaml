@@ -1,0 +1,54 @@
+experiment_id: EXP_021
+architecture_config: configs/architectures/gu_behavioral_v1.yaml
+historical_truth_config: configs/nonidealities/gu_gate_d_static_v0_1.yaml
+
+training:
+  epochs: 64
+  seed: 20261001
+  code_centers: 4096
+  dither_symbol_pairs:
+    - [-1, -1]
+    - [-1, 1]
+    - [1, -1]
+    - [1, 1]
+  normalized_step_sizes: [0.001, 0.003, 0.006, 0.012]
+  coefficient_bounds: [0.0, 2.0]
+  checkpoint_epochs: [0, 1, 2, 4, 8, 16, 32, 64]
+
+validation:
+  sample_count: 2048
+  seed: 20261002
+  input_range: [-0.95, 0.95]
+
+heldout_random:
+  sample_count: 4096
+  seed: 20261003
+  input_range: [-0.95, 0.95]
+
+heldout_tone:
+  sample_rate_hz: 3.0e9
+  sample_count: 8192
+  tone_bin: 251
+  amplitude_peak: 0.901
+  phase_radians: 0.2718281828459045
+  dither_seed: 20261004
+
+cases:
+  historical_pwl:
+    kind: historical_pwl
+    role: historical_control_not_heldout_analog_shape
+  cubic_compression:
+    kind: cubic
+    role: prespecified_synthetic_curve_holdout
+    stage1: {linear_scale: 1.0, cubic_coefficient: -0.08}
+    stage2: {linear_scale: 1.0, cubic_coefficient: -0.06}
+  cubic_mixed:
+    kind: cubic
+    role: prespecified_synthetic_curve_holdout
+    stage1: {linear_scale: 1.02, cubic_coefficient: -0.04}
+    stage2: {linear_scale: 0.98, cubic_coefficient: 0.02}
+
+acceptance:
+  maximum_training_physical_overloads: 0
+  maximum_heldout_physical_overloads: 0
+  maximum_heldout_digital_saturations: 0

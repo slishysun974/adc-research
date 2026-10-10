@@ -1,0 +1,20 @@
+{
+  "version": "EXP-054-prespecified-v1",
+  "declared_date": "2026-10-10",
+  "source": "artifacts/runs/EXP_050/phases_v1",
+  "cells": 24,
+  "windows": 160,
+  "training_windows": 128,
+  "window_size": 120,
+  "methods": ["merged_boundary", "lane_rounded_boundary", "serial_immediate", "delayed_broadcast"],
+  "sampling": "Every method selects the same conversion IDs 120*w+[0,1,2,3]; 4 learning samples, base steps unchanged, each selected product multiplied by 30. Unit Q22 start; no reset on training-to-sine transition.",
+  "merged_boundary": "Frozen visible shared banks for all 120 conversions. Sum four unrounded gated products, round once, saturate master once at boundary; broadcast for next window. Must exactly reproduce stored EXP-050 fixed path.",
+  "lane_rounded_boundary": "Frozen visible shared banks for all 120 conversions. Round each of four lane increments separately, sum and saturate master once at boundary; broadcast for next window.",
+  "serial_immediate": "Score selected samples in conversion-ID order, compute both bank requests using the same preconversion state, round and saturate after each selected conversion, globally activate for the next conversion. Other 116 samples score without learning. This assumes coefficient forwarding between selected conversions; chip timing feasibility unverified.",
+  "delayed_broadcast": "Frozen visible banks for all 120 conversions. Round merged request once; add to current master at boundary. Next window sees the master from BEFORE this boundary, so each commit has one additional complete window of broadcast latency. Two first windows see unity. Thresholds and products use visible state; saturation uses current master.",
+  "diagnostics": "At every actual commit, evaluate EXP-052 front direction on all 120 digital observations using the commit's actual learning state and the actual applied master increment. The finite-step counterfactual applies that increment immediately to visible front coefficients with visible backend frozen. For serial there are four probes per window; report adverse fractions, never sum their SSE as closed-loop loss. For delayed this is a hypothetical immediate probe, not the actual activation effect. Offline ideal codes only enter diagnostics and scoring.",
+  "evaluation": "Continued-online sine integer codes, SNDR, SFDR, MSE; frozen visible and master training endpoints; actual clips and exported state changes. Pair against merged_boundary in all cells. No method selection, tuning, or new-algorithm victory criterion; these reused records are development sensitivity checks, not fresh holdouts.",
+  "resource_boundary": "Same selected samples and nominal integrated step, not equal hardware cost. Serial uses four commits and requires forwarding; delay adds eight 11-bit visible coefficient registers plus version/control; lane rounding changes arithmetic placement. Four independent lane banks are excluded from this shared-state comparison and require a separate learning-speed/state budget.",
+  "failure_policy": "Retain all cells, clipping, invalid probes and failed runs; do not replace records, steps, phases or methods.",
+  "limits": "No new analog conversions, Cadence, RTL changes or chip timing identification. Raw digital records can be reused because the declared analog dither/physical path does not depend on digital calibration state. Timing candidates do not exhaust unpublished possibilities."
+}

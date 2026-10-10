@@ -1,0 +1,34 @@
+{
+  "version": "EXP-050-prespecified-v1",
+  "declared_date": "2026-10-10",
+  "scope": "Same four selected samples per window; only the phase schedule changes. Fresh seeds and tones validate the EXP-049 bottleneck.",
+  "training_samples": 15360,
+  "sine_samples": 3840,
+  "window_size": 120,
+  "methods": ["fixed", "rotate", "xorshift32", "all_reference"],
+  "curves": [
+    {"name": "weak_compression", "stage1": [0.995, -0.03], "stage2": [0.99, -0.025], "auxiliary": [1.0, 0.01]},
+    {"name": "expansion", "stage1": [0.975, 0.04], "stage2": [0.98, 0.035], "auxiliary": [1.0, -0.015]}
+  ],
+  "inputs": [
+    {"name": "uniform", "distribution": "uniform", "training_peak": 0.82, "sine_peak": 0.82, "sine_dc": 0.0},
+    {"name": "central", "distribution": "triangular", "training_peak": 0.82, "sine_peak": 0.65, "sine_dc": 0.1}
+  ],
+  "histories": [
+    {"name": "reset", "tracking_factor": 0.0},
+    {"name": "hold", "tracking_factor": 1.0}
+  ],
+  "trials": [
+    {"id": 1, "uniform_input_seed": 20261101, "central_input_seed": 20261102, "uniform_dither_seed": 20261201, "central_dither_seed": 20261202, "uniform_tone": 109, "central_tone": 89, "phase_seed": 324508639},
+    {"id": 2, "uniform_input_seed": 20261111, "central_input_seed": 20261112, "uniform_dither_seed": 20261211, "central_dither_seed": 20261212, "uniform_tone": 127, "central_tone": 113, "phase_seed": 610839777},
+    {"id": 3, "uniform_input_seed": 20261121, "central_input_seed": 20261122, "uniform_dither_seed": 20261221, "central_dither_seed": 20261222, "uniform_tone": 151, "central_tone": 137, "phase_seed": 270544961}
+  ],
+  "amplification_factors": [0.002, 0.04, 0.002],
+  "schedule_contract": "fixed phase 0; rotate phase 0 then +1 mod 30 per complete window; pseudorandom phase state mod 30, state updated with masked unsigned xorshift(13,17,5) once after each complete window; no reset at sine transition",
+  "pseudorandom_seed_contract": "trial phase_seed shared across paired curves, inputs and histories; independent of input/dither seed variables, deterministic after declaration",
+  "evaluation": "primary continued-online sine SNDR and final integer-code MSE; secondary frozen training endpoint, SFDR, per-window target/error attribution and phase coverage; all_reference uses 120 products and is diagnostic only",
+  "candidate_support_criterion": "each candidate evaluated separately: mean paired online SNDR gain over fixed > 0 dB, positive in at least 18 of 24 cells, and no paired loss exceeding 3 dB; this is a finite screening criterion, not a population confidence claim",
+  "resource_contract": "same 4 selected samples, 8 gate-product sums, 2 banks and 160 commits; rotate adds 5 state bits; xorshift adds 32 state bits plus XOR/shift and constant remainder logic; shared within-window phase counter, enables and broadcast remain unverified chip assumptions",
+  "failure_policy": "retain every cell, clipping and overload; no seed, frequency, step-size or curve replacement",
+  "limits": "three seed groups, two previously inspected cubic curves and new sine tones; no chip, convergence, global optimality or hardware-cost victory claim"
+}

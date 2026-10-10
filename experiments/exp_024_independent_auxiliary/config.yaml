@@ -1,0 +1,15 @@
+experiment_id: EXP_024
+reference_protocol: experiments/exp_023_full_chain_protocol/config.yaml
+auxiliary_hypotheses:
+  proxy: stage1_main_output_affine_copy
+  independent: linear_transfer_of_stage1_cdac_summing_node
+  independent_settling_factors: [0.0, 0.0, 0.0]
+  gain_ratio_and_offset: architecture_defaults
+cases:
+  linear_control: ideal_linear_both_main_and_auxiliary
+  cubic_new_a: EXP_023_cubic_new_a
+  cubic_new_b: EXP_023_cubic_new_b
+acceptance:
+  maximum_physical_overloads: 0
+  maximum_heldout_digital_saturations: 0
+  linear_control_maximum_differences: 0

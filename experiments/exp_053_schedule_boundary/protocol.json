@@ -1,0 +1,16 @@
+{
+  "version": "EXP-053-prespecified-v1",
+  "declared_date": "2026-10-10",
+  "source": "artifacts/runs/EXP_050/phases_v1",
+  "scope": "Read-only cross-schedule objective-direction audit on the 24 EXP-050 paired cells; no analog replay or online retraining.",
+  "methods": ["fixed", "rotate", "xorshift32", "all_reference"],
+  "cells": 24,
+  "windows_per_method": 160,
+  "training_windows": 128,
+  "samples_per_window": 120,
+  "diagnostic": "Use the same EXP-052 frozen-preupdate-backend digital basis, Q22 direction, exported Q1.10 finite step, Q3 correction, and integer-code SSE for every stored method/window. Offline ideal codes never enter the learner.",
+  "comparison": "Report training and online sine separately; per method count favorable/adverse/neutral directions, improved/worsened/unchanged same-window integer SSE, and per-cell net sign. Pair methods only within the same 24 source cells and retain all results.",
+  "resource_boundary": "fixed, rotate, xorshift32 each use four phase-selected samples per 120 conversions; all_reference uses all 120 products and is a higher-statistic-budget mechanism control, not equal-resource algorithm evidence.",
+  "source_boundary": "Gu OJSSCS Fig.18/Sec.III-C reports four 750-MHz units and decimation by 30 for coefficient updating but not the phase, aggregation, coefficient commit or broadcast semantics. All four source schedules are explicit research candidates; measured-output decimation by 120 is separate.",
+  "interpretation": "Local frozen-record direction can reveal sensitivity to a chosen schedule but cannot identify chip timing, prove long-run causality, or establish a schedule-independent hardware failure. Existing source online SNDR is retained without reranking or tuning."
+}

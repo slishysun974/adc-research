@@ -1,27 +1,56 @@
-# 文档索引
+# 文档索引与 AI 阅读指南
 
-## 项目治理
+这里是统一阅读入口。当前任务由 [STATUS](STATUS.md)维护，批准的方法由当前计划维护，历史决定保存在 [DECISIONS](DECISIONS.md)。不要根据文件修改时间或旧报告的“下一项”推断当前任务。
 
-- `PROJECT_CHARTER.md`：当前研究章程；
-- `STATUS.md`：当前进度、下一项工作和阻塞；
-- `DECISIONS.md`：影响范围、方法和验证标准的重要决定。
-- `TECHNICAL_WRITING_CONVENTIONS_V1.md`：电路量、数学术语和实验内部名称的统一写法。
-- `reports/DOCUMENT_LANGUAGE_AUDIT_V1.md`：全仓库研究文档的可读性审查范围、问题和处理记录。
+## 开始一个研究会话
 
-## 研究内容
+1. 读 [当前状态](STATUS.md)：确认最新成果、开放问题和本次允许的范围。
+2. 读 [项目章程](PROJECT_CHARTER.md)：理解四阶段目标、未知模拟传输和在线／离线信息边界。
+3. 读状态页引用的最新决策及 [已批准静态定点计划](RESEARCH_PLAN_STATIC_FIXED_POINT_DIAGNOSTICS_2026-10-10.md)：确认接续任务；需要追溯时再读较早决策。
+4. 读 [近期成果综合分析](reports/RESEARCH_SYNTHESIS_2026-10-10.md)：理解近期解释如何修订、成果在主线中意味着什么。
+5. 根据任务进入 [理论索引](theory/README.md) 和 [结论—证据表](theory/STAGE2_CLAIM_EVIDENCE_LEDGER_V1.md)，或 [实验报告索引](reports/experiments/README.md)。先读摘要、条件和局限，再读证明、代码和原始数据。
+6. 推导或运行前读 [本地研究流程](../CONTRIBUTING.md)，核对相关规格、协议和源码。开始时简要说明当前问题、已有依据、下一验证及范围；收尾同步状态与证据。
 
-- `theory/STAGE2_READER_GUIDE_V1.md`：阶段二易读导引和最小手算例；
-- `theory/STAGE2_CLAIM_EVIDENCE_LEDGER_V1.md`：逐项结论、验证等级与开放缺口；
-- `theory/ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.tex`：阶段二、三严格理论框架；
-- `specifications/`：Gu 架构、参数来源和信号/码制规格；
-- `theory/uncalibrated_adc/`：无校准 ADC 的理论推导；
-- `theory/calibration/`：数字后台校准影响理论；
-- `literature/`：按阶段组织的 Deep Research 结果和证据表；
-- `reports/experiments/`：经过审查的实验报告。
-- `reports/STAGE1_PLATFORM_ACCEPTANCE_V1.md`：阶段一平台的验收证据与适用范围。
-- `reports/STAGE1_SIGNAL_CHAIN_STAGE2_DEPENDENCY_AUDIT_V1.md`：逐段核查阶段一信号链和主/辅路径约简对阶段二理论的影响。
-- `reports/STAGE2_THEORY_INDEPENDENT_AUDIT_V1.md`：阶段二数学与证据独立审查的发现、修订和未决问题。
-- `reports/experiments/EXP_019_DUAL_PATH_SETTLING_V0_1.md`：独立辅路候选的判决、周期建立和旧约简对照。
-- `reports/THEORY_LITERATURE_AND_ADAPTATION_REVIEW_V1.md`：理论文献的适用条件与本课题的改写范围。
+用户的新指令优先于保存的历史安排。本次批准资料整理和阶段方向，不表示本文列出的待研究任务已经执行。以后用户要求继续时，按当前计划推进；不要重新启动百万计划已完成的前三步。
 
-动态生成的 trace、日志和批量结果不放入本目录，而保存在 `artifacts/runs/`。
+## 按任务读取资料
+
+| 任务 | 先读 | 再读 |
+|---|---|---|
+| 理解四阶段与代码位置 | [阶段导航](stages/README.md) | 对应阶段README及相关源码入口 |
+| 未知增益、信息与性能关系 | [完整链路理论框架](theory/UNKNOWN_GAIN_END_TO_END_FRAMEWORK_V0_1.md) | 对应理论文档、证据表、独立验证 |
+| 长期Gu统计与静态两级 | EXP-055—057的报告和理论，见索引 | 实验目录README、冻结协议、验证记录及状态数据 |
+| 码制、来源、测量口径 | [规格索引](specifications/README.md) | Gu架构／码制约定、ADC指标协议和原始文献 |
+| 定点和硬件 | [阶段三入口](stages/03_gu_baseline/README.md) | EXP-026、030—035及 [RTL入口](../rtl/README.md) |
+| 理论与实验结果为什么不同 | 相关推导的假设和实验协议 | 分项控制、边界样本及综合分析；不先调参 |
+| 历史研究如何演变 | [旧状态快照](reports/PROJECT_PROGRESS_HISTORY_2026-10-10.md) | 相关决策、历史计划与复核 |
+
+## 目录职责与新增文件原则
+
+| 位置 | 保存什么 | 阅读和维护原则 |
+|---|---|---|
+| `docs/STATUS.md` | 当前阶段快照和接续入口 | 只维护一份当前状态，不持续叠加长篇历史 |
+| `docs/DECISIONS.md` | 已批准的范围、方法和验证标准变化 | 保留历史记录；当前状态引用相关最新决定 |
+| `docs/RESEARCH_PLAN_*.md` | 阶段研究问题、理论／实验／分析任务与验收 | 一个阶段一份有效计划；旧计划标明接续关系，不每轮生成计划 |
+| `docs/theory/` | 定义、推导、条件性结论、反例及开放证明 | 按问题组织；优先扩展相关文档，在证据表登记 |
+| `docs/reports/` | 阶段综合分析、审查和汇报 | 解释主线意义与困难，不逐份复制实验表格 |
+| `docs/reports/experiments/` | 经审查的实验设计、结果、条件和局限 | 每个有独立结果的正式实验可有报告；数学证明可由理论文档承担 |
+| `experiments/` | 专用协议／配置、说明和执行／核对入口 | 数值记录不能替代推导；冻结入口不为目录美观搬动 |
+| `src/adc_research/` | 可复用正式实现 | 平台、理论、在线校准、离线评分、指标保持边界 |
+| `configs/`、`references/`、`tests/`、`rtl/` | 共享配置、来源、验证和硬件 | 使用各自已有说明；保留现有测试发现方式 |
+| `artifacts/runs/<实验>/<运行>/` | 本地原始数据、日志、图和验证记录 | 先查摘要和验证，再按需读大数据；保留失败记录 |
+| `artifacts/research/`、`tmp/` | 本地来源提取／整理核查、临时工作 | 临时文件不是正式证据；有引用价值时复制归档并校验 |
+| `legacy/`、旧TeX/PDF | 历史原型、给定传输下的条件性底稿 | 不当作当前未知增益理论已完成的证据 |
+
+不新增一套并列的AI指南、研究工作流、成果清单或目录树。根 `AGENTS.md` 与常驻规则只链接上述入口。新增文档须说明它与已有计划、理论或报告的区别；空模板目录、空算法成果和仅为换名的副本均没有必要。
+
+## 复用证据时检查什么
+
+- 分开数学成立、程序一致、统计控制、物理适用性和硬件工艺验证。数值通过不能自动升级其余层次。
+- 确认模型、输入、后端、码制、更新时序与预算；区分同学习量和同转换时长。报告每段有效观测，不能只报总样本数。
+- 理想输入、模拟传输、oracle和目标码只用于离线推导／诊断／评分。提出在线策略须说明真实可见信息及新增成本。
+- 部分理论的“下一项”是编写时的开放问题；当前优先级看STATUS和已批准计划。近期局部不利更新的解释以EXP-055之后的综合分析为准。
+- 本地文献和运行数据默认被Git忽略。目录或文件缺失时保留无法复算结论，列出所缺资料；不要用合成替代物冒充原数据，不自动重跑大实验。
+- 文档链接以各文件所在位置解析，执行命令以仓库根目录为起点；不要假定原运行哈希中的绝对机器路径可以直接移植。
+
+术语与写作见 [统一约定](TECHNICAL_WRITING_CONVENTIONS_V1.md)。历史审查仍可从实验索引、理论索引和 [文档语言审查](reports/DOCUMENT_LANGUAGE_AUDIT_V1.md)进入。

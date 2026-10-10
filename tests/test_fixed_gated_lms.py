@@ -24,7 +24,8 @@ from adc_research.calibration.fixed_pwl import (
     FixedPwlArithmetic,
     quantize_two_stage_config,
 )
-from adc_research.calibration.known_truth import build_two_stage_oracle
+from adc_research.calibration.gu_baseline import build_gu_two_stage_baseline
+from adc_research.evaluation.observations import digital_sample
 from adc_research.platform.pipeline import process
 from adc_research.platform.presets import (
     build_gu_gate_d_nonidealities,
@@ -129,9 +130,11 @@ class FixedAdaptiveTwoStageTests(unittest.TestCase):
             effects,
             enabled_effects=("static_pwl_truth",),
         )
-        oracle = build_two_stage_oracle(cls.pipeline, cls.nonidealities)
+        baseline = build_gu_two_stage_baseline(
+            cls.pipeline, architecture["pwl_implications"]
+        )
         arithmetic = FixedPwlArithmetic()
-        cascade = quantize_two_stage_config(oracle, arithmetic)
+        cascade = quantize_two_stage_config(baseline, arithmetic)
         stage1_lms = FixedGatedLmsConfig(
             slice_width_scaled=cascade.stage1_pwl.slice_width_scaled,
             step_sizes=(Fraction(1, 1000000),) * 4,
@@ -159,7 +162,7 @@ class FixedAdaptiveTwoStageTests(unittest.TestCase):
             dither_symbols=(-1, 1),
             nonidealities=self.nonidealities,
         )
-        result = correct_and_update_fixed(raw, self.state, self.config)
+        result = correct_and_update_fixed(digital_sample(raw), self.state, self.config)
         self.assertEqual(result.calibration.stage1_pwl.coefficient_code, 1024)
         self.assertEqual(result.calibration.stage2_pwl.coefficient_code, 1024)
         self.assertEqual(result.state.stage1.sample_count, 1)

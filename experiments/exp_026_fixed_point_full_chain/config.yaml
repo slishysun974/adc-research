@@ -1,0 +1,23 @@
+experiment_id: EXP_026
+reference_summary: artifacts/runs/EXP_025/frozen_v1_20261001/summary.json
+reference_protocol: experiments/exp_023_full_chain_protocol/config.yaml
+training_seeds: [20261011, 20261021, 20261031, 20261041]
+cases: [cubic_new_a, cubic_new_b]
+schedule: every_sample
+auxiliary_model: independent_linear_zero_memory
+fixed_point:
+  coefficient_total_bits: 11
+  coefficient_fractional_bits: 10
+  data_fractional_bits: 3
+  accumulator_fractional_bits: [22, 26]
+  coefficient_rounding: nearest_even
+  multiplication_rounding: nearest_even
+  offset_rounding: after_coefficient_sum
+  update_rounding: nearest_even
+  coefficient_export_rounding: nearest_even
+  threshold_rounding: nearest_even
+acceptance:
+  maximum_physical_overloads: 0
+  maximum_unity_code_disagreements: 0
+  maximum_reference_mae_difference: 1.0e-12
+  maximum_reference_spectrum_difference_db: 1.0e-9

@@ -387,6 +387,7 @@ def main() -> None:
         ROOT / "src" / "adc_research" / "calibration" / "pwl.py",
         ROOT / "src" / "adc_research" / "calibration" / "gated_lms.py",
         ROOT / "src" / "adc_research" / "platform" / "amplifier.py",
+        ROOT / "src" / "adc_research" / "evaluation" / "oracle.py",
     ]
     (output_dir / "environment.json").write_text(
         json.dumps(

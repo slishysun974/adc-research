@@ -1,0 +1,7 @@
+experiment_id: EXP_028
+source_experiment: experiments/exp_025_auxiliary_update_schedules/config.yaml
+curve: cubic_new_a
+seed: 20261011
+sample_count: 4096
+coefficient_state: frozen_unity
+output_path: artifacts/runs/EXP_028/frozen_v1_20261003/summary.json

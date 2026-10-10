@@ -19,9 +19,9 @@ from adc_research.calibration.fixed_point import (
     round_shift,
     signed_bits_required,
 )
-from adc_research.calibration.known_truth import TwoStagePwlCalibrationConfig
+from adc_research.calibration.observation import DigitalCalibrationSample
+from adc_research.calibration.two_stage import TwoStagePwlCalibrationConfig
 from adc_research.calibration.pwl import NegativeFullScalePolicy, PwlConfig
-from adc_research.platform.pipeline import PipelineResult
 
 
 OffsetRounding = Literal["after_coefficient_sum", "per_coefficient"]
@@ -315,36 +315,50 @@ class FixedTwoStageResult:
 
 
 def correct_two_stage_fixed(
-    raw: PipelineResult,
+    raw,
     config: FixedTwoStageConfig,
 ) -> FixedTwoStageResult:
-    """Apply the stage-2 then stage-1 PWL cascade with integer arithmetic."""
+    """Historical offline entry point; use the digital-only online variant."""
+
+    from adc_research.evaluation.scoring import correct_two_stage_fixed as score_fixed
+
+    return score_fixed(raw, config)
+
+
+def correct_two_stage_fixed_observed(
+    observed: DigitalCalibrationSample,
+    config: FixedTwoStageConfig,
+) -> FixedTwoStageResult:
+    """Apply the integer cascade using only digital, hardware-visible fields."""
+
+    if not isinstance(observed, DigitalCalibrationSample):
+        raise TypeError("online correction requires a digital calibration sample")
 
     scale = 1 << config.data_fractional_bits
     if config.backend_weight_scaled % scale:
         raise ValueError("fractional backend weight is not supported by this reference")
     stage2_raw = (
-        config.backend_weight_scaled * raw.backend.centered_code
+        config.backend_weight_scaled * observed.backend_centered_code
     )
     stage2 = correct_fixed(stage2_raw, config.stage2_pwl)
     dither2 = _dither_scaled(
-        raw.stage2.cdac.dither_symbol,
+        observed.stage2_dither_symbol,
         config.dither_code_copies_scaled[1],
         2,
     )
     stage1_before = (
-        config.stage2_symbol_weight_scaled * raw.stage2.quantizer.symbol
+        config.stage2_symbol_weight_scaled * observed.stage2_symbol
         + stage2.corrected_code_scaled
     )
     stage1_raw = stage1_before - dither2
     stage1 = correct_fixed(stage1_raw, config.stage1_pwl)
     dither1 = _dither_scaled(
-        raw.stage1.cdac.dither_symbol,
+        observed.stage1_dither_symbol,
         config.dither_code_copies_scaled[0],
         1,
     )
     centered = (
-        config.stage1_symbol_weight_scaled * raw.stage1.quantizer.symbol
+        config.stage1_symbol_weight_scaled * observed.stage1_symbol
         + stage1.corrected_code_scaled
         - dither1
     )
@@ -353,12 +367,6 @@ def correct_two_stage_fixed(
     saturated_low = unclipped < low
     saturated_high = unclipped > high
     output = min(max(unclipped, low), high)
-    path_overload = any(
-        not stage.correctable
-        or stage.main_input_overload_low
-        or stage.main_input_overload_high
-        for stage in (raw.stage1, raw.stage2)
-    ) or raw.backend.overload_low or raw.backend.overload_high
     signed_values = (
         stage2_raw,
         stage2.corrected_code_scaled,
@@ -382,9 +390,8 @@ def correct_two_stage_fixed(
         output_scaled=output,
         saturated_low=saturated_low,
         saturated_high=saturated_high,
-        correctable=not (path_overload or saturated_low or saturated_high),
+        correctable=not (saturated_low or saturated_high),
         maximum_signed_data_bits_required=max(
             signed_bits_required(value) for value in signed_values
         ),
     )
-

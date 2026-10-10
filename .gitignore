@@ -18,3 +18,9 @@ references/local/*
 # Reproducible run outputs; reviewed summaries belong in docs/reports/.
 artifacts/runs/*
 !artifacts/runs/README.md
+
+# Project-local synthesis tools and their compilation cache.
+artifacts/tooling/
+
+# Read-only paper extraction, rendered source pages and local research checks.
+artifacts/research/

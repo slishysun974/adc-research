@@ -14,9 +14,9 @@ from adc_research.calibration.fixed_gated_lms import (
 from adc_research.calibration.fixed_pwl import (
     FixedTwoStageConfig,
     FixedTwoStageResult,
-    correct_two_stage_fixed,
+    correct_two_stage_fixed_observed,
 )
-from adc_research.platform.pipeline import PipelineResult
+from adc_research.calibration.observation import DigitalCalibrationSample
 
 
 @dataclass(frozen=True)
@@ -84,7 +84,7 @@ def cascade_from_fixed_state(
 
 
 def correct_and_update_fixed(
-    raw: PipelineResult,
+    observed: DigitalCalibrationSample,
     state: FixedTwoStageAdaptiveState,
     config: FixedTwoStageAdaptiveConfig,
 ) -> FixedTwoStageAdaptiveResult:
@@ -96,7 +96,7 @@ def correct_and_update_fixed(
         config.stage1_lms,
         config.stage2_lms,
     )
-    calibration = correct_two_stage_fixed(raw, dynamic)
+    calibration = correct_two_stage_fixed_observed(observed, dynamic)
     dither1 = calibration.stage1_dither_scaled
     dither2 = calibration.stage2_dither_scaled
     if dither1 == 0 or dither2 == 0:

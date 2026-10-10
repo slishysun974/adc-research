@@ -14,13 +14,37 @@ class ProjectLayoutTests(unittest.TestCase):
             "docs/PROJECT_CHARTER.md",
             "docs/STATUS.md",
             "docs/DECISIONS.md",
+            ".cursor/rules/readable-writing.mdc",
+            "docs/theory/UNKNOWN_GAIN_END_TO_END_FRAMEWORK_V0_1.md",
+            "rtl/README.md",
         ):
+            self.assertTrue((self.root / relative).is_file(), relative)
+
+    def test_four_stage_navigation_exists(self) -> None:
+        for stage in (
+            "01_platform",
+            "02_end_to_end_theory",
+            "03_gu_baseline",
+            "04_new_algorithm",
+        ):
+            relative = f"docs/stages/{stage}/README.md"
             self.assertTrue((self.root / relative).is_file(), relative)
 
     def test_research_modules_are_separated(self) -> None:
         package = self.root / "src" / "adc_research"
-        for module in ("common", "platform", "theory", "calibration", "metrics"):
+        for module in ("common", "platform", "theory", "calibration", "evaluation", "metrics"):
             self.assertTrue((package / module / "__init__.py").is_file(), module)
+
+    def test_online_and_offline_modules_have_separate_entrances(self) -> None:
+        package = self.root / "src" / "adc_research"
+        for relative in (
+            "calibration/observation.py",
+            "calibration/two_stage.py",
+            "calibration/gu_baseline.py",
+            "evaluation/observations.py",
+            "evaluation/oracle.py",
+        ):
+            self.assertTrue((package / relative).is_file(), relative)
 
     def test_theory_does_not_import_experimental_platform(self) -> None:
         theory_root = self.root / "src" / "adc_research" / "theory"
@@ -40,4 +64,3 @@ class ProjectLayoutTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

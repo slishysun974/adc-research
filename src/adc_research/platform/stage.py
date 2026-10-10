@@ -8,9 +8,12 @@ from typing import Hashable
 
 from adc_research.platform.amplifier import (
     AmplifierResult,
+    CubicAmplifierResult,
     PwlAmplifierResult,
+    StaticCubicTruthConfig,
     StaticPwlTruthConfig,
     amplify_ideal_static,
+    amplify_static_cubic_truth,
     amplify_static_pwl_truth,
 )
 from adc_research.platform.cdac import (
@@ -51,6 +54,7 @@ class StaticStageNonidealities:
     cdac_mismatch: CdacMismatch | None = None
     actual_interstage_gain: float | None = None
     pwl_truth: StaticPwlTruthConfig | None = None
+    cubic_truth: StaticCubicTruthConfig | None = None
 
     def __post_init__(self) -> None:
         if any(not isfinite(offset) for offset in self.threshold_offsets):
@@ -60,6 +64,8 @@ class StaticStageNonidealities:
             or self.actual_interstage_gain <= 0
         ):
             raise ValueError("actual interstage gain must be finite and positive")
+        if self.pwl_truth is not None and self.cubic_truth is not None:
+            raise ValueError("choose one static analog truth for a stage")
 
 
 @dataclass(frozen=True)
@@ -71,7 +77,7 @@ class StageResult:
     quantizer: QuantizerResult
     cdac: DacResult
     residue_preamp: float
-    amplifier: AmplifierResult | PwlAmplifierResult
+    amplifier: AmplifierResult | PwlAmplifierResult | CubicAmplifierResult
     residue: float
     correctable: bool
     overload_low: bool
@@ -104,17 +110,24 @@ def process(
     residue_preamp = (
         main_input - dac.actual_dac_value + dac.dither_contribution
     )
-    if applied.pwl_truth is None:
-        amplifier = amplify_ideal_static(
-            residue_preamp,
-            nominal_gain=config.nominal_interstage_gain,
-            actual_gain=applied.actual_interstage_gain,
-        )
-    else:
+    if applied.pwl_truth is not None:
         amplifier = amplify_static_pwl_truth(
             residue_preamp,
             nominal_gain=config.nominal_interstage_gain,
             truth=applied.pwl_truth,
+            actual_gain=applied.actual_interstage_gain,
+        )
+    elif applied.cubic_truth is not None:
+        amplifier = amplify_static_cubic_truth(
+            residue_preamp,
+            nominal_gain=config.nominal_interstage_gain,
+            truth=applied.cubic_truth,
+            actual_gain=applied.actual_interstage_gain,
+        )
+    else:
+        amplifier = amplify_ideal_static(
+            residue_preamp,
+            nominal_gain=config.nominal_interstage_gain,
             actual_gain=applied.actual_interstage_gain,
         )
     low, high = config.next_stage_range
@@ -134,5 +147,9 @@ def process(
         correctable=not (overload_low or overload_high),
         overload_low=overload_low,
         overload_high=overload_high,
-        applied_nonideality_order=STATIC_NONIDEALITY_ORDER,
+        applied_nonideality_order=(
+            (*STATIC_NONIDEALITY_ORDER[:-1], "static_cubic_truth")
+            if applied.cubic_truth is not None
+            else STATIC_NONIDEALITY_ORDER
+        ),
     )

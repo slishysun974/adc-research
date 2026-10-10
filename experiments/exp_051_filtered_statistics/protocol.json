@@ -1,0 +1,36 @@
+{
+  "version": "EXP-051-prespecified-v1",
+  "declared_date": "2026-10-10",
+  "scope": "Test a fixed statistic smoother and a slower step under the same four selected samples per window; only digital learner inputs.",
+  "training_samples": 15360,
+  "sine_samples": 3840,
+  "window_size": 120,
+  "methods": ["baseline", "quarter_step", "ema_quarter"],
+  "checkpoints_windows": [0, 32, 64, 96, 128],
+  "curves": [
+    {"name": "compression_new", "stage1": [0.992, -0.04], "stage2": [0.985, -0.03], "auxiliary": [1.0, 0.015]},
+    {"name": "expansion_new", "stage1": [0.98, 0.03], "stage2": [0.985, 0.025], "auxiliary": [1.0, -0.01]}
+  ],
+  "inputs": [
+    {"name": "uniform", "distribution": "uniform", "training_peak": 0.82, "sine_peak": 0.82, "sine_dc": 0.0, "tone_bin": 109},
+    {"name": "central", "distribution": "triangular", "training_peak": 0.82, "sine_peak": 0.65, "sine_dc": 0.1, "tone_bin": 89}
+  ],
+  "histories": [
+    {"name": "reset", "tracking_factor": 0.0},
+    {"name": "hold", "tracking_factor": 1.0}
+  ],
+  "trials": [
+    {"id": 1, "uniform_input_seed": 20261301, "central_input_seed": 20261302, "uniform_dither_seed": 20261401, "central_dither_seed": 20261402},
+    {"id": 2, "uniform_input_seed": 20261311, "central_input_seed": 20261312, "uniform_dither_seed": 20261411, "central_dither_seed": 20261412},
+    {"id": 3, "uniform_input_seed": 20261321, "central_input_seed": 20261322, "uniform_dither_seed": 20261421, "central_dither_seed": 20261422}
+  ],
+  "amplification_factors": [0.002, 0.04, 0.002],
+  "fixed_phase": 0,
+  "step_contract": "baseline uses EXP-032 steps; quarter_step divides every step by 4 without adding learner state; ema_quarter preserves baseline steps and filters selected sums with alpha=1/4",
+  "ema_integer_contract": "8 signed filter states H represent 4 times the raw-product statistic; H_next=nearest_even((3*H+4*P)/4); delta=nearest_even(-mu*30*2^22*H_next/(64*4)); filter and calibration state start at zero and unity respectively and remain continuous at sine transition",
+  "resource_contract": "all methods select 4 samples at phase 0, score 120 outputs and commit once per window; EMA adds four 28-bit and four 24-bit filter registers (208 bits); filter intermediates need 30/26 bits; original 184-bit coefficient state is retained",
+  "evaluation": "primary continued-online final integer-code MSE and approximate SNDR; frozen endpoint and prespecified checkpoints evaluate the same sine observations without choosing a best stop; report state ranges, actual target/error/filter-rounding attribution, clipping and per-window errors",
+  "candidate_support_criterion": "each candidate separately: mean paired online SNDR gain over baseline > 0 dB, gains positive in at least 18/24 cells, MSE lower in at least 18/24 cells, and no paired SNDR loss exceeding 3 dB; finite screening only",
+  "failure_policy": "retain all cells and failures; no parameter, seed, curve, horizon, phase or checkpoint replacement",
+  "limits": "new parameters in two synthetic cubic families, three fresh seed groups and fixed tones per input; no chip, full convergence, unbiased Gu objective or target hardware cost claim"
+}

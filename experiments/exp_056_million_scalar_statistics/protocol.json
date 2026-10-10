@@ -1,0 +1,50 @@
+{
+  "version": "EXP-056-million-scalar-v1",
+  "declared_date": "2026-10-10",
+  "purpose": "First two steps of the continuation plan: iid static one-slope positive controls and finite-backend quantization; no nonlinear gated or coupled-chip claim.",
+  "model": "R=a*(X+D) or floor(a*(X+D)); Y=k*R-D; frozen k within 120 conversion slots, simultaneous one-coefficient window update. X and independent equiprobable D have no history. Ideal backend is an offline control, not extra hardware information.",
+  "gains": ["1", "39/40"],
+  "inputs": [
+    {"name": "wide_uniform", "low": "-256", "high": "256"},
+    {"name": "narrow_uniform", "low": "-1/4", "high": "1/4"},
+    {"name": "dc", "low": "37/100", "high": "37/100"}
+  ],
+  "quantizers": ["continuous", "floor10"],
+  "quantizer_contract": "Assumed scalar 10-bit offset-binary backend, centered codes -512..511, input -512..512, step 1; match existing floating SAR expression floor(value+512)-512, not mid-bin reconstructed voltage. Near a bin boundary adding512 may round across it; retain and count discrepancies from exact floor(value). Analytic population integrals use exact floor and hold almost everywhere for continuous inputs; their floating difference is not a certified error bound. This is not the two-stage Gu readout nor its measured quantizer resolution.",
+  "dither_codes": 64,
+  "base_step": "1/262144000",
+  "step_provenance": "Keep the EXP-055 scalar control and recent first-coefficient candidate's code/step scales. Factor 30 is an assumed mean-speed normalization, not a paper-disclosed chip step.",
+  "methods": [
+    {"name": "point30", "selected": 4, "multiplier": 30, "positions": [0, 30, 60, 90]},
+    {"name": "full120", "selected": 120, "multiplier": 1, "positions": "all"}
+  ],
+  "seeds": [202610561, 202610562, 202610563, 202610564, 202610565],
+  "rng_contract": "PCG64; independent SeedSequence children for input and dither per seed/input/method, shared latent observations across gains/quantizers. Methods have independent streams; comparisons concern distributions and budgets, not the exact same physical record.",
+  "total_windows": 250000,
+  "conversion_slots_per_window": 120,
+  "checkpoint_windows": [0, 2500, 8334, 25000, 250000],
+  "checkpoint_counts": "point30 learning=0,10000,33336,100000,1000000; full120 learning=0,300000,1000080,3000000,30000000. Same-learning comparison uses point30 at250000 and full120 at8334 (80 extra observations due to complete-window alignment). Same-conversion comparison uses equal windows.",
+  "tail_start_window": 125000,
+  "tail_blocks": 10,
+  "record_all_window_states": true,
+  "acceleration": "1024-window chunks of affine recurrences using prefix products and sums; abort on nonpositive factors or coefficients outside [0,2], no silent clipping. Cross-check direct window-product and original gated_lms block-mean reference before long runs, and replay all transitions afterwards.",
+  "implementation_chunk_windows": 1024,
+  "kernel_acceptance_max_error": 0.0000000001,
+  "reference_windows": 4096,
+  "test_record": {"samples": 30720, "fundamental_bin": 127, "amplitude_codes": 256, "dither_seed": 202610569, "sample_rate_hz": 1},
+  "scoring": "Fixed coherent tone with fresh independent dither: unit k, each declared checkpoint frozen, each checkpoint continued online, inverse gain and population zero-correlation k. Report MSE relative to X, DC error, SNDR and SFDR of continuous corrected codes; no extra output rounding. Population expected MSE separates mean offset, backend residual and coefficient variance. Test/oracle input never enters updates.",
+  "acceptance": {
+    "tail_mean_max_predicted_standard_errors": 5,
+    "tail_variance_ratio_range": [0.65, 1.35],
+    "tail_drift_max_standard_errors": 5,
+    "zero_variance_absolute_tolerance": 0.000000001,
+    "reference_and_replay_error": 0.0000000001,
+    "coefficient_bounds": [0, 2],
+    "coefficient_clipping_allowed": 0,
+    "backend_overloads_allowed": 0,
+    "policy": "Keep every seed and failure. Statistical checks validate declared scalar moments, not chip fidelity or universal performance. More samples need not remove constant-step noise. No performance gate is used to select a method or tune step, input, seed or checkpoint. Tail tests use predicted temporal covariance, not iid sample errors. A stable tail is finite-run evidence only."
+  },
+  "counting_boundary": "Generate only selected iid static observations. 30M conversion slots/path are inferred elapsed conversion counts, not executions of the two-stage ADC platform. Full120 generates all 30M scalar observations/path; point30 generates1M. No dynamic history is omitted because none exists in this declared control. One coefficient is always active; higher PWL gates are not studied.",
+  "freeze": "Copy and hash protocol before any outcomes, hash theory, experiment, original LMS/PWL/SAR/architecture and RTL; refuse overwrite; retain preflight failures and all long-run outputs.",
+  "next": "After this controlled statistical audit, separately freeze static two-stage smooth nonlinear and backend-error tests, then fixed-point and dynamic controls. Do not transfer scalar success/noise rankings to eight-state Gu or invent a new algorithm now."
+}

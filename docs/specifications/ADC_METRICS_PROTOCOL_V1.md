@@ -145,6 +145,8 @@ SFDR 当前使用 dBc。若需要 dBFS，必须另行提供满量程正弦的峰
 
 ## 6. 论文参照结果与使用限制
 
+2026-10-09 新增数值包含方式：[EXP-038 的有理数入口](../theory/CERTIFIED_FINITE_RECORD_SPECTRUM_V1.md)按本协议的矩形窗、去直流与单边功率口径，将已有最终整数码范围传到 SNDR/SFDR 范围，显式纳入三角／对数和向外舍入误差。它只认证明示码范围后的短记录运算；普通 NumPy 分数仍为近似值。码范围的物理覆盖、输出位置和实际抽取规则须单独核实。
+
 Gu 等人的扩展论文报告：仿真中四段 PWL 校正的名义 THD 约为 -80 dB，最坏
 工艺、电压和温度条件下约为 -75 dB；1 GHz、0 dBFS 测量中，增益非线性校正
 使 SNDR 从 54.0 dB 增至 60.3 dB，SFDR 从 62.7 dB 增至 76.0 dB；输入频率
@@ -154,6 +156,15 @@ Gu 等人的扩展论文报告：仿真中四段 PWL 校正的名义 THD 约为 
 因此不能复现测量绝对值或高频下降。Gate E 只检查 PWL 校正是否使 THD、SNDR
 和 SFDR 按论文方向变化，并把频率不变性作为静态模型适用边界，而不是把缺失
 动态机制吸收到 PWL 参数中。
+
+论文第 9--10 页的测量链还有一个单独的口径差异：四个 750 MHz 数字单元各自
+抽取 30，再选一路输出，测量速率为 25 MS/s；本协议当前默认评分连续
+3 GS/s 的四路交织完整码流。论文明确指出其选路输出不能观察交织杂散。
+比较绝对频谱、SNDR 或 SFDR 时，必须注明评分的输出位置和真实抽取规则；
+仅有选路测量值不能唯一确定完整码流的频谱。
+[整数码反例与证明](../theory/MEASUREMENT_PATH_INFORMATION_BOUNDARY_V1.md)
+给出这一信息边界。只有知道芯片实际抽取器函数、选路及相位后，才能构造
+与其测量口径一致的数字对照。
 
 [^1]: [IEEE 1241-2023, IEEE Standard for Terminology and Test Methods for Analog-to-Digital Converters](https://standards.ieee.org/ieee/1241/6797/).
 [^2]: [W. Kester, “Understand SINAD, ENOB, SNR, THD, THD+N, and SFDR,” Analog Devices MT-003](https://www.analog.com/media/en/training-seminars/tutorials/MT-003.pdf).

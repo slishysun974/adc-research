@@ -1,63 +1,34 @@
-# 流水线 ADC 结构化性能预测研究
+# 流水线 ADC 数字后台校准研究
 
-本项目围绕三个相互衔接的研究阶段展开：
+> 后续AI或研究者先读 [文档阅读指南](docs/README.md) 和 [当前状态](docs/STATUS.md)。阅读入口、研究流程和成果索引复用现有文件；当前批准的静态定点阶段同时包含理论推导、实验验证和结果分析。
 
-1. 参考 Gu et al. 的 12-bit、3-GS/s 流水线 ADC，建立可逐级观测的 Python 实验平台；
-2. 建立不含数字后台校准的 ADC 性能解析或半解析预测理论；
-3. 建立数字后台校准模块对 ADC 性能指标影响的预测理论。
+本项目研究一个直接的问题：**残差放大器的非线性事先未知时，ADC 内部能看到哪些信息，数字校准能改善多少性能，能否设计出比 Gu et al. 基线更好的算法？** 这里的“更好”还需要通过留出测试和硬件成本比较来证明。
 
-阶段一 Gate A 至 Gate E 已全部通过，候选 A 行为级 v1 已冻结为可信、可观测
-的静态参考平台。理想码制、数字冗余、逐项静态非理想、已知参数与自适应校正、
-定点实现、静态码密度和相干单音频谱指标均有正式实验与测试证据。阶段二的独立
-区间传播和正弦相位积分预测器已通过 EXP-015/016，可直接预测静态传输、
-码密度、连续傅里叶功率及有限记录 SNDR/SNR/THD/SFDR/ENOB；EXP-017 已为
-有限建立建立首个具有静态极限和周期稳态的一阶动态基线。理论框架 v1.2
-已完成独立审查与修订；EXP-018 第一门验证了单个阈值对连续静态谱线的局部
-边界导数。为便于理解和检查，继续工作前请先阅读：
+研究按[四阶段章程](docs/PROJECT_CHARTER.md)开展：实验平台、完整信号链与校准理论、Gu 算法基线、新算法。旧“三阶段”文档和实验编号仍在原位置，便于核查历史结果；[阶段导航](docs/stages/README.md)解释它们在新路线中的位置。
 
-- `docs/PROJECT_CHARTER.md`：已经批准、但允许后续修订的研究章程；
-- `docs/STATUS.md`：当前进度和下一项工作；
-- `docs/DECISIONS.md`：重要研究决策及理由。
-- `docs/theory/STAGE2_READER_GUIDE_V1.md`：从手算阈值例子进入阶段二主线；
-- `docs/theory/STAGE2_CLAIM_EVIDENCE_LEDGER_V1.md`：逐项结论、证据等级和缺口；
-- `docs/theory/ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.tex`：严格推导、适用条件和阶段三入口。
+## 当前最重要的限制
 
-阶段一冻结规格和指标协议集中在 `docs/specifications/`，验收报告为
-`docs/reports/STAGE1_PLATFORM_ACCEPTANCE_V1.md`。机器可读的行为级基线为
-`configs/architectures/gu_behavioral_v1.yaml`；历史草案中保持为 `null`
-的字段代表公开资料尚未闭合的信息，不能由实现静默猜测。
+已有平台可人为指定一条模拟 PWL 曲线（若干段直线），旧理论预测器在**给定这条曲线**时计算码边界与频谱。这个一致性结果没有证明真实放大器的曲线已知，也没有证明它本来就是 PWL。Gu 的 PWL 指的是**数字校正函数**，不是模拟增益的物理形状。
 
-## 代码边界
+新阶段二的[理论入口](docs/theory/UNKNOWN_GAIN_END_TO_END_FRAMEWORK_V0_1.md)把模拟传输当成未知对象，同时纳入从输入到最终码的逐级信号链，以及数字校正和参数更新。旧的[TeX 推导](docs/theory/ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.tex)和 [PDF](output/pdf/ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.pdf)保留作有指定曲线／动态假设的条件性底稿；新的未知增益理论尚未完成，不可用旧 PDF 冒充。
 
-- `src/adc_research/platform/`：逐样本实验平台，用于生成验证数据；
-- `src/adc_research/theory/`：独立解析预测器；
-- `src/adc_research/calibration/`：数字校正和自适应校准算法；
-- `src/adc_research/metrics/`：统一的 ADC 指标计算；
-- `src/adc_research/common/`：配置、单位、数据结构和来源信息。
+## 阅读与代码入口
 
-实验平台与理论预测器可以共享经过审查的配置和数据结构，但理论模块不得依赖实验平台产生的频谱或数值灵敏度来构成其核心预测。
+- [章程](docs/PROJECT_CHARTER.md)：目标、四阶段和不泄漏模拟真值的原则。
+- [状态](docs/STATUS.md)与[决策](docs/DECISIONS.md)：现在做到哪里、有哪些开放问题。
+- [四阶段导航](docs/stages/README.md)：旧代码、实验与新阶段的对应关系。
+- `src/adc_research/platform/`：含模拟真值的逐样本实验链；`calibration/`：只从数字样本更新的校准核心；`evaluation/`：提取数字观测和离线 oracle 评分；`theory/`：现有条件性计算器；`metrics/`：统一指标。
+- `experiments/`：可复现的编号实验；`docs/reports/`：经审查的结果；`rtl/`：已有 Gu 数字候选的功能核对与通用综合，目标工艺成本和新算法仍待研究。
 
-## 研究资料与产物
+[第一轮代码信息边界审计](docs/stages/03_gu_baseline/ONLINE_INFORMATION_BOUNDARY_AUDIT_V1.md)指出旧 EXP-010/011/013 的配置经由模拟真值对象建立；现已拆分配置来源与在线输入，但跨曲线留出测试和真实芯片可见总线核对仍未完成。
 
-- `references/`：文献清单、BibTeX 和本地参考资料；
-- `configs/`：架构、非理想和实验配置；
-- `experiments/`：带编号的可复现实验入口；
-- `artifacts/runs/`：运行时生成的配置快照、日志、trace、指标和图表；
-- `docs/reports/`：经过审查后保留的实验结论、理论与证据审查报告；
-- `legacy/pre_charter_v0_1/`：新章程形成前的两级原型，非当前正式模型。
+理论实现与逐样本平台保持分开；共享经过审查的架构信息可以，但不能把平台幕后真值或频谱喂给正在检验的理论和算法。
 
-## 开发检查
+## 本地检查
 
 ```powershell
 $env:PYTHONPATH = "src"
 python -m unittest discover -s tests -v
 ```
 
-当前目录结构本身受测试约束。后续新增实验时，应把原始运行产物与人工撰写的研究报告分开保存。
-
-## 参与维护
-
-本项目公开接受社区维护与贡献。任何人都可以通过 Issue 提出问题或研究建议，
-并通过 fork 后提交 Pull Request 的方式参与代码、实验、文档和复现工作。具体流程与
-证据要求见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。GitHub 的公开仓库不会自动向所有人
-授予直接写权限；合并到主分支前仍需经过审查。
+贡献流程及公开资料限制见 [CONTRIBUTING.md](CONTRIBUTING.md)。

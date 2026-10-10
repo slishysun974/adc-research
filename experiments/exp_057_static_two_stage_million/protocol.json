@@ -1,0 +1,35 @@
+{
+  "version": "EXP-057-static-two-stage-million-v1",
+  "declared_date": "2026-10-10",
+  "purpose": "Continue step3 with static two-stage four-slope Gu candidate, add backend quantization and smooth analog nonlinearity in separate paired controls, no new algorithm or chip certification.",
+  "cases": [
+    {"name":"ideal", "stage1":[1.0,0.0], "stage2":[1.0,0.0]},
+    {"name":"front_linear", "stage1":[0.975,0.0], "stage2":[1.0,0.0]},
+    {"name":"both_linear", "stage1":[0.975,0.0], "stage2":[0.98,0.0]},
+    {"name":"front_smooth", "stage1":[0.975,-0.055], "stage2":[1.0,0.0]},
+    {"name":"both_smooth", "stage1":[0.975,-0.055], "stage2":[0.98,-0.04]}
+  ],
+  "analog_model": "Reviewed static pipeline: q1=flash(X); z1=4*(X-q1/4+D1/32); r1=a1*z1+b1*z1^3; q2=flash(r1); z2=4*(r1-q2/4+D2/32); r2=a2*z2+b2*z2^3. Auxiliary matches main statically; no independent auxiliary mismatch, history, noise or jitter. Coefficients are assumptions, not chip fits.",
+  "backend_modes": ["continuous_reference","sar8"],
+  "backend_contract": "continuous_reference uses R2=128*r2 as an OFFLINE ideal-backend control outside the integer digital-sample hardware interface. sar8 uses original floor((r2+1)*128)-128 and preserves endpoint overload checks. Neither mode adds coefficient/data fixed-point or extra final integer rounding.",
+  "digital": "R1=128*q2+PWL32(R2,k2)-16*D2; Y1=PWL128(R1,k1)-64*D1; Y2=PWL32(R2,k2)-16*D2; final=2048+512*q1+Y1. Four symmetric cumulative slopes per bank, original lower-bound-only gates on local Y1,Y2; current coefficients score/gate, both banks simultaneously commit after each120 slots. Quantized mode uses only original integer observations/tags and state; no truth or target in learning.",
+  "steps": {"stage1_denominator":262144000,"stage2_denominator":16384000,"numerators":[1,3,6,12]},
+  "step_provenance": "Original EXP-032/039 candidate floating limit and EXP-055/056 first-slope scale; retained without tuning. These steps and point normalization are assumed candidates, not measured chip parameters.",
+  "methods": [
+    {"name":"point30","selected":4,"multiplier":30,"training_windows":250000,"checkpoint_windows":[0,2500,8334,25000,250000],"selected_positions":[0,1,2,3]},
+    {"name":"full120","selected":120,"multiplier":1,"training_windows":8334,"checkpoint_windows":[0,84,834,2500,8334],"selected_positions":"all"}
+  ],
+  "comparison_contract": "Same-learning final: point1M versus full1,000,080 observations/stage. Same-conversion checks at2500 and8334 windows (300,000 and1,000,080 conversions). Full120 is NOT extended to30M conversions; at point's30M conversion endpoint only same-learning comparison is available. Do not imply all final endpoints have equal physical time or resources.",
+  "seeds":[202610571,202610572,202610573,202610574,202610575],
+  "input": {"distribution":"iid uniform","low":-0.82,"high":0.82},
+  "random_source": "Declared deterministic counter source: SplitMix64 finalizer(seed XOR stream_constant XOR (conversion_index*0x9E3779B97F4A7C15)), top53bits uniform for input and topbit for each dither. Streams constants1,2,3 times0xD1B54A32D192ED03. Paired cases/backend/methods share index/tag record. IID is a modeling assumption; this is not chip PRNG evidence. Static point paths need only generate selected indices; no dynamics/history are omitted.",
+  "counts": "Report inferred conversion slots, generated static analog samples, actual observations per bank, per-slope gate counts, nonzero digital-basis support, gate-and-basis support, commits, saturation and overload. Higher slope readout support does not guarantee updates.",
+  "tail": {"fraction":0.5,"blocks":10,"policy":"Equal integer partition of latter-half states; use block mean range, per-block std and lag correlations; no scalar stationary-law assumption or iid confidence interval for the coupled nonlinear system. Do not claim convergence from final coefficient or ten stable blocks."},
+  "test_record": {"samples":30720,"tone_bin":127,"amplitude":0.82,"seed":202610579,"sample_rate_hz":3000000000},
+  "evaluation": "Same fixed tone and midpoints validation on[-.82,.82] with all four dither pairs at every checkpoint: unit, frozen learned bank, continued online tone. Score continuous output against2048*(X+1), MSE/DC/SNDR/SFDR. Linear exact inverse is offline positive control. Nonlinear stage2-then-stage1 least-squares PWL reference fitted ONLY on independent fixed validation grid, not training/tone and never fed to update; constrained unexcited slopes remain1. Report representation residual, residual dither/quantization and learned-state loss separately without claiming eight-state causal decomposition.",
+  "validation_points":4096,
+  "verification": {"model_grid_points":512,"native_original_coefficient_tolerance":0.0000000001,"native_voltage_tolerance":0.000000000001,"coefficient_probe_windows":32,"window_probe_schedule":"First32 windows and up to32 ending at every declared nonzero checkpoint, duplicate windows removed; each probe retains pre-state, raw physical input/tags, post-state and update sums/counts. Independent Python original-core replay, including simultaneous frozen banks.","endpoint_probe_policy":"Include every flash threshold with nextafter neighbors and all four tags; test negative floor, all PWL boundaries/negative endpoint and lower-gate equality separately."},
+  "acceptance": {"source_match":true,"original_core_reference_tolerance":0.0000000001,"physical_overloads_allowed":0,"output_clipping_allowed":0,"coefficient_clipping_allowed":0,"all_seeds_retained":true,"policy":"Implementation gates are predeclared; performance and coupled-state tail statistics are outcomes, not a method-selection gate. Keep failures and unsupported coefficients; no change to seed/step/case/checkpoint or post-result horizon extension. Abort invalid PWL raw range per path and report it, do not silently change geometry."},
+  "implementation": "Experiment-local C#/.NET acceleration compiled by PowerShell Add-Type, double arithmetic, no fast math. Expose physical source and digital-only correction/update as separate functions. Preflight against existing Python platform/LMS before training; retain all preflight failures. Do not modify production Gu, platform or RTL.",
+  "next": "Use full-output results and actual gate support to decide whether scalar noise/quantization diagnostics carry to the static cascade. Fixed-point and dynamic controls remain separate next stages; information/update redesign only after their evidence gates."
+}

@@ -1,20 +1,25 @@
 ---
-description: Maintain continuity and evidence discipline for the ADC research project
+description: Maintain the four-stage ADC research scope and evidence boundaries
 alwaysApply: true
 ---
 
 # ADC Research Project Continuity
 
-- Before substantive work, read `docs/PROJECT_CHARTER.md`, `docs/STATUS.md`, and `docs/DECISIONS.md` when they exist.
+- Before substantive work, follow `docs/README.md`: read the current status, charter, relevant latest decisions, and approved plan. Historical next-step text does not override `docs/STATUS.md`.
 - Treat the charter as the current, amendable research baseline. New evidence or user decisions may revise it.
-- Follow the current three-stage route: Gu et al. experimental platform, uncalibrated ADC prediction theory, then calibration-impact theory. Do not infer authorization to advance beyond the user's current request.
+- Follow the current four-stage route: experimental platform; integrated unknown-gain signal-chain and calibration theory; Gu baseline analysis and hardware evaluation; new algorithm design and comparison. Do not infer authorization to advance beyond the user's current request.
+- Treat physical residue-amplifier nonlinearity as unknown to the running calibration algorithm. A synthetic analog PWL truth or Cadence curve may be used for offline tests, never silently as an algorithm input or a default physical law.
+- Preserve the online/offline code boundary: adaptive update functions accept only `DigitalCalibrationSample` from `calibration/observation.py`; build Gu candidate PWL geometry from reviewed digital architecture bits via `calibration/gu_baseline.py`. `evaluation/oracle.py` and physical-overload scoring are offline only. The historical `calibration/known_truth.py` path is compatibility code, not a new online dependency.
+- The older affine interval and one-pole state derivations are conditional baselines, not a completed general theory for unknown gain. Read `docs/theory/UNKNOWN_GAIN_END_TO_END_FRAMEWORK_V0_1.md` before extending stage two.
 - Keep the experimental platform and analytical predictor independently implemented; sharing reviewed architecture parameters is allowed, sharing simulator-derived sensitivities as theory is not.
 - Mark important parameters and claims by provenance: paper-reported, externally sourced, derived, fitted, or assumed.
 - Do not present a numerical Jacobian, fitted response surface, or surrogate model as an analytical ADC theory.
-- Do not invoke the `mcm-modeling` skill for this project unless the user explicitly reverses this instruction.
 - In research documents, use standard technical terminology and prefer wording already used in the cited papers or established literature. Do not coin new terms when a standard expression is available; if a new label is unavoidable, define it explicitly and mark it as a local label rather than literature terminology.
 - Update `docs/STATUS.md` after substantive project work. Record decisions that alter scope, methods, assumptions, or validation standards in `docs/DECISIONS.md`.
-- During stages two and three, keep `docs/theory/ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.tex` synchronized with the currently established theoretical framework and compile it to `output/pdf/ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.pdf`.
-- Keep that framework document at the theory level: describe objects, assumptions, mappings, dependencies, validation logic, established scope, and open layers. Exclude source-code structure, function names, run configurations, and concrete numerical algorithms. After substantive updates, compile, render every page, and visually inspect the PDF.
-- Whenever a stage or other meaningful interim conclusion is completed, update the relevant status, decision, and report documents; run the applicable checks; then commit the coherent change set to Git with a descriptive message and push it to the configured remote. Do not leave a completed milestone only in the working tree.
+- Keep the current stage-two framework in `docs/theory/UNKNOWN_GAIN_END_TO_END_FRAMEWORK_V0_1.md` synchronized with established results and open proofs. The older `ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.tex` and PDF remain a conditional, known-transfer baseline; do not cite them as a solved unknown-gain theory. If the TeX changes, compile, render, and inspect its PDF.
+- In theory documents, separate established identities, conditional results, counterexamples, and proposed but unproved work. Do not convert a test curve into a physical assumption by changing terminology.
+- Whenever a stage or meaningful interim conclusion is completed, update the relevant status, decision, and report documents and run applicable checks. Prepare a coherent change set; commit or push only when requested or authorized by the current workflow.
 - Deep Research may be used for stages two and three when requested or when a focused literature investigation is needed.
+
+- Research includes analytical derivation, predeclared experimental checks, and evidence-based analysis. Follow the local workflow in `CONTRIBUTING.md`; experiments do not substitute for proofs.
+- Reuse existing reading guides, indexes, theory ledgers and folders. Keep only one current status; add a file only for a distinct research question or deliverable.

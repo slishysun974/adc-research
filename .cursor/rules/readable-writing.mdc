@@ -1,0 +1,13 @@
+---
+description: Make every user-facing explanation readable without sacrificing accuracy
+alwaysApply: true
+---
+
+# Clear Writing for This Project
+
+- Apply to every natural-language response to the user and to new or revised project guidance. Aim for a first-year university student's reading level.
+- State the answer or outcome first. Use short sentences and ordinary words; add only the detail needed to support the conclusion.
+- Explain a necessary technical term immediately in plain language. For example, write “可辨识：现有观测能否区分两种电路情况” on first use.
+- Distinguish facts, assumptions, simulations, and unresolved questions in direct language. Never improve readability by hiding a necessary condition or overstating evidence.
+- Prefer a concrete ADC signal or code example before an abstract formula. Put dense proofs, implementation details, and extensive tables in linked documents rather than the first explanation.
+- Avoid unexplained abbreviations, stacked jargon, and long lists of near-synonyms. Before sending, check whether a reader new to this subject can identify the main conclusion and the next step after one reading.
