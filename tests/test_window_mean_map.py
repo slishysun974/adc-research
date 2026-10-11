@@ -13,6 +13,8 @@ from adc_research.theory.window_mean_map import (
     MeanGeometry, analyze_window_mean, certify_mean_cell, certify_q3_mean_error, exact_matrix_rank,
     mean_update_infinity_bound, phase_product_means,
 )
+from adc_research.theory.static_fixed_contract import readout, nearest_even
+from adc_research.theory.cascade_mean_output import cascade_loss_change
 from experiments.exp_032_online_lms_rtl.generate_vectors import _config
 from experiments.exp_033_fixed_online_box.run import _initial
 
@@ -143,6 +145,65 @@ class WindowMeanMapTests(unittest.TestCase):
             certify_mean_cell(result, F(-1))
         with self.assertRaises(ValueError):
             phase_product_means(result)
+
+    def test_two_bank_zero_linear_change_still_moves_exact_integer_output(self):
+        sample = Sample(0, 0, 16, -1, -1)
+        result = analyze_window_mean((sample,), self.slopes)
+        for sign in (-1, 1):
+            delta = (sign*F(1, 2), F(0), F(0), F(0),
+                     -sign*F(1, 4), F(0), F(0), F(0))
+            loss = cascade_loss_change(result, delta, (F(0),))
+            changed = tuple(k+h for k, h in zip(self.slopes, delta))
+            # The independent rational readout uses front/rear bank order.
+            direct = readout(0, 0, F(16), -1, -1, changed[4:]+changed[:4], data_q3=True)
+            self.assertEqual(nearest_even(direct.output), 2142)
+            self.assertEqual(loss.linear_changes, (F(0),))
+            self.assertEqual(loss.bilinear_changes, (F(-2),))
+            self.assertEqual(loss.linear_square, 0)
+            self.assertEqual(loss.bilinear_square, 4)
+            self.assertEqual(loss.mse_difference, 4)
+            # A different offline target can reverse the MSE-change sign.
+            self.assertEqual(cascade_loss_change(result, delta, (F(3),)).mse_difference, -8)
+
+    def test_all_signed_small_bank_changes_match_independent_continuous_readout(self):
+        result = analyze_window_mean(self.samples, self.slopes)
+        errors = (F(3, 7), F(-5, 9))
+        for signs in itertools.product((-1, 1), repeat=8):
+            delta = tuple(F(sign, 10000) for sign in signs)
+            loss = cascade_loss_change(result, delta, errors)
+            changes = []
+            for sample, row in zip(self.samples, result.rows):
+                changed = tuple(k+h for k, h in zip(self.slopes, delta))
+                new = readout(sample.stage1_symbol, sample.stage2_symbol,
+                              F(sample.backend_centered_code), sample.stage1_dither_symbol,
+                              sample.stage2_dither_symbol, changed[4:]+changed[:4], data_q3=False)
+                changes.append(new.y1-row.local1)
+            direct = sum(((e+d)**2-e**2 for e, d in zip(errors, changes)), F(0))/2
+            self.assertEqual(loss.mse_difference, direct)
+
+    def test_integer_arithmetic_cross_is_retained_with_fixed_rear(self):
+        sample = Sample(0, 0, 17, 1, -1)
+        result = analyze_window_mean((sample,), self.slopes)
+        delta = (F(0),)*4+(F(1, 1024), F(0), F(0), F(0))
+        old = readout(0, 0, F(17), 1, -1, self.slopes, data_q3=True)
+        changed = tuple(k+h for k, h in zip(self.slopes, delta))
+        new = readout(0, 0, F(17), 1, -1, changed[4:]+changed[:4], data_q3=True)
+        actual = F(nearest_even(new.output)-nearest_even(old.output))
+        unrounded = F(33, 1024)
+        loss = cascade_loss_change(result, delta, (F(2),), (actual-unrounded,))
+        self.assertEqual(actual, 0)
+        self.assertEqual(loss.bilinear_square, 0)
+        self.assertNotEqual(loss.arithmetic_cross, 0)
+        self.assertEqual(loss.mse_difference, 0)
+
+    def test_crossed_segment_and_base_boundary_are_rejected_for_loss_polynomial(self):
+        delta = (F(-1, 2), F(0), F(0), F(0), F(0), F(0), F(0), F(0))
+        result = analyze_window_mean((Sample(0, 1, -17, 1, -1),), self.slopes)
+        with self.assertRaisesRegex(ValueError, "crosses"):
+            cascade_loss_change(result, delta, (F(0),))
+        boundary = analyze_window_mean((Sample(0, 1, -16, 1, -1),), self.slopes)
+        with self.assertRaisesRegex(ValueError, "boundary"):
+            cascade_loss_change(boundary, (F(0),)*8, (F(0),))
 
 
 if __name__ == "__main__":

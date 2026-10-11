@@ -1,0 +1,35 @@
+{
+  "version": "EXP-067-dynamic-history-preflight-v1",
+  "declared_date": "2026-10-10",
+  "scope": "Approved plan5d / D-098: analytical history, exact limits and short ORIGINAL-platform preflight only. No long dynamic scan, input switch, comparator offsets, auxiliary curve mismatch, new algorithm or tuning.",
+  "source_protocol": "experiments/exp_057_static_two_stage_million/protocol.json",
+  "static_reference": "artifacts/runs/EXP_062/preflight_v2",
+  "cases": [
+    {"name":"ideal","stage1":[1.0,0.0],"stage2":[1.0,0.0],"auxiliary":[1.0,0.0]},
+    {"name":"both_linear","stage1":[0.975,0.0],"stage2":[0.98,0.0],"auxiliary":[0.975,0.0]},
+    {"name":"both_smooth","stage1":[0.975,-0.055],"stage2":[0.98,-0.04],"auxiliary":[0.975,-0.055]}
+  ],
+  "phases": [
+    {"name":"static","amplification":[0.0,0.0,0.0],"tracking":1.0},
+    {"name":"reset","amplification":[0.002,0.04,0.002],"tracking":0.0},
+    {"name":"hold","amplification":[0.002,0.04,0.002],"tracking":1.0}
+  ],
+  "provenance": "Three already-seen EXP062 nominal curves. Nonzero factors and reset/hold limits reused from EXP050 and audited in EXP055; synthetic mechanism assumptions, NOT chip pole/reset extraction. Static removes amplification factors, not just tracking memory. No fitted parameter or independent holdout claim.",
+  "seed":202610621,
+  "input": {"source":"Delivered EXP062/preflight_v2 tone.bin with frozen SHA256","samples_per_period":30720,"tone_bin":127,"amplitude":0.82,"phase":0.0},
+  "dither": "Original global counter streams2/3, +/-1, preamp amplitudes1/32; independent-model labels, not identified chip PRNG. Start global n=0, continuous in all windows.",
+  "initial_analog_outputs":[0.0,0.0,0.0],
+  "tracking_targets":[0.0,0.0,0.0],
+  "methods": [
+    {"name":"point30","selection":"point_products","selected":4,"multiplier":30},
+    {"name":"full120","selection":"all_products","selected":120,"multiplier":1}
+  ],
+  "online": "Original unit Q22 / Q1.10 export / Q3 readout, old-state gates and base steps from EXP057;120-slot simultaneous two-bank commits. Online accepts digital words/global IDs only. EVERY conversion advances main1/aux1/main2 history AND emits both algorithm outputs and unit reference, including unselected slots. No per-lane analog states or warm-up discarded.",
+  "budget": {"windows":32,"conversions_per_stream":3840,"physical_streams":9,"algorithm_paths":18,"physical_conversions":34560,"online_codes":69120,"unit_codes":34560,"two_bank_commits":576,"point_learning_observations_per_stage_path":128,"full_learning_observations_per_stage_path":3840},
+  "controls": {"checkpoint_window":16,"exact_scalar_steps":24,"exact_chain_steps_linear":24,"exact_chain_steps_smooth":4,"tracking_controls":[0.0,0.1,1.0],"endpoint_neighbor":"1/2^40","endpoint_equality":"right-inclusive flash and floor SAR; exact mathematical controls and native double operations separately checked","history_contrast":[0.5,-0.5,0.25]},
+  "predictions": "Zero amplification equals delivered static words, codes and all window Q22 states. Zero tracking removes prior-history dependence but leaves (1-rho_a) target attenuation. With ALL three analog outputs plus Q22/counters and global labels, resumed suffix equals uninterrupted suffix exactly. Wrongly skipping unselected history can change future selected words under hold. Current-dither ungated affine correlation depends on rho_a, not solely kappa; gated quantized two-stage roots remain open. More support/update never implies benefit.",
+  "verification": {"full_physical_replay":true,"full_digital_replay":true,"voltage_tolerance":2e-12,"digital_tolerance":0,"short_mse":"sample-level against2048*(x+1), finite cross identities; no short-block SNDR/SFDR or convergence claim","source_policy":"freeze all src/RTL and EXP055-066 source files plus new implementation/test/protocol; copy/hash old short reference before any conversion; refusal to overwrite; preserve failed run"},
+  "acceptance": {"overloads_allowed":0,"saturations_allowed":0,"output_clips_allowed":0,"word_code_state_mismatches_allowed":0,"source_hashes_unchanged":true,"performance_is_gate":false},
+  "next": "After short acceptance and analysis, separately freeze a NECESSARY limited dynamic long protocol with all-history cost; no long execution is included in this preflight. General eight-state stationary law and physical applicability stay open.",
+  "publication":"Local research only; no commit/push."
+}

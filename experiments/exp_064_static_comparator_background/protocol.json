@@ -1,0 +1,329 @@
+{
+  "version": "EXP-064-static-comparator-background-v1",
+  "declared_date": "2026-10-10",
+  "scope": "D-095 / static plan section6: six single-stage comparator conditions, paired with delivered EXP062 nominal paths. No tuning, input switch, dynamics or simultaneous offsets.",
+  "source_protocol": "experiments/exp_057_static_two_stage_million/protocol.json",
+  "cases": [
+    {
+      "name": "ideal_stage1_only",
+      "stage1": [
+        1.0,
+        0.0
+      ],
+      "stage2": [
+        1.0,
+        0.0
+      ],
+      "auxiliary": [
+        1.0,
+        0.0
+      ],
+      "model": "ideal",
+      "variant": "stage1_only",
+      "offsets1": [
+        "3/2000",
+        "-2/2000",
+        "1/2000",
+        "-3/2000",
+        "2/2000",
+        "-1/2000",
+        "3/2000",
+        "-2/2000"
+      ],
+      "offsets2": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "name": "ideal_stage2_only",
+      "stage1": [
+        1.0,
+        0.0
+      ],
+      "stage2": [
+        1.0,
+        0.0
+      ],
+      "auxiliary": [
+        1.0,
+        0.0
+      ],
+      "model": "ideal",
+      "variant": "stage2_only",
+      "offsets1": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "offsets2": [
+        "-2/2000",
+        "3/2000",
+        "-1/2000",
+        "2/2000",
+        "-3/2000",
+        "1/2000",
+        "-2/2000",
+        "3/2000"
+      ]
+    },
+    {
+      "name": "both_linear_stage1_only",
+      "stage1": [
+        0.975,
+        0.0
+      ],
+      "stage2": [
+        0.98,
+        0.0
+      ],
+      "auxiliary": [
+        0.975,
+        0.0
+      ],
+      "model": "both_linear",
+      "variant": "stage1_only",
+      "offsets1": [
+        "3/2000",
+        "-2/2000",
+        "1/2000",
+        "-3/2000",
+        "2/2000",
+        "-1/2000",
+        "3/2000",
+        "-2/2000"
+      ],
+      "offsets2": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "name": "both_linear_stage2_only",
+      "stage1": [
+        0.975,
+        0.0
+      ],
+      "stage2": [
+        0.98,
+        0.0
+      ],
+      "auxiliary": [
+        0.975,
+        0.0
+      ],
+      "model": "both_linear",
+      "variant": "stage2_only",
+      "offsets1": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "offsets2": [
+        "-2/2000",
+        "3/2000",
+        "-1/2000",
+        "2/2000",
+        "-3/2000",
+        "1/2000",
+        "-2/2000",
+        "3/2000"
+      ]
+    },
+    {
+      "name": "both_smooth_stage1_only",
+      "stage1": [
+        0.975,
+        -0.055
+      ],
+      "stage2": [
+        0.98,
+        -0.04
+      ],
+      "auxiliary": [
+        0.975,
+        -0.055
+      ],
+      "model": "both_smooth",
+      "variant": "stage1_only",
+      "offsets1": [
+        "3/2000",
+        "-2/2000",
+        "1/2000",
+        "-3/2000",
+        "2/2000",
+        "-1/2000",
+        "3/2000",
+        "-2/2000"
+      ],
+      "offsets2": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    },
+    {
+      "name": "both_smooth_stage2_only",
+      "stage1": [
+        0.975,
+        -0.055
+      ],
+      "stage2": [
+        0.98,
+        -0.04
+      ],
+      "auxiliary": [
+        0.975,
+        -0.055
+      ],
+      "model": "both_smooth",
+      "variant": "stage2_only",
+      "offsets1": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "offsets2": [
+        "-2/2000",
+        "3/2000",
+        "-1/2000",
+        "2/2000",
+        "-3/2000",
+        "1/2000",
+        "-2/2000",
+        "3/2000"
+      ]
+    }
+  ],
+  "parameter_provenance": "EXP007 original synthetic comparator vectors, max0.0015 normalized per-stage flash input. Same three already-seen EXP062 main/auxiliary curves; no chip distribution/fit/drift.",
+  "seeds": [
+    202610621,
+    202610622,
+    202610623,
+    202610624,
+    202610625
+  ],
+  "input": {
+    "samples_per_block": 30720,
+    "tone_bin": 127,
+    "amplitude": 0.82,
+    "phase_radians": 0.0,
+    "sample_rate_hz": 3000000000,
+    "formula": "x[n]=0.82*sin(2*pi*127*(n mod30720)/30720). Stored one-period double table is the declared source; integer modulo is phase reduction, not a reset at evaluation. No input/PRNG/state pause at block boundaries."
+  },
+  "dither": "Original independent counter streams 2 and 3, indexed by global conversion n, +/-1 with physical amplitudes1/32 at both preamp summing nodes. Periodic input is independent of declared tags; IID independence is a modeling assumption, not a proven property of SplitMix64/chip PRNG.",
+  "methods": [
+    {
+      "name": "point30",
+      "selected": 4,
+      "multiplier": 30
+    },
+    {
+      "name": "full120",
+      "selected": 120,
+      "multiplier": 1
+    }
+  ],
+  "budget": {
+    "blocks": 256,
+    "conversions_per_path": 7864320,
+    "windows_per_path": 65536,
+    "point_observations_per_stage": 262144,
+    "full_observations_per_stage": 7864320,
+    "paths": 60,
+    "generated_physical_conversions": 235929600,
+    "actual_online_output_codes": 471859200,
+    "comparison": "same conversions and commits; full uses30x learning observations/products. Do not imply equal hardware cost or same-learning endpoint."
+  },
+  "preflight": {
+    "windows": 32,
+    "seeds": "first seed only; full replay also compared with EXP063 first-seed short records",
+    "streams": 6,
+    "paths": 12,
+    "probe_windows": "all",
+    "full_digital_and_platform_replay": true
+  },
+  "verification": {
+    "long_probe_blocks": [
+      0,
+      1,
+      4,
+      16,
+      64,
+      128,
+      255
+    ],
+    "long_probe_schedule": "first4 windows of each listed block plus final4 windows; all120 conversions in each probe, both old states, rational readout/commit and original fixed bank commit. 32 windows/stream.",
+    "all_digital_replay": "Independent signed integer nearest-even Q3/Q1.10/Q22 vector replay of EVERY stored conversion output and EVERY commit, selected/all-conversion support and update counters. Physical source checked against original platform at predeclared probes only; all stored tags independently regenerated and words checked against separate vector physical formulas.",
+    "voltage_tolerance": 2e-12,
+    "nominal_sha256": "All cited nominal metadata, words, outputs, state and input files checked against EXP062 delivery_hashes before use; manifest itself frozen in new source hashes.",
+    "stage1_point_identity": "EVERY Q22 window state, effective state and selected support/correlations/update counters must exactly match nominal. Output change restricted to q1-change phases, including all unselected conversions.",
+    "comparator_short": "Accelerated preflight words/output/Q22/correlations/selected gates/basis matched with EXP063 original-platform short.jsonl.gz for all12 matching paths.",
+    "changed_q": "All and selected q1/q2 change counts per coherent block, computed against nominal delivered words and independently checked."
+  },
+  "empirical_convergence": {
+    "group_blocks": 8,
+    "minimum_groups": 3,
+    "sndr_group_mean_range_db": 1.0,
+    "coefficient_group_mean_range": 0.005,
+    "coordinates": "each coordinate with nonzero selected gate-and-basis support in the three-group interval; unsupported coordinates explicitly listed, not called converged",
+    "definition": "first end of three consecutive nonoverlapping8-block groups with SNDR group mean range<=1dB and each supported effective coefficient group mean range<=0.005. Retrospective offline descriptor only, not online stopping; report subsequent violations and total passing intervals. Does not require positive net benefit and does not prove stationarity."
+  },
+  "tail": {
+    "first_block": 128,
+    "groups": 16,
+    "lags_windows": [
+      1,
+      100,
+      1000
+    ],
+    "policy": "all latter-half window states; population covariance,8-block group drift and temporal correlations. Per-block actual outputs and net gains retained. No iid confidence interval or eight-state stationary-law claim."
+  },
+  "evaluation": "Save all digital source words plus unit unupdated / point / full final nearest-even12-bit codes from first conversion. Each30720-conversion rectangular coherent block: integer MSE/DC/SNDR/SFDR and exact MSE improvement identity with unit reference, including cross. Startup block is a transient spectrum, not a steady-state claim. Never freeze/pause updates for FFT. Save selected and all-conversion gates/basis/joint, correlation sums, hidden/export changes and zero requests by block. Nominal threshold baseline only.",
+  "predictions": "Stage1-only point30 must exactly match nominal state for all65536 windows; changed output restricted to92/30720 phases (23552 maximum over long horizon). More gate/joint support need not improve net benefit. Stage2/full state changes not presumed equal. No prescribed performance ordering.",
+  "acceptance": {
+    "physical_overloads_allowed": 0,
+    "coefficient_saturations_allowed": 0,
+    "output_clips_allowed": 0,
+    "digital_mismatches_allowed": 0,
+    "source_hashes_unchanged": true,
+    "performance_is_gate": false,
+    "all_seeds_failures_retained": true
+  },
+  "freeze": "Refuse output overwrite, copy protocol/source protocol and hash executable sources plus original core/RTL before preflight. Long run requires passed preflight with same executable hashes. Freeze horizon/criteria before either run, no post-result extension or tuning. Online accumulation receives only digital values and old state, never input/analog/target/convergence score. Run files ignored by Git. No commit/push.",
+  "nominal_folder": "artifacts/runs/EXP_062/background_v1",
+  "comparator_preflight_folder": "artifacts/runs/EXP_063/preflight_v1",
+  "analysis": "Actual online outputs vs own unit baseline and paired nominal online outputs. All block MSE/residual spectrum cross identities. Integer four-grid observation/state/interaction decomposition uses entire changed digital words (including changed stage1 main residue), checked for all actual outputs. Report all cross products; no causal attribution."
+}

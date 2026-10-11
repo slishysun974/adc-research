@@ -1,0 +1,71 @@
+{
+  "version": "EXP-059-static-fixed-million-v1",
+  "declared_date": "2026-10-10",
+  "purpose": "T2 long fixed-point attribution, T3 finite mean/covariance identities, T4 increment/stagnation balance, T5 continuous/integer full-output scoring; previously seen static controls, no tuning or new algorithm.",
+  "source_protocol": "experiments/exp_057_static_two_stage_million/protocol.json",
+  "baseline_run": "artifacts/runs/EXP_057/million_v1",
+  "inherits": "Exact five cases, five seeds, input, counter/tag source, steps, methods, windows, checkpoints, tail blocks and 30720-sample tone from copied source_protocol.json; sar8 backend only. Prior continuous-backend controls not repeated.",
+  "layers": [
+    {
+      "name": "float",
+      "mode": 0,
+      "state": "double; reuse immutable EXP057 sar8 states; regenerate concurrently and compare every state value bit-for-bit"
+    },
+    {
+      "name": "q3",
+      "mode": 1,
+      "state": "double; Q3 offset and product separately, gates Q3 thresholds"
+    },
+    {
+      "name": "export",
+      "mode": 2,
+      "state": "double hidden; nearest-even Q1.10 export once per window, cap exported code 2047; Q3 data and thresholds"
+    },
+    {
+      "name": "q22",
+      "mode": 3,
+      "state": "exact integer Q22 hidden; Q1.10 export and Q3 readout; nearest-even exact request once per window; cap hidden to2047*4096"
+    }
+  ],
+  "update": "Old exported bank throughout120 conversion slots; selected4 times30 or full120 times1; no normalization by active gates; both banks simultaneous boundary commit. q22 requests use exact signed rational numerator -2*n*m*S or -32*n*m*S over125 because physical Q3 dither products are integers. Double layers use original step multiplication order and [0,2] hidden cap. Q22 cap differs by representable upper limit; record any activation.",
+  "integer_output": "Score EVERY layer both continuous and clip[0,4095] then nearest-even integer; integerization never feeds learning. Retain DC, MSE, cross term, rounding power, SNDR/SFDR and clipping counts.",
+  "counts": "50 paired source paths;150 new fixed-layer learning paths plus50 regenerated float-reference controls;50,002,000 generated selected analog samples shared by layers. 1M/1,000,080 observations per bank at different conversion times. point unselected static slots not generated during training; inferred slots are not executed ADC conversions.",
+  "preflight": {
+    "windows": 64,
+    "seeds": "first inherited seed",
+    "cases": "all five",
+    "methods": "both",
+    "probes": "first8 and last8 windows; independent Fraction readouts for three fixed layers, original-platform and fixed-readout checks; original fixed bank sum/commit helper replay on selected rows (helper sample_count uses selected rows, not inferred conversion slots)",
+    "native_edges": "30720 legal Q3 PWL words including negative fullscale, three coefficient banks;76 signed rational rounding controls with denominators2,4,125,4096"
+  },
+  "verification": {
+    "probes_per_checkpoint": 8,
+    "schedule": "first8 plus8 ending at every nonzero original checkpoint, duplicate removed",
+    "native_readout_tolerance": 1e-10,
+    "q3_readouts_and_q22_states": "exact",
+    "retained_probe_layout": "little-endian doubles: window,4x8 hidden before,n rows(x,d1,d2,6 plant fields,4x[output,y1,y2,raw1,gatebits,basisbits]),4x8 sums,4x8 hidden after; row size97+33*n",
+    "baseline": "All50 original state files compared at every state; original run fingerprint checked; no original file modified"
+  },
+  "T3": {
+    "grid_midpoints": 512,
+    "dithers": "all four per input",
+    "rear_anchor": "final effective rear bank of each path, fixed for diagnostic only",
+    "front_states": "all latter-half effective front banks; empirical covariance divisorM",
+    "direct_checks": "20 equally spaced predeclared integer indices per each of10 latter-half blocks, deduplicate; independent direct unrounded scoring verifies subset identity; Q3/integer correction residual and joint-varying-rear output mean/variance use same200-state subset only",
+    "limits": "Fixed-basis identity applies to unrounded front PWL; Q3/integer error retains cross terms. Joint output mean/variance is descriptive; fixed rear diagnostic not full eight-state causal decomposition."
+  },
+  "T4": "Finite-record first/second increment telescoping on full latter-half hidden states about unit origin. Report per-coordinate zero requested, hidden changed, export changed, saturation, hidden/export variance, time correlation and10 block statistics. Stationary expectations only conditional theory, not certified from identities or ten blocks.",
+  "acceptance": {
+    "preflight_pass": true,
+    "source_hashes_unchanged": true,
+    "physical_overloads": 0,
+    "coefficient_saturations": 0,
+    "output_clips": 0,
+    "fixed_replay": "exact",
+    "floating_tolerance": 1e-10,
+    "identity_relative_tolerance": 1e-09,
+    "all_seeds_and_failures_retained": true,
+    "performance": "Outcomes, not pass gates; no adjustments after viewing results"
+  },
+  "scope": "Production Gu, pipeline and RTL unchanged. No dynamic/mismatch/algorithm search/chip claim. Sequential differences are conditional increments, not additive independent causes."
+}

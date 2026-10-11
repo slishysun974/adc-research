@@ -1,0 +1,176 @@
+{
+  "version": "EXP-065-input-switch-tracking-v1",
+  "declared_date": "2026-10-10",
+  "scope": "D-093/D-096 static plan5c only. Nominal matched three curves, one amplitude down-switch, inherited hidden state versus unit-start new-input control. No comparator offset, dynamic history, tuning or new algorithm.",
+  "source_protocol": "experiments/exp_057_static_two_stage_million/protocol.json",
+  "cases": [
+    {
+      "name": "ideal",
+      "stage1": [
+        1.0,
+        0.0
+      ],
+      "stage2": [
+        1.0,
+        0.0
+      ],
+      "auxiliary": [
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "name": "both_linear",
+      "stage1": [
+        0.975,
+        0.0
+      ],
+      "stage2": [
+        0.98,
+        0.0
+      ],
+      "auxiliary": [
+        0.975,
+        0.0
+      ]
+    },
+    {
+      "name": "both_smooth",
+      "stage1": [
+        0.975,
+        -0.055
+      ],
+      "stage2": [
+        0.98,
+        -0.04
+      ],
+      "auxiliary": [
+        0.975,
+        -0.055
+      ]
+    }
+  ],
+  "parameter_provenance": "Minimal already-seen EXP057/059 nominal subset: ideal positive control, both-stage linear and both-stage smooth. Synthetic mechanism assumptions, no chip fit or independent curve holdout. Original numeric kernels reused unchanged.",
+  "seeds": [
+    202610621,
+    202610622,
+    202610623,
+    202610624,
+    202610625
+  ],
+  "input": {
+    "samples_per_block": 30720,
+    "tone_bin": 127,
+    "amplitude": 0.82,
+    "phase_radians": 0.0,
+    "sample_rate_hz": 3000000000,
+    "formula": "Use delivered EXP062 tone[n mod30720] before global n_s=3932160; exactly half of that double after n_s. Frequency127/30720 and continuous global phase unchanged. Only amplitude changes.",
+    "amplitude_after": 0.41,
+    "scale_after": 0.5
+  },
+  "dither": "Original independent counter streams 2 and 3, indexed by global conversion n, +/-1 with physical amplitudes1/32 at both preamp summing nodes. Periodic input is independent of declared tags; IID independence is a modeling assumption, not a proven property of SplitMix64/chip PRNG.",
+  "methods": [
+    {
+      "name": "point30",
+      "selected": 4,
+      "multiplier": 30
+    },
+    {
+      "name": "full120",
+      "selected": 120,
+      "multiplier": 1
+    }
+  ],
+  "budget": {
+    "post_blocks": 128,
+    "post_windows_per_path": 32768,
+    "post_conversions_per_path": 3932160,
+    "paths": 60,
+    "physical_streams": 30,
+    "generated_post_physical_conversions": 117964800,
+    "actual_post_online_codes": 235929600,
+    "point_observations_per_stage": 131072,
+    "full_observations_per_stage": 3932160,
+    "comparison": "3 models x5 original seeds x2 methods x2 initializations. Carry prefix3932160 reused; fresh begins at same switch tag, no prefix. Full uses30x learning. Nochange long suffix is existing EXP062, not rerun. Long execution not implied by a preflight result."
+  },
+  "preflight": {
+    "prefix_windows": 2,
+    "post_windows": 32,
+    "seeds": "first seed only",
+    "variants": [
+      "nochange",
+      "carry",
+      "fresh"
+    ],
+    "streams": 9,
+    "paths": 18,
+    "physical_conversions": 36000,
+    "probe_windows": "all",
+    "nochange": "Start at32766 with corresponding delivered states. Reproduce all34 windows of original unchanged input exactly.",
+    "carry": "Start at32766 and reproduce2 prefix windows, switch amplitude at32768, continue32 windows without reset.",
+    "fresh": "Start at32768 unit, new amplitude immediately,32 windows; pair future words exactly with carry."
+  },
+  "verification": {
+    "voltage_tolerance": 2e-12,
+    "long_probe_post_blocks": [
+      0,
+      1,
+      4,
+      16,
+      64,
+      127
+    ],
+    "long_probe_schedule": "First4 windows of each listed post block and final4 windows =28 per stream; all120 samples, original physical/readout/bank commit probes.",
+    "digital": "Every actual stored source word/tag, unit/online code, Q22 state transition, selected/all support and change counters. Original physical platform full short replay; later long physical source original probes plus all separate vector formulas.",
+    "splice": "Nochange all34 windows equal original words/output/Q22. Carry2-prefix equal original; switch state at boundary exactly original32768. Carry/fresh all32 future words and unit codes equal. Counter tag never reindexed.",
+    "nominal_sha256": "Every reused tone, protocol, validation, metadata, words, outputs and Q22 file checked against original delivery_hashes before use and verification; delivery manifest itself frozen."
+  },
+  "empirical_convergence": {
+    "group_blocks": 8,
+    "minimum_groups": 3,
+    "sndr_group_mean_range_db": 1.0,
+    "coefficient_group_mean_range": 0.005,
+    "coordinates": "each coordinate with nonzero selected gate-and-basis support in the three-group interval; unsupported coordinates explicitly listed, not called converged",
+    "definition": "first end of three consecutive nonoverlapping8-block groups with SNDR group mean range<=1dB and each supported effective coefficient group mean range<=0.005. Retrospective offline descriptor only, not online stopping; report subsequent violations and total passing intervals. Does not require positive net benefit and does not prove stationarity."
+  },
+  "tail": {
+    "first_post_block": 64,
+    "groups": 8,
+    "lags_windows": [
+      1,
+      100,
+      1000
+    ]
+  },
+  "evaluation": "Long: use all128 post blocks of30720 conversions; first block is switch/start transient. Reuse original prefix blocks for context, never mix unequal amplitudes into one sine FFT. Continuous online output against own same-input unit reference, and carry versus fresh. Report MSE/DC/SNDR/SFDR, both dB and power averages, finite MSE/spectrum cross identities, per-block support and Q22/export changes, drift/covariance/time correlations. Short: no incomplete-block sine metrics, only word/state/support and exact sample MSE diagnostic; no recovery/performance claim.",
+  "predictions": "Nochange splice exactly identical by window induction; carry/fresh post words identical under static feedforward plant independent of calibration state. Output/state need not become equal. Loss difference must retain fresh-error/state-output cross. Amplitude change does not assume monotone high-segment support or guaranteed recovery.",
+  "acceptance": {
+    "physical_overloads_allowed": 0,
+    "coefficient_saturations_allowed": 0,
+    "output_clips_allowed": 0,
+    "digital_mismatches_allowed": 0,
+    "source_hashes_unchanged": true,
+    "performance_is_gate": false,
+    "all_seeds_failures_retained": true
+  },
+  "freeze": "Copy protocol, inherited delivery manifest, exact prefix state and tone with SHA256 before run; refuse overwrite; frozen horizon/criteria before short. Short accepted before necessary long. Preserve failures and prior files. Original gates/steps/width/window unchanged. Online update sees digital fields/state only; physical amplitude schedule and inherited file loading outside online update. No commit/push.",
+  "nominal_folder": "artifacts/runs/EXP_062/background_v1",
+  "switch": {
+    "source_block_exclusive": 128,
+    "global_conversion": 3932160,
+    "global_window": 32768,
+    "origin": "Predetermined half of the existing 256-block horizon, not a selected stable state. Original128-block prefix reused with delivery SHA256, no retraining.",
+    "carry": "All eight integer Q22 accumulators, original global counter tags/streams2,3, phase and lane; no partial products at the120-slot boundary. Keep both method-specific states, export via original Q1.10. Original physical paths are static with zero memory; no applicable analog history state exists here.",
+    "fresh": "All eight Q22 states unit at SAME global n_s with SAME future tone/tag words. Does not restart PRNG/global phase. This control isolates inherited digital initialization."
+  },
+  "tracking": {
+    "group_blocks": 8,
+    "minimum_groups": 3,
+    "sndr_group_mean_range_db": 1.0,
+    "coefficient_group_mean_range": 0.005,
+    "pair_sndr_group_mean_gap_db": 1.0,
+    "pair_coefficient_group_mean_gap": 0.005,
+    "definition": "Offline only. Retain original separate3x8-block stability criterion. Recovery = first3 consecutive8-block groups where BOTH carry and fresh satisfy it, each paired group SNDR mean gap<=1dB, and absolute paired effective-state group mean gap<=0.005 on union of selected joint-supported coordinates. Report unsupported coordinates and later failures; criterion missing within128 blocks is censored, not divergence. Close but equally poor paths may pass: net unit benefit/MSE/SFDR separately reported. No oracle target or online stop.",
+    "origin": "Predeclared mechanism criterion, reuse original tolerance for paired closeness; no chip/paper standard or q<1 proof."
+  }
+}

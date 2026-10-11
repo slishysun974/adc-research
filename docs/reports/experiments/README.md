@@ -2,7 +2,9 @@
 
 当前任务看 [STATUS](../../STATUS.md)，近期解释与主线意义看 [综合分析](../RESEARCH_SYNTHESIS_2026-10-10.md)。本页定位已有成果，实验如何组织见 [实验说明](../../../experiments/README.md)，推导见 [理论索引](../../theory/README.md)。索引收录不表示所有成果已通过芯片或一般理论验收。
 
-先读EXP-055—057的条件和结果，再按当前任务追溯EXP-026、030—035、039—054。EXP-052—054的局部不利次数以EXP-055之后的解释修订为准；早期报告的“下一项”只代表当时安排。
+先读EXP-055—059的条件和结果，再按当前任务追溯EXP-026、030—035、039—054。EXP-058为局部定点预检，EXP-059完成预定静态定点百万控制及有限均值／协方差关系；一般长期理论与动态仍开放；静态失配长期见EXP-061。EXP-052—054的局部不利次数以EXP-055之后的解释修订为准；早期报告的“下一项”只代表当时安排。
+
+EXP-060补独立主辅静态合同与完整短预检，失配第三门前提已收紧；EXP-061已完成必要静态失配长期配对及观测／状态交叉；当前动态入口短控制已由EXP-067完成，必要有限动态长期已由EXP-068完成。相关早期敏感性见EXP-024—026，不能用其逐转换记录代替当前窗口验收。
 
 ## 编号成果
 
@@ -66,8 +68,20 @@
 | EXP-055 | 模型与dither统计基础核查 | [README](../../../experiments/exp_055_model_dither_audit/README.md) | [报告](EXP_055_MODEL_DITHER_AUDIT_V1.md) | [目录](../../../artifacts/runs/EXP_055) |
 | EXP-056 | 百万量级静态单斜率统计检查 | [README](../../../experiments/exp_056_million_scalar_statistics/README.md) | [报告](EXP_056_MILLION_SCALAR_STATISTICS_V1.md) | [目录](../../../artifacts/runs/EXP_056) |
 | EXP-057 | 静态两级及平滑非线性的百万量级检查 | [README](../../../experiments/exp_057_static_two_stage_million/README.md) | [报告](EXP_057_STATIC_TWO_STAGE_MILLION_V1.md) | [目录](../../../artifacts/runs/EXP_057) |
+| EXP-058 | 静态码域、定点数值合同及短预检 | [README](../../../experiments/exp_058_static_fixed_preflight/README.md) | [报告](EXP_058_STATIC_FIXED_PREFLIGHT_V1.md) | [目录](../../../artifacts/runs/EXP_058) |
+| EXP-059 | 静态定点百万学习、平均位置及状态波动 | [README](../../../experiments/exp_059_static_fixed_million/README.md) | [报告](EXP_059_STATIC_FIXED_MILLION_V1.md) | [目录](../../../artifacts/runs/EXP_059) |
+| EXP-060 | 独立主辅静态分支／学习与短预检 | [README](../../../experiments/exp_060_static_auxiliary_preflight/README.md) | [报告](EXP_060_STATIC_AUXILIARY_PREFLIGHT_V1.md) | [目录](../../../artifacts/runs/EXP_060) |
+| EXP-061 | 必要静态失配长期配对与观测／状态交叉 | [README](../../../experiments/exp_061_static_auxiliary_million/README.md) | [报告](EXP_061_STATIC_AUXILIARY_MILLION_V1.md) | [目录](../../../artifacts/runs/EXP_061) |
+| EXP-062 | 同正弦从单位初值起的全程后台评价 | [README](../../../experiments/exp_062_same_input_background/README.md) | [报告](EXP_062_SAME_INPUT_BACKGROUND_V1.md) | [目录](../../../artifacts/runs/EXP_062) |
+| EXP-063 | 逐级固定比较器安全范围／学习支持与短预检 | [README](../../../experiments/exp_063_static_comparator_preflight/README.md) | [报告](EXP_063_STATIC_COMPARATOR_PREFLIGHT_V1.md) | [目录](../../../artifacts/runs/EXP_063) |
+| EXP-064 | 逐级比较器同输入长配对／完整观测交叉及有限输出支撑 | [README](../../../experiments/exp_064_static_comparator_background/README.md) | [报告](EXP_064_STATIC_COMPARATOR_BACKGROUND_V1.md) | [目录](../../../artifacts/runs/EXP_064) |
+| EXP-065 | 输入幅度切换／隐藏状态承接与短预检 | [README](../../../experiments/exp_065_input_switch_tracking/README.md) | [报告](EXP_065_INPUT_SWITCH_PREFLIGHT_V1.md) | [目录](../../../artifacts/runs/EXP_065) |
+| EXP-066 | 切换后持续后台／必要恢复配对与净输出 | [README](../../../experiments/exp_066_input_switch_tracking_long/README.md) | [报告](EXP_066_INPUT_SWITCH_TRACKING_V1.md) | [目录](../../../artifacts/runs/EXP_066) |
+| EXP-067 | 动态三路历史／当前相关／静态退化与短预检 | [README](../../../experiments/exp_067_dynamic_history_preflight/README.md) | [报告](EXP_067_DYNAMIC_HISTORY_PREFLIGHT_V1.md) | [目录](../../../artifacts/runs/EXP_067) |
+| EXP-068 | 必要有限动态后台／相关根与MSE关系／完整整数交叉 | [README](../../../experiments/exp_068_dynamic_background/README.md) | [报告](EXP_068_DYNAMIC_BACKGROUND_V1.md) | [目录](../../../artifacts/runs/EXP_068) |
+| EXP-069 | 同数字流Gu学习率／输出收益／启动／有限稳定 | [README](../../../experiments/exp_069_gu_learning_rate/README.md) | [报告](EXP_069_GU_LEARNING_RATE_V1.md) | [目录](../../../artifacts/runs/EXP_069) |
 
-共55个编号实验目录（EXP-003—057），另有EXP-001／002组合报告。EXP-029通过现有理论文档保存证明和数值，不补造一份同义报告。
+编号实验目录已接续至EXP-069，另有EXP-001／002组合报告。EXP-029通过现有理论文档保存证明和数值，不补造一份同义报告；NG编号仍是理论结论索引，不能代替实验编号。
 
 ## 非编号机制工作与历史
 

@@ -39,6 +39,19 @@ class DitherInformationTests(unittest.TestCase):
         self.assertGreater(result.coefficient_variance, 0)
         self.assertGreater(result.stationary_variance, 0)
 
+    def test_exact_gate_contrast_and_selection_terms_at_all_pairs_and_equalities(self):
+        F = Fraction
+        for target in (F(-1), F(0), F(1)):
+            for average in (F(-1, 4), F(0), F(1, 4)):
+                for contrast in (F(-1, 2), F(0), F(1, 2)):
+                    for threshold in (F(0), F(1)):
+                        positive, negative = target+average+contrast, target+average-contrast
+                        gp, gm = int(abs(positive) >= threshold), int(abs(negative) >= threshold)
+                        expected = contrast*(gp+gm)/2+(target+average)*(gp-gm)/2
+                        actual = binary_conditional_correlation(positive, negative, threshold)
+                        self.assertEqual(actual, expected)
+                        self.assertGreaterEqual(actual*contrast, 0)
+
 
 if __name__ == "__main__":
     unittest.main()

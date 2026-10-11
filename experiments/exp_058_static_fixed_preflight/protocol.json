@@ -1,0 +1,23 @@
+{
+  "version": "EXP-058-static-fixed-preflight-v2",
+  "declared_date": "2026-10-10",
+  "scope": "T1/T2 analytic range and numerical-contract preflight only; no million training, new algorithm, chip certification or performance ranking",
+  "source_protocol": "experiments/exp_057_static_two_stage_million/protocol.json",
+  "fixed_state_grid": {"points": 4096, "low": "-41/50", "high": "41/50", "tags": "all four pairs", "cases": ["ideal", "front_linear", "both_linear"], "coefficients": "offline exact inverse all slopes, never used as online initialization", "levels": ["sar8_exact", "sar8_q3", "sar8_q3_q1_10"]},
+  "edge_controls": "All flash thresholds plus nextafter neighbors with four tags checked against original float platform; independent rational exact thresholds and +/-2^-40 neighbors; all signed Q3 PWL words at widths32/128 in coefficient banks unity, [1025,1043,1067,1101], [0,2047,1024,1]; all threshold equalities and adjacent Q3 words; signed nearest-even ties; Q22 export ties; request half-LSB and saturation boundaries; explicit unprotected gate-change control k=4097/4096 with digital word[0,0,16,+1,-1]",
+  "revision": "preflight_v1 preserved: fixed grid/edges passed, short runner stopped at nonexistent PipelineResult.correctable. v2 checks actual per-stage and backend overload fields and passes sample_index for TI channel ownership; adds predeclared boundary sensitivity witness. No model/step/seed/budget changes.",
+  "float_endpoint_policy": "Original SAR computes floor((v+1)*128)-128 in that double operation order. Rational floor is an exact mathematical control, NOT an assertion of bit equality at float nextafter neighbors. Preserve and count disagreements, original public semantics remain unchanged.",
+  "short_paths": {"cases": "all five EXP-057 cases", "seeds": "all five EXP-057 seeds", "methods": ["point30", "full120"], "windows": 8, "window_size": 120, "selected_positions_point": [0,1,2,3], "purpose": "All conversions and commits independently replayed, not a steady-state or performance estimate"},
+  "contract": {
+    "data": "Q3 local product and cumulative offset rounded separately nearest-even; offset after coefficient sum; analog backend SAR8 remains original; raw domain[-512,512)/[-128,128), negative endpoint extend last slice",
+    "coefficients": "Unsigned11bits Q1.10, round nearest-even Q22/4096 at window start, saturate interface to[0,2047]",
+    "thresholds": "Q3 nearest-even of b times exported cumulative slopes; equality opens gate; first gate always open; all coefficients/gates use pre-window visible state",
+    "update": "Eight Q22 accumulators; exact signed integer product sums; point four products times30 or full120 products times1, no active-count normalization; original steps denominators262144000/16384000 and numerators1,3,6,12; round once per bank coordinate then saturate to[0,2047*4096]",
+    "timing": "Both banks freeze across120 conversions, simultaneous end-window commit first visible next window; sample_count in original implementation counts all scored conversions, selected learning counts logged separately",
+    "final_integer": "After local gates/products, clip Q3 final output to[0,4095], nearest-even integer for offline output only; never feed final integer back to local learning",
+    "intermediate_widths": "Python unbounded integers, record required widths; not an RTL width or cost claim"
+  },
+  "predictions": {"compression": "Third gates remain closed at correct inverse with SAR if a2<63/64 and a1<1-1/(256*a2); Q1.10/Q3 require derived margin bound, not automatic extension", "unity": "Negative local residual interval [-1/8,-1/8+1/512) rear / [-1/8,-1/8+1/2048) front maps to equality and opens third gate", "q3": "With Q1.10, front offset and threshold exact at width128; front local arithmetic bound1/16, rear1/8; every changed gate must be unprotected", "learning": "Accumulator request0, applied0 at saturation, and unchanged export are distinct outcomes; no all-record error bound from single commit"},
+  "acceptance": {"integer_mismatches_allowed": 0, "protected_gate_mismatches_allowed": 0, "short_physical_overloads_allowed": 0, "short_output_clips_allowed": 0, "short_coefficient_saturations_allowed": 0, "all_groups_retained": true, "exact_inverse_compression_third_gates_allowed": 0, "q1_10_q3_compression_third_gates_allowed": 0, "performance_is_gate": false},
+  "provenance": "Q1.10 interface and3 data fractional bits reported in locally reviewed Gu author manuscript per EXP-026; flash/CDAC table, digital geometry, Q22, rounding, saturation, counter RNG and frozen-window timing are declared candidates/assumptions. No new literature or chip evidence."
+}

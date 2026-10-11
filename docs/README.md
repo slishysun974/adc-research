@@ -6,8 +6,8 @@
 
 1. 读 [当前状态](STATUS.md)：确认最新成果、开放问题和本次允许的范围。
 2. 读 [项目章程](PROJECT_CHARTER.md)：理解四阶段目标、未知模拟传输和在线／离线信息边界。
-3. 读状态页引用的最新决策及 [已批准静态定点计划](RESEARCH_PLAN_STATIC_FIXED_POINT_DIAGNOSTICS_2026-10-10.md)：确认接续任务；需要追溯时再读较早决策。
-4. 读 [近期成果综合分析](reports/RESEARCH_SYNTHESIS_2026-10-10.md)：理解近期解释如何修订、成果在主线中意味着什么。
+3. 读状态页引用的最新决策及 [现有阶段计划](RESEARCH_PLAN_STATIC_FIXED_POINT_DIAGNOSTICS_2026-10-10.md)：Gu评价已交付，当前按D-117／§13.5继续学习率与收敛研究；EXP-069矩阵及NG-30只读触发诊断完成，后寻找新算法；需要追溯时再读较早安排。
+4. 读 [Gu算法综合评价](reports/GU_ALGORITHM_EVALUATION_V1.md)：先理解原理、公开收益、本项目候选与未决边界；再按需读 [近期成果综合分析](reports/RESEARCH_SYNTHESIS_2026-10-10.md)追溯解释如何演变。
 5. 根据任务进入 [理论索引](theory/README.md) 和 [结论—证据表](theory/STAGE2_CLAIM_EVIDENCE_LEDGER_V1.md)，或 [实验报告索引](reports/experiments/README.md)。先读摘要、条件和局限，再读证明、代码和原始数据。
 6. 推导或运行前读 [本地研究流程](../CONTRIBUTING.md)，核对相关规格、协议和源码。开始时简要说明当前问题、已有依据、下一验证及范围；收尾同步状态与证据。
 
@@ -18,6 +18,8 @@
 | 任务 | 先读 | 再读 |
 |---|---|---|
 | 理解四阶段与代码位置 | [阶段导航](stages/README.md) | 对应阶段README及相关源码入口 |
+| 客观评价Gu与寻找优化问题 | [Gu综合评价报告](reports/GU_ALGORITHM_EVALUATION_V1.md) | 报告所引原文、规格、理论／实验；当前顺序见计划§13 |
+| Gu LMS学习率与收敛 | [标量统计§7—15](theory/MILLION_SAMPLE_SCALAR_MEAN_NOISE_AND_QUANTIZATION_V1.md)、Gu报告§5.6—5.8 | 原文第4—6页、窗口／门控／定点条件及[EXP-069](reports/experiments/EXP_069_GU_LEARNING_RATE_V1.md)；§15／报告§8补原判据触发与时间平均，当前接续见计划§13.5 |
 | 未知增益、信息与性能关系 | [完整链路理论框架](theory/UNKNOWN_GAIN_END_TO_END_FRAMEWORK_V0_1.md) | 对应理论文档、证据表、独立验证 |
 | 长期Gu统计与静态两级 | EXP-055—057的报告和理论，见索引 | 实验目录README、冻结协议、验证记录及状态数据 |
 | 码制、来源、测量口径 | [规格索引](specifications/README.md) | Gu架构／码制约定、ADC指标协议和原始文献 |

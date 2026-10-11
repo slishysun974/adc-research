@@ -1,0 +1,186 @@
+{
+  "version": "EXP-068-limited-dynamic-background-v1",
+  "declared_date": "2026-10-11",
+  "scope": "Approved5d / plan9: necessary finite reset/hold pairs after accepted EXP067. No parameter scan, input switch, comparator offsets, auxiliary mismatch, new algorithm or tuning.",
+  "source_protocol": "experiments/exp_057_static_two_stage_million/protocol.json",
+  "cases": [
+    {
+      "name": "ideal",
+      "stage1": [
+        1.0,
+        0.0
+      ],
+      "stage2": [
+        1.0,
+        0.0
+      ],
+      "auxiliary": [
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "name": "both_linear",
+      "stage1": [
+        0.975,
+        0.0
+      ],
+      "stage2": [
+        0.98,
+        0.0
+      ],
+      "auxiliary": [
+        0.975,
+        0.0
+      ]
+    },
+    {
+      "name": "both_smooth",
+      "stage1": [
+        0.975,
+        -0.055
+      ],
+      "stage2": [
+        0.98,
+        -0.04
+      ],
+      "auxiliary": [
+        0.975,
+        -0.055
+      ]
+    }
+  ],
+  "parameter_provenance": "Same EXP067 matched curves and synthetic two-phase factors0.002/0.04/0.002, tracking0(reset)/1(hold), reset targets0. No chip identification, new curve or statistical holdout.",
+  "seeds": [
+    202610621,
+    202610622,
+    202610623,
+    202610624,
+    202610625
+  ],
+  "input": {
+    "samples_per_block": 30720,
+    "tone_bin": 127,
+    "amplitude": 0.82,
+    "phase_radians": 0.0,
+    "sample_rate_hz": 3000000000,
+    "formula": "x[n]=0.82*sin(2*pi*127*(n mod30720)/30720). Stored one-period double table is the declared source; integer modulo is phase reduction, not a reset at evaluation. No input/PRNG/state pause at block boundaries."
+  },
+  "dither": "Original independent counter streams 2 and 3, indexed by global conversion n, +/-1 with physical amplitudes1/32 at both preamp summing nodes. Periodic input is independent of declared tags; IID independence is a modeling assumption, not a proven property of SplitMix64/chip PRNG.",
+  "methods": [
+    {
+      "name": "point30",
+      "selected": 4,
+      "multiplier": 30
+    },
+    {
+      "name": "full120",
+      "selected": 120,
+      "multiplier": 1
+    }
+  ],
+  "budget": {
+    "blocks": 128,
+    "conversions_per_path": 3932160,
+    "windows_per_path": 32768,
+    "point_observations_per_stage": 131072,
+    "full_observations_per_stage": 3932160,
+    "paths": 60,
+    "physical_streams": 30,
+    "generated_physical_conversions": 117964800,
+    "actual_online_output_codes": 235929600,
+    "comparison": "Fixed existing finite tracking horizon; same actual conversions, full30x observations. Static first128 blocks only read/hash reused. No endpoint extension."
+  },
+  "preflight": {
+    "windows": 32,
+    "seeds": "first seed only",
+    "streams": 9,
+    "paths": 18,
+    "probe_windows": "all",
+    "full_digital_and_platform_replay": true,
+    "reference": "Full32-window EXP067 original-platform streams and EXP062 static degeneration. All words/codes/commits/history checked before long."
+  },
+  "verification": {
+    "long_probe_blocks": [
+      0,
+      1,
+      4,
+      16,
+      64,
+      127
+    ],
+    "long_probe_schedule": "First4 windows each listed block and final4:28 windows per physical stream. Restore recorded prior three analog outputs; audit all120 nodes, exact rational readouts and original bank commit.",
+    "all_digital_replay": "Every online/unit code, every Q22 bank-pair commit, all and selected gates/basis/joint/correlations/zero/hidden/export counters by signed integer arithmetic. All global tags regenerated.",
+    "voltage_tolerance": 2e-12,
+    "all_physical_replay": "Independent expanded recurrence via scipy.signal.lfilter for every stored word and window-boundary history, zero resets. Float tolerance2e-12; threshold-near windows separately native-operation replay from preceding window history; count/report exceptions. Original platform probes separately declared.",
+    "short_probe_record_width": 2092,
+    "independent_scores": "Every block: independent full complex FFT and extended-precision MSE/DC, compare common rfft score."
+  },
+  "empirical_convergence": {
+    "group_blocks": 8,
+    "minimum_groups": 3,
+    "sndr_group_mean_range_db": 1.0,
+    "coefficient_group_mean_range": 0.005,
+    "coordinates": "each coordinate with nonzero selected gate-and-basis support in the three-group interval; unsupported coordinates explicitly listed, not called converged",
+    "definition": "first end of three consecutive nonoverlapping8-block groups with SNDR group mean range<=1dB and each supported effective coefficient group mean range<=0.005. Retrospective offline descriptor only, not online stopping; report subsequent violations and total passing intervals. Does not require positive net benefit and does not prove stationarity."
+  },
+  "tail": {
+    "first_block": 64,
+    "groups": 8,
+    "lags_windows": [
+      1,
+      100,
+      1000
+    ],
+    "policy": "all latter-half window states; population covariance,8-block group drift and temporal correlations. Per-block actual outputs and net gains retained. No iid confidence interval or eight-state stationary-law claim."
+  },
+  "evaluation": "All startup and later conversions emitted, every slot advances three histories. Same-dynamic unit no-update net output and same-seed static first128-block online/unit references separately scored; reset vs hold separately paired. Integer four-grid dynamic/static observations and actual old states, full-observation interactions, all finite MSE/residual spectral crosses. No cause/stationarity claim. dB and power means separate.",
+  "predictions": "Short source must exactly reproduce EXP067 words/codes/Q22 and history within tolerance. Dynamic memory persists through unselected slots. Scalar white-input dither root need not minimize memoryless MSE, but not applied as quantitative two-stage coherent prediction. Extra third support is not a benefit gate. No assumed long ordering or convergence.",
+  "acceptance": {
+    "physical_overloads_allowed": 0,
+    "coefficient_saturations_allowed": 0,
+    "output_clips_allowed": 0,
+    "digital_mismatches_allowed": 0,
+    "source_hashes_unchanged": true,
+    "performance_is_gate": false,
+    "all_seeds_failures_retained": true
+  },
+  "freeze": "Refuse overwrite. Long requires SAME frozen executable sources as accepted acceleration preflight plus accepted EXP067 full delivery. Freeze protocol, source/core/RTL/tests, nominal delivery and table. All histories/Q22/words/codes/windows saved; no warmup removed, no tuning/extension. Only digital words/state feed accumulation. Preserve all failures/seeds. Local only.",
+  "nominal_folder": "artifacts/runs/EXP_062/background_v1",
+  "short_reference": "artifacts/runs/EXP_067/preflight_v1",
+  "phases": [
+    {
+      "name": "static",
+      "amplification": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tracking": 1.0
+    },
+    {
+      "name": "reset",
+      "amplification": [
+        0.002,
+        0.04,
+        0.002
+      ],
+      "tracking": 0.0
+    },
+    {
+      "name": "hold",
+      "amplification": [
+        0.002,
+        0.04,
+        0.002
+      ],
+      "tracking": 1.0
+    }
+  ],
+  "initial_analog_outputs": [
+    0,
+    0,
+    0
+  ]
+}
+
