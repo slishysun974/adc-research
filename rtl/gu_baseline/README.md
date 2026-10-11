@@ -2,6 +2,8 @@
 
 此处逐步建立 Gu 数字校准的 RTL、验证平台与综合约束。现有候选 flash 入口、逐转换门控乘积、单级定点 PWL、冻结系数两级校正链及逐转换在线 Q22 更新；已有通用逻辑综合结果，尚无四路抽取/广播 RTL 或工艺面积、时序、功耗结果。硬件实际可见的总线、更新时序和论文未公开的字长细节仍须另行核对；候选设定逐项注明。
 
+2026-10-11 追加面向电路教师的 [Vivado 集成入口](vivado_review/REPRODUCE.md)和[实际工程报告](../../docs/reports/CIRCUIT_REVIEW_VIVADO_RESULTS_2026-10-11.md)。现有专用链已在 Vivado 2026.1 / Artix-7 建立 `.xpr`、结构网表及原生图；八状态 RTL 与有限网表输出回放通过。2548 LUT/184 FF/4 DSP/0 BRAM，100 MHz 综合时序未满足，不升级为板级或芯片实现结论。原候选源码未修改。
+
 OJSSCS Fig. 14 画出前级 `D[7:0]` 原始比较器输出，而 Fig. 13 仅把 flash 方框标作 `3-bit`。当前软件使用九状态 `q=-4…4`；若 RTL 候选要用三位输入，须先明确第九状态如何处理，不能静默截断。位级接口核查见[来源审计](../../docs/stages/03_gu_baseline/DIGITAL_BUS_AND_DUAL_PATH_SOURCE_AUDIT_V1.md)。
 
 [EXP-026](../../docs/reports/experiments/EXP_026_FIXED_POINT_FULL_CHAIN_V1.md) 已给出相同五字段记录和整数最终码规则下的 Q1.10／Q3 软件定点对照，可作未来 RTL 功能验证的数值基线。其 22/26 位更新累加器、无限宽 Python 中间整数、逐转换更新及舍入规则都是候选设定，RTL 需明确实际位宽、溢出、四路抽取和系数生效时序。

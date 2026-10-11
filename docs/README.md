@@ -23,6 +23,7 @@
 | 长期Gu统计与静态两级 | EXP-055—057的报告和理论，见索引 | 实验目录README、冻结协议、验证记录及状态数据 |
 | 码制、来源、测量口径 | [规格索引](specifications/README.md) | Gu架构／码制约定、ADC指标协议和原始文献 |
 | 定点和硬件 | [阶段三入口](stages/03_gu_baseline/README.md) | EXP-026、030—035及 [RTL入口](../rtl/README.md) |
+| 向电路教师汇报现有进度 | [汇报工程与实际验收](reports/CIRCUIT_REVIEW_VIVADO_RESULTS_2026-10-11.md) | [公开下载材料](reports/circuit_review_2026-10-11/README.md)、[准备方案](reports/CIRCUIT_REVIEW_PRESENTATION_PLAN_2026-10-11.md)；功能通过，100 MHz 综合时序未满足 |
 | 理论与实验结果为什么不同 | 相关推导的假设和实验协议 | 分项控制、边界样本及综合分析；不先调参 |
 | 历史研究如何演变 | [旧状态快照](reports/PROJECT_PROGRESS_HISTORY_2026-10-10.md) | 相关决策、历史计划与复核 |
 
