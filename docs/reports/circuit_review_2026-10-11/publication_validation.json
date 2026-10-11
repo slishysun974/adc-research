@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-11",
+  "files": {
+    "ADC_Circuit_Review.pptx": {
+      "bytes": 390663,
+      "sha256": "8555e81b533f7061c489ec2901a6f5e0a690fb01ed9309fa5efeeff1210b7e0c"
+    },
+    "ADC_Circuit_Review.pdf": {
+      "bytes": 499455,
+      "sha256": "75bafeb0244cbadc060c6953ff941b180b10729db880543583c9a21e4796508e"
+    },
+    "Reproduction_Guide.pdf": {
+      "bytes": 113078,
+      "sha256": "3f0eed4d232aa0ebed8b6b40a6844078e00ee8ffc9860c58c6ca863b539ce300"
+    },
+    "ADC_Circuit_Review_Package.zip": {
+      "bytes": 28841406,
+      "sha256": "bbc6e9cc142ef25f9b0cfc57271ddce76c7299d6c31ec8212ef662c8516b926e"
+    }
+  },
+  "archive": {
+    "crc_pass": true,
+    "members": 336,
+    "verified_member_sha256": 335
+  },
+  "documents": {
+    "pptx_slides": 6,
+    "native_tables": 3,
+    "slide_pdf_pages": 6,
+    "guide_pages": 1,
+    "visual_review_passed": true
+  },
+  "portable_demo": {
+    "zip_extracted_to_new_directory": true,
+    "relocated_project_opened": true,
+    "rtl_output_checks": 8391,
+    "idle_cycles": 8391,
+    "reset_replay": 128,
+    "passed": true
+  },
+  "code_regression": {
+    "command": "python -m unittest discover -s tests -v",
+    "PYTHONPATH": "src",
+    "tests": 367,
+    "passed": true,
+    "new_dependency_installations": 0,
+    "environment_note": "existing Python with NumPy; task-local temporary directory"
+  },
+  "claim_boundary": {
+    "functional_finite_checks_passed": true,
+    "100_MHz_synthesis_timing_met": false,
+    "place_and_route_completed": false,
+    "board_or_analog_transistor_validation_completed": false
+  },
+  "publication_scope": "reviewed source/docs and final deliverables; original ignored research data and unscreened tool caches remain local"
+}

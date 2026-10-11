@@ -1,0 +1,29 @@
+{
+  "version": "gu-circuit-review-vivado-v1",
+  "scope": "existing candidate-A digital hardware and presentation; no analog or algorithm change",
+  "part": "xc7a100tcsg324-1",
+  "clock_period_ns": 10.0,
+  "input_delay_ns": 1.0,
+  "output_delay_ns": 1.0,
+  "input_transition_ns": null,
+  "input_transition_note": "Vivado does not support set_input_transition in XDC; initial attempted command was ignored; removed from reproduction entry",
+  "output_load_pf": 1.0,
+  "timing_contract": "exploratory FPGA constraints, not a claimed board interface or 3-GS/s implementation",
+  "rtl_top": "two_stage_adaptive_exact_candidate_a",
+  "cost_top": "gu_online_cost_top",
+  "state_bits": 184,
+  "vector_source": "experiments.exp_032_online_lms_rtl.generate_vectors",
+  "expected_vectors": 8263,
+  "reset_replay_vectors": 128,
+  "expected_arithmetic_deltas": 173872,
+  "expected_saturation_probes": 869360,
+  "expected_disabled_probes": 173872,
+  "rules": [
+    "one conversion per clock; old coefficients score before simultaneous bank update",
+    "simulation reference uses only digital words, dither and state",
+    "cost synthesis exports valid and 12-bit final code only",
+    "original RTL, historical experiments and existing million-sample data remain unchanged",
+    "failures and unconstrained paths are retained and reported",
+    "no pipelining, coefficient constants, changed arithmetic or adjusted step sizes"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "version": "adc-simulink-parity-v1",
+  "declared_date": "2026-10-10",
+  "purpose": "Independent Simulink port of existing behavioral Python platform and floating Gu digital candidate; implementation parity, not new algorithm, long-run study or physical certification.",
+  "architecture": "configs/architectures/gu_behavioral_v1.yaml",
+  "static_effects": "configs/nonidealities/gu_gate_d_static_v0_1.yaml",
+  "steps_source": "experiments/exp_057_static_two_stage_million/protocol.json",
+  "time": "One discrete tick per ADC conversion, tick n maps to Python sample_index n. Nominal physical sample rate 3e9 Hz is used for offline plots only.",
+  "inputs": "Python generates and saves all inputs and dither tags once. Simulink only consumes stimulus CSV, never Python output or truth-derived coefficients. float64 CSV uses 17 significant digits.",
+  "seed": 2026101001,
+  "cases": ["ideal_grid", "ideal_dither", "flash_offsets", "cdac_mismatch", "gain_error", "analog_pwl", "all_static_effects", "auxiliary_mismatch", "front_linear", "both_linear", "front_smooth", "both_smooth", "frozen_pwl", "finite_settling", "dual_path_settling", "two_phase", "zero_two_phase", "instantaneous_lms", "point30_window", "full120_window", "dynamic_full120", "overload_bypass", "demo_tone"],
+  "budgets": "Grid includes all 4096 ideal code boundaries and nextafter neighbors, all flash boundaries and neighbors, endpoints and all dither pairs. Other controls use 480 conversions each; adaptive controls 2400; coherent demo 4096 with bin127. Dynamic history advances on EVERY conversion, including unselected window samples. No million-sample rerun.",
+  "digital": "Floating PWL widths128/32, negative endpoint extended on last slice, upper full scale rejected, stage2 correction then D2 subtraction then stage1 correction then D1 subtraction. Both banks score/gate from old coefficients and take effect on the next conversion. Modes:0 bypass,1 frozen,2 instantaneous,3 point30,4 full120. Window length120, point30 selects positions0..3 and commits at119, multiplier30; full120 selects every position and multiplier1. Window normalization matches original update_block_mean with adapted step mu*multiplier*selected_count.",
+  "checks": "Every conversion, every trace field; primitive PWL endpoints and out-of-range rejection, gate equality and neighbors, all SAR edges, clipping flags, restart resets states. Direct feedthrough and feedback delays checked by model compilation and execution.",
+  "tolerances": {"discrete_exact": true, "voltage_absolute": 1e-12, "digital_code_absolute": 1e-9, "coefficient_absolute": 1e-11, "gated_product_absolute": 1e-7, "spectrum_db_absolute": 1e-7},
+  "failure_policy": "Retain dated runs and failures. Do not tune model parameters, learning steps, seeds, input budget or tolerance to make output agree. Fix port implementation only; document arithmetic discrepancies and rerun affected checks.",
+  "limits": "Floating software behavior only. Existing fixed-point/RTL variants and continuous-backend offline oracle are not this model. Artificial analog curves, settling and update timing remain explicit research assumptions. No claim of silicon bit identity or convergence from short controls."
+}

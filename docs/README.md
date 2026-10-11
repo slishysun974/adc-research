@@ -20,10 +20,12 @@
 | 理解四阶段与代码位置 | [阶段导航](stages/README.md) | 对应阶段README及相关源码入口 |
 | 客观评价Gu与寻找优化问题 | [Gu综合评价报告](reports/GU_ALGORITHM_EVALUATION_V1.md) | 报告所引原文、规格、理论／实验；当前顺序见计划§13 |
 | Gu LMS学习率与收敛 | [标量统计§7—15](theory/MILLION_SAMPLE_SCALAR_MEAN_NOISE_AND_QUANTIZATION_V1.md)、Gu报告§5.6—5.8 | 原文第4—6页、窗口／门控／定点条件及[EXP-069](reports/experiments/EXP_069_GU_LEARNING_RATE_V1.md)；§15／报告§8补原判据触发与时间平均，当前接续见计划§13.5 |
+| 查看或复算 Simulink 行为模型 | [Simulink 使用说明](../simulink_adc/README.md) | [与原 Python 的一致性验收](../simulink_adc/VALIDATION.md)、[校准前后性能与论文对标](../simulink_adc/PERFORMANCE_DEMO.md)，不等同定点／芯片验收 |
 | 未知增益、信息与性能关系 | [完整链路理论框架](theory/UNKNOWN_GAIN_END_TO_END_FRAMEWORK_V0_1.md) | 对应理论文档、证据表、独立验证 |
 | 长期Gu统计与静态两级 | EXP-055—057的报告和理论，见索引 | 实验目录README、冻结协议、验证记录及状态数据 |
 | 码制、来源、测量口径 | [规格索引](specifications/README.md) | Gu架构／码制约定、ADC指标协议和原始文献 |
 | 定点和硬件 | [阶段三入口](stages/03_gu_baseline/README.md) | EXP-026、030—035及 [RTL入口](../rtl/README.md) |
+| 向电路教师汇报现有进度 | [汇报工程与实际验收](reports/CIRCUIT_REVIEW_VIVADO_RESULTS_2026-10-11.md) | [公开下载材料](reports/circuit_review_2026-10-11/README.md)、[准备方案](reports/CIRCUIT_REVIEW_PRESENTATION_PLAN_2026-10-11.md)；功能通过，100 MHz 综合时序未满足 |
 | 理论与实验结果为什么不同 | 相关推导的假设和实验协议 | 分项控制、边界样本及综合分析；不先调参 |
 | 历史研究如何演变 | [旧状态快照](reports/PROJECT_PROGRESS_HISTORY_2026-10-10.md) | 相关决策、历史计划与复核 |
 

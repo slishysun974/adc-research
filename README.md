@@ -18,6 +18,7 @@
 - [状态](docs/STATUS.md)与[决策](docs/DECISIONS.md)：现在做到哪里、有哪些开放问题。
 - [四阶段导航](docs/stages/README.md)：旧代码、实验与新阶段的对应关系。
 - `src/adc_research/platform/`：含模拟真值的逐样本实验链；`calibration/`：只从数字样本更新的校准核心；`evaluation/`：提取数字观测和离线 oracle 评分；`theory/`：现有条件性计算器；`metrics/`：统一指标。
+- [Simulink 行为模型](simulink_adc/README.md)：新文件夹内的可编辑 `.slx`、逐级信号流程、Scope和与原 Python 的逐样本核对入口。已验证浮点候选；定点／RTL与芯片适用性另行验收。
 - `experiments/`：可复现的编号实验；`docs/reports/`：经审查的结果；`rtl/`：已有 Gu 数字候选的功能核对与通用综合，目标工艺成本和新算法仍待研究。
 
 [第一轮代码信息边界审计](docs/stages/03_gu_baseline/ONLINE_INFORMATION_BOUNDARY_AUDIT_V1.md)指出旧 EXP-010/011/013 的配置经由模拟真值对象建立；现已拆分配置来源与在线输入，但跨曲线留出测试和真实芯片可见总线核对仍未完成。

@@ -1,0 +1,4 @@
+# Preserve the generated model and figure bytes across Git checkouts.
+*.slx binary
+*.png binary
+performance_figures/*.svg -text -whitespace
