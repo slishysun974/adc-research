@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块二　信号链建模与性能预测</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">给定模拟传输下的性能预测</text></g>
+<g id="method" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="64" y="191" font-size="24">研究方法：从电压与判决关系独立推导最终输出，再与平台核对。</text>
+<text x="66" y="276" font-size="44" fill="#226E9C">1</text><text x="145" y="262" font-size="28" font-weight="700" fill="#16324F">求输入端码转换边界</text><text x="145" y="307" font-size="24">把后级阈值沿信号链反算，确定每个输出码对应的输入区间。</text>
+<line x1="145" y1="339" x2="1216" y2="339" stroke="#D7E0E7"/>
+<text x="66" y="410" font-size="44" fill="#226E9C">2</text><text x="145" y="396" font-size="28" font-weight="700" fill="#16324F">连接静态指标与正弦频谱</text><text x="145" y="441" font-size="24">由区间宽度计算码密度，由正弦跨界时刻或有限记录计算频谱。</text>
+<line x1="145" y1="473" x2="1216" y2="473" stroke="#D7E0E7"/>
+<text x="66" y="544" font-size="44" fill="#226E9C">3</text><text x="145" y="530" font-size="28" font-weight="700" fill="#16324F">传播可信的不确定范围</text><text x="145" y="575" font-size="24">模拟传输或系数只有范围时，保留允许分支，得到输出与性能界限。</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：模块二、未知增益完整链路框架。具体预测依赖声明的模拟与动态条件。</text><text x="1216" y="682" text-anchor="end">06</text></g>
+</svg>

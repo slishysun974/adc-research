@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">附录B</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">Gu原文与本项目候选</text></g>
+<g id="source-table" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><rect x="64" y="168" width="1152" height="52" fill="#F2F5F8"/><text x="84" y="204" font-size="24" font-weight="700">项目</text><text x="310" y="204" font-size="24" font-weight="700">原文公开内容</text><text x="774" y="204" font-size="24" font-weight="700">项目约定或未决内容</text>
+<text x="84" y="269" font-size="24">校正原理</text><text x="310" y="269" font-size="24">数字四段PWL、dither相关学习</text><text x="310" y="309" font-size="24">后级先处理</text><text x="774" y="269" font-size="24">原理对应，未复原完整片上引擎</text><line x1="64" y1="340" x2="1216" y2="340" stroke="#D7E0E7"/>
+<text x="84" y="386" font-size="24">精度与步长</text><text x="310" y="386" font-size="24">10小数位系数、数据保留3小数位</text><text x="310" y="426" font-size="24">实际四段芯片步长未充分公开</text><text x="774" y="386" font-size="24">Q22累加与具体舍入规则</text><text x="774" y="426" font-size="24">以及实验步长属于项目候选</text><line x1="64" y1="457" x2="1216" y2="457" stroke="#D7E0E7"/>
+<text x="84" y="503" font-size="24">抽取与提交</text><text x="310" y="503" font-size="24">四路750 MHz、抽取30</text><text x="310" y="543" font-size="24">片内聚合与广播细节仍有缺口</text><text x="774" y="503" font-size="24">120转换旧系数输出</text><text x="774" y="543" font-size="24">窗口末尾提交为明确候选</text>
+<text x="64" y="612" font-size="24" fill="#226E9C">平滑三次传输、动态参数及部分主辅关系为受控假设，需要物理资料验证。</text></g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：GU_ALGORITHM_EVALUATION_V1.md §4、原文来源与数字总线审查。</text><text x="1216" y="682" text-anchor="end">26</text></g>
+</svg>

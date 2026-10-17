@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块四　数字观测与校正目标</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">信息、表示与在线取得</text></g>
+<g id="distinctions" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="64" y="213" font-size="28" font-weight="700" fill="#16324F">观测能否区分有关误差</text><text x="64" y="258" font-size="24">需要说明输入条件、允许历史，以及额外的可信物理或信号知识。</text>
+<line x1="64" y1="297" x2="1216" y2="297" stroke="#D7E0E7"/>
+<text x="64" y="358" font-size="28" font-weight="700" fill="#16324F">校正结构能否表示较好输出</text><text x="64" y="403" font-size="24">可通过合法固定系数和受限误差界，检查现有数字表示的能力。</text>
+<line x1="64" y1="442" x2="1216" y2="442" stroke="#D7E0E7"/>
+<text x="64" y="503" font-size="28" font-weight="700" fill="#16324F">在线算法能否发现并取得改善</text><text x="64" y="548" font-size="24">需要从相同初态出发，验证可见信息、实际更新、达到与保持。</text>
+<text x="64" y="614" font-size="24" fill="#226E9C">目前已有信息边界与较好表示的证据，在线取得仍是关键缺口。</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：模块四、观测与校正能力理论。各类界限只用于其声明的函数或策略集合。</text><text x="1216" y="682" text-anchor="end">12</text></g>
+</svg>

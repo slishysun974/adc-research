@@ -1,0 +1,609 @@
+{
+  "slides": [
+    {
+      "slide": "01_cover.svg",
+      "text_lines": 8
+    },
+    {
+      "slide": "02_objective.svg",
+      "text_lines": 12
+    },
+    {
+      "slide": "03_modules.svg",
+      "text_lines": 25
+    },
+    {
+      "slide": "04_signal_chain.svg",
+      "text_lines": 20
+    },
+    {
+      "slide": "05_platform_evidence.svg",
+      "text_lines": 14
+    },
+    {
+      "slide": "06_prediction_method.svg",
+      "text_lines": 14
+    },
+    {
+      "slide": "07_prediction_results.svg",
+      "text_lines": 23
+    },
+    {
+      "slide": "08_fixed_point.svg",
+      "text_lines": 19
+    },
+    {
+      "slide": "09_hardware.svg",
+      "text_lines": 20
+    },
+    {
+      "slide": "10_observation.svg",
+      "text_lines": 14
+    },
+    {
+      "slide": "11_objective_gap.svg",
+      "text_lines": 22
+    },
+    {
+      "slide": "12_capability.svg",
+      "text_lines": 11
+    },
+    {
+      "slide": "13_sampling.svg",
+      "text_lines": 14
+    },
+    {
+      "slide": "14_scalar_learning.svg",
+      "text_lines": 14
+    },
+    {
+      "slide": "15_background_method.svg",
+      "text_lines": 15
+    },
+    {
+      "slide": "16_learning_rate.svg",
+      "text_lines": 28
+    },
+    {
+      "slide": "17_recovery.svg",
+      "text_lines": 18
+    },
+    {
+      "slide": "18_intervention.svg",
+      "text_lines": 18
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "text_lines": 25
+    },
+    {
+      "slide": "20_remaining_cases.svg",
+      "text_lines": 13
+    },
+    {
+      "slide": "21_gate_case.svg",
+      "text_lines": 28
+    },
+    {
+      "slide": "22_history_and_space.svg",
+      "text_lines": 17
+    },
+    {
+      "slide": "23_conclusions.svg",
+      "text_lines": 16
+    },
+    {
+      "slide": "24_next_question.svg",
+      "text_lines": 11
+    },
+    {
+      "slide": "25_metrics.svg",
+      "text_lines": 15
+    },
+    {
+      "slide": "26_gu_mapping.svg",
+      "text_lines": 22
+    },
+    {
+      "slide": "27_evidence_index.svg",
+      "text_lines": 28
+    },
+    {
+      "slide": "28_limits.svg",
+      "text_lines": 16
+    }
+  ],
+  "charts": [
+    {
+      "slide": "11_objective_gap.svg",
+      "element": "bar-correlation",
+      "attribute": "height",
+      "expected": 207.15300000000002,
+      "actual": 207.15,
+      "error_px": 0.0030000000000143245
+    },
+    {
+      "slide": "11_objective_gap.svg",
+      "element": "bar-correlation",
+      "attribute": "y",
+      "expected": 337.847,
+      "actual": 337.85,
+      "error_px": 0.0030000000000427463
+    },
+    {
+      "slide": "11_objective_gap.svg",
+      "element": "bar-mae",
+      "attribute": "height",
+      "expected": 147.82725000000002,
+      "actual": 147.83,
+      "error_px": 0.0027499999999918145
+    },
+    {
+      "slide": "11_objective_gap.svg",
+      "element": "bar-mae",
+      "attribute": "y",
+      "expected": 397.17274999999995,
+      "actual": 397.17,
+      "error_px": 0.002749999999934971
+    },
+    {
+      "slide": "16_learning_rate.svg",
+      "element": "bar-linear-held",
+      "attribute": "height",
+      "expected": 118.7025,
+      "actual": 118.7,
+      "error_px": 0.0024999999999977263
+    },
+    {
+      "slide": "16_learning_rate.svg",
+      "element": "bar-linear-held",
+      "attribute": "y",
+      "expected": 431.2975,
+      "actual": 431.3,
+      "error_px": 0.0024999999999977263
+    },
+    {
+      "slide": "16_learning_rate.svg",
+      "element": "bar-linear-base",
+      "attribute": "height",
+      "expected": 254.58749999999998,
+      "actual": 254.59,
+      "error_px": 0.002500000000026148
+    },
+    {
+      "slide": "16_learning_rate.svg",
+      "element": "bar-linear-base",
+      "attribute": "y",
+      "expected": 295.4125,
+      "actual": 295.41,
+      "error_px": 0.0024999999999977263
+    },
+    {
+      "slide": "16_learning_rate.svg",
+      "element": "bar-linear-quarter",
+      "attribute": "height",
+      "expected": 69.66000000000001,
+      "actual": 69.66,
+      "error_px": 1.4210854715202004e-14
+    },
+    {
+      "slide": "16_learning_rate.svg",
+      "element": "bar-linear-quarter",
+      "attribute": "y",
+      "expected": 480.34,
+      "actual": 480.34,
+      "error_px": 0.0
+    },
+    {
+      "slide": "16_learning_rate.svg",
+      "element": "bar-smooth-held",
+      "attribute": "height",
+      "expected": 241.32,
+      "actual": 241.32,
+      "error_px": 0.0
+    },
+    {
+      "slide": "16_learning_rate.svg",
+      "element": "bar-smooth-held",
+      "attribute": "y",
+      "expected": 308.68,
+      "actual": 308.68,
+      "error_px": 0.0
+    },
+    {
+      "slide": "16_learning_rate.svg",
+      "element": "bar-smooth-base",
+      "attribute": "height",
+      "expected": 258.045,
+      "actual": 258.04,
+      "error_px": 0.0049999999999954525
+    },
+    {
+      "slide": "16_learning_rate.svg",
+      "element": "bar-smooth-base",
+      "attribute": "y",
+      "expected": 291.955,
+      "actual": 291.96,
+      "error_px": 0.0049999999999954525
+    },
+    {
+      "slide": "16_learning_rate.svg",
+      "element": "bar-smooth-quarter",
+      "attribute": "height",
+      "expected": 76.24499999999999,
+      "actual": 76.24,
+      "error_px": 0.0049999999999954525
+    },
+    {
+      "slide": "16_learning_rate.svg",
+      "element": "bar-smooth-quarter",
+      "attribute": "y",
+      "expected": 473.755,
+      "actual": 473.76,
+      "error_px": 0.0049999999999954525
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case01",
+      "attribute": "cx",
+      "expected": 185.24409876799928,
+      "actual": 185.24,
+      "error_px": 0.004098767999266784
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case01",
+      "attribute": "cy",
+      "expected": 538.9233721755973,
+      "actual": 538.92,
+      "error_px": 0.003372175597291971
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case02",
+      "attribute": "cx",
+      "expected": 171.0250230373672,
+      "actual": 171.03,
+      "error_px": 0.00497696263281
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case02",
+      "attribute": "cy",
+      "expected": 553.6519031542306,
+      "actual": 553.65,
+      "error_px": 0.0019031542306038318
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case03",
+      "attribute": "cx",
+      "expected": 123.87251332772675,
+      "actual": 123.87,
+      "error_px": 0.002513327726745729
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case03",
+      "attribute": "cy",
+      "expected": 548.8335048292114,
+      "actual": 548.83,
+      "error_px": 0.0035048292113515345
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case04",
+      "attribute": "cx",
+      "expected": 120.86677638702582,
+      "actual": 120.87,
+      "error_px": 0.003223612974181833
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case04",
+      "attribute": "cy",
+      "expected": 549.9944929543153,
+      "actual": 549.99,
+      "error_px": 0.004492954315310271
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case05",
+      "attribute": "cx",
+      "expected": 199.49194505222403,
+      "actual": 199.49,
+      "error_px": 0.0019450522240163082
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case05",
+      "attribute": "cy",
+      "expected": 552.482556216236,
+      "actual": 552.48,
+      "error_px": 0.0025562162360301954
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case06",
+      "attribute": "cx",
+      "expected": 217.29063521108242,
+      "actual": 217.29,
+      "error_px": 0.0006352110824252577
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case06",
+      "attribute": "cy",
+      "expected": 552.9622286459302,
+      "actual": 552.96,
+      "error_px": 0.002228645930131279
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case07",
+      "attribute": "cx",
+      "expected": 112.12685587615293,
+      "actual": 112.13,
+      "error_px": 0.0031441238470648614
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case07",
+      "attribute": "cy",
+      "expected": 558.7860014776076,
+      "actual": 558.79,
+      "error_px": 0.003998522392407722
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case08",
+      "attribute": "cx",
+      "expected": 123.49593850150472,
+      "actual": 123.5,
+      "error_px": 0.004061498495275373
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case08",
+      "attribute": "cy",
+      "expected": 560.1942220897303,
+      "actual": 560.19,
+      "error_px": 0.00422208973020588
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case09",
+      "attribute": "cx",
+      "expected": 543.8979120223692,
+      "actual": 543.9,
+      "error_px": 0.0020879776308220244
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case09",
+      "attribute": "cy",
+      "expected": 546.107782419043,
+      "actual": 546.11,
+      "error_px": 0.002217580956994425
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case10",
+      "attribute": "cx",
+      "expected": 550.1376451532936,
+      "actual": 550.14,
+      "error_px": 0.002354846706339231
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case10",
+      "attribute": "cy",
+      "expected": 554.7411878739996,
+      "actual": 554.74,
+      "error_px": 0.001187873999583644
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case11",
+      "attribute": "cx",
+      "expected": 268.2800771109246,
+      "actual": 268.28,
+      "error_px": 7.711092462159286e-05
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case11",
+      "attribute": "cy",
+      "expected": 552.2290273471003,
+      "actual": 552.23,
+      "error_px": 0.0009726528996907291
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case12",
+      "attribute": "cx",
+      "expected": 293.95987566425435,
+      "actual": 293.96,
+      "error_px": 0.00012433574562464855
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case12",
+      "attribute": "cy",
+      "expected": 548.648960353821,
+      "actual": 548.65,
+      "error_px": 0.0010396461789241584
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case13",
+      "attribute": "cx",
+      "expected": 412.6777125125211,
+      "actual": 412.68,
+      "error_px": 0.0022874874788954003
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case13",
+      "attribute": "cy",
+      "expected": 521.0512036126247,
+      "actual": 521.05,
+      "error_px": 0.0012036126247494394
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case14",
+      "attribute": "cx",
+      "expected": 366.91900385320037,
+      "actual": 366.92,
+      "error_px": 0.0009961467996504325
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case14",
+      "attribute": "cy",
+      "expected": 555.8726869847696,
+      "actual": 555.87,
+      "error_px": 0.0026869847696389115
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case15",
+      "attribute": "cx",
+      "expected": 165.1064842667697,
+      "actual": 165.11,
+      "error_px": 0.003515733230301521
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case15",
+      "attribute": "cy",
+      "expected": 544.3738443048896,
+      "actual": 544.37,
+      "error_px": 0.003844304889639716
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case16",
+      "attribute": "cx",
+      "expected": 142.86029967791274,
+      "actual": 142.86,
+      "error_px": 0.0002996779127215632
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case16",
+      "attribute": "cy",
+      "expected": 561.4481495600112,
+      "actual": 561.45,
+      "error_px": 0.0018504399888570333
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case17",
+      "attribute": "cx",
+      "expected": 248.95047805721083,
+      "actual": 248.95,
+      "error_px": 0.00047805721084159813
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case17",
+      "attribute": "cy",
+      "expected": 526.2135796652339,
+      "actual": 526.21,
+      "error_px": 0.0035796652338149215
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case18",
+      "attribute": "cx",
+      "expected": 231.43653939647655,
+      "actual": 231.44,
+      "error_px": 0.003460603523450345
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case18",
+      "attribute": "cy",
+      "expected": 534.0406057963884,
+      "actual": 534.04,
+      "error_px": 0.0006057963884131823
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case19",
+      "attribute": "cx",
+      "expected": 127.24700528551088,
+      "actual": 127.25,
+      "error_px": 0.0029947144891195876
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case19",
+      "attribute": "cy",
+      "expected": 545.1167028093887,
+      "actual": 545.12,
+      "error_px": 0.0032971906113061777
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case20",
+      "attribute": "cx",
+      "expected": 118.41225258561323,
+      "actual": 118.41,
+      "error_px": 0.0022525856132347144
+    },
+    {
+      "slide": "19_sampling_effect.svg",
+      "element": "case20",
+      "attribute": "cy",
+      "expected": 550.5520888649401,
+      "actual": 550.55,
+      "error_px": 0.00208886494010585
+    },
+    {
+      "slide": "21_gate_case.svg",
+      "element": "bar-full",
+      "attribute": "width",
+      "expected": 450.080229105,
+      "actual": 450.08,
+      "error_px": 0.00022910500001671608
+    },
+    {
+      "slide": "21_gate_case.svg",
+      "element": "bar-mean",
+      "attribute": "width",
+      "expected": 413.08811055,
+      "actual": 413.09,
+      "error_px": 0.0018894499999646541
+    },
+    {
+      "slide": "21_gate_case.svg",
+      "element": "bar-initial",
+      "attribute": "width",
+      "expected": 465.13524915,
+      "actual": 465.14,
+      "error_px": 0.004750849999993534
+    },
+    {
+      "slide": "21_gate_case.svg",
+      "element": "bar-held",
+      "attribute": "width",
+      "expected": 431.30296340999996,
+      "actual": 431.3,
+      "error_px": 0.0029634099999498176
+    },
+    {
+      "slide": "21_gate_case.svg",
+      "element": "bar-witness",
+      "attribute": "width",
+      "expected": 259.212871845,
+      "actual": 259.21,
+      "error_px": 0.0028718450000155826
+    }
+  ],
+  "errors": [],
+  "scope": "Saved presentation values, pixel geometry, and text extents only. No ADC computation or new scientific scoring.",
+  "passed": true
+}

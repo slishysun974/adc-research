@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="cover">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif" fill="#16324F">
+<text x="80" y="113" font-size="24" fill="#596D7B">ADC课题阶段进展</text>
+<text x="76" y="278" font-size="64" font-weight="700">流水线ADC</text>
+<text x="76" y="366" font-size="64" font-weight="700">数字后台校准研究</text>
+</g>
+<g id="subtitle" font-family="Microsoft YaHei, Arial, sans-serif">
+<line x1="80" y1="423" x2="1198" y2="423" stroke="#D7E0E7" stroke-width="2"/>
+<text x="80" y="478" font-size="28" fill="#226E9C">Gu基线、学习过程与剩余误差</text>
+<text x="80" y="531" font-size="24" fill="#243746">七个研究模块的阶段成果与当前结论</text>
+<text x="80" y="643" font-size="20" fill="#596D7B">2026年10月16日　阅读版 v1</text>
+<text x="80" y="677" font-size="15" fill="#596D7B">研究证据截至2026年10月15日</text>
+<text x="1200" y="677" font-size="15" text-anchor="end" fill="#596D7B">01</text>
+</g>
+</svg>

@@ -73,7 +73,8 @@ module two_stage_adaptive_exact_candidate_a (
     fixed_gated_lms_exact_candidate_a #(
         .SLICE_WIDTH_Q3(1024), .REDUCED_SHIFT(4)
     ) stage1_bank (
-        .clk(clk), .reset(reset), .valid_in(valid_out),
+        .clk(clk), .reset(reset), .valid_in(valid_out), .commit_enable(1'b1),
+        .delta0(15'sd0), .delta1(15'sd0), .delta2(15'sd0), .delta3(15'sd0),
         .learning_output_q3(stage1_learning_q3[14:0]),
         .dither_positive(stage1_dither_positive),
         .gate(stage1_gate),
@@ -89,7 +90,8 @@ module two_stage_adaptive_exact_candidate_a (
     fixed_gated_lms_exact_candidate_a #(
         .SLICE_WIDTH_Q3(256), .REDUCED_SHIFT(6)
     ) stage2_bank (
-        .clk(clk), .reset(reset), .valid_in(valid_out),
+        .clk(clk), .reset(reset), .valid_in(valid_out), .commit_enable(1'b1),
+        .delta0(15'sd0), .delta1(15'sd0), .delta2(15'sd0), .delta3(15'sd0),
         .learning_output_q3(stage2_learning_q3[14:0]),
         .dither_positive(stage2_dither_positive),
         .gate(stage2_gate),

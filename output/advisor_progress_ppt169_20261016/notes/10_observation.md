@@ -1,0 +1,3 @@
+EXP-020构造两条严格单调的人工静态传输。16,384条训练记录未访问差异区间，因此五字段与最终码相同。另一条8,192点正弦记录有2个最终码不同。小差异足以否定这批有限训练对该记录的唯一确定性，但不提供芯片误差大小或继续观测无效的证据。原数值反例未启用数字PWL。后续完整历史反例和已知正弦条件在各自定义下分别成立，不能互换。
+
+来源：D:/ADC/docs/reports/experiments/EXP_020_UNKNOWN_GAIN_IDENTIFIABILITY_V1.md；D:/ADC/docs/reports/RESEARCH_MODULE_04_INFORMATION_V1.md。

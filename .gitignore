@@ -9,7 +9,7 @@ build/
 dist/
 *.egg-info/
 tmp/
-notebooks/.ipynb_checkpoints/
+.ipynb_checkpoints/
 
 # Large or machine-specific local reference files.
 references/local/*
@@ -24,3 +24,18 @@ artifacts/tooling/
 
 # Read-only paper extraction, rendered source pages and local research checks.
 artifacts/research/
+
+# Vivado/XSim working-directory logs and compiled simulation state.
+/.Xil/
+/xsim.dir/
+/vivado*.jou
+/vivado*.log
+/xelab.log
+/xelab.pb
+/xvlog.log
+/xvlog.pb
+/xsim*.jou
+/xsim*.log
+
+# Presentation preview service state; retain sources and reviewed deliverables.
+/output/**/live_preview/

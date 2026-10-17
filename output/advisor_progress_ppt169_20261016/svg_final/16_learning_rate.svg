@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块六　后台校准的性能、稳定性与适用条件</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">学习率与后期整数误差</text><text x="64" y="171" font-size="20" fill="#596D7B">每120转换采用4个样本。同数字流、同输出时长，以下为五种子均值。</text></g>
+<!-- chart-plot-area: x_min=110,y_min=250,x_max=770,y_max=550; y_range=0,40 -->
+<g id="chart-mse" font-family="Microsoft YaHei, Arial, sans-serif" font-size="20" fill="#596D7B">
+<rect x="110" y="204" width="16" height="16" fill="#9AA9B4"/><text x="136" y="219">不更新</text><rect x="277" y="204" width="16" height="16" fill="#226E9C"/><text x="303" y="219">原步长</text><rect x="444" y="204" width="16" height="16" fill="#21857A"/><text x="470" y="219">1/4步长</text>
+<text x="110" y="245">MSE（码²，越小越好）</text>
+<line x1="110" y1="250" x2="770" y2="250" stroke="#D7E0E7"/><line x1="110" y1="325" x2="770" y2="325" stroke="#D7E0E7"/><line x1="110" y1="400" x2="770" y2="400" stroke="#D7E0E7"/><line x1="110" y1="475" x2="770" y2="475" stroke="#D7E0E7"/><line x1="110" y1="550" x2="770" y2="550" stroke="#596D7B"/>
+<text x="96" y="257" text-anchor="end">40</text><text x="96" y="332" text-anchor="end">30</text><text x="96" y="407" text-anchor="end">20</text><text x="96" y="482" text-anchor="end">10</text><text x="96" y="557" text-anchor="end">0</text>
+<rect id="bar-linear-held" x="180" y="431.30" width="58" height="118.70" fill="#9AA9B4"/><rect id="bar-linear-base" x="250" y="295.41" width="58" height="254.59" fill="#226E9C"/><rect id="bar-linear-quarter" x="320" y="480.34" width="58" height="69.66" fill="#21857A"/>
+<rect id="bar-smooth-held" x="510" y="308.68" width="58" height="241.32" fill="#9AA9B4"/><rect id="bar-smooth-base" x="580" y="291.96" width="58" height="258.04" fill="#226E9C"/><rect id="bar-smooth-quarter" x="650" y="473.76" width="58" height="76.24" fill="#21857A"/>
+<text x="209" y="419" text-anchor="middle">15.827</text><text x="279" y="283" text-anchor="middle">33.945</text><text x="349" y="468" text-anchor="middle">9.288</text><text x="539" y="296" text-anchor="middle">32.176</text><text x="609" y="279" text-anchor="middle">34.406</text><text x="679" y="461" text-anchor="middle">10.166</text>
+<text x="279" y="590" font-size="24" text-anchor="middle" fill="#243746">两级线性增益误差</text><text x="609" y="590" font-size="24" text-anchor="middle" fill="#243746">两级平滑非线性</text>
+</g>
+<g id="meaning" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><text x="840" y="287" font-size="28" font-weight="700" fill="#21857A">1/4步长取得后期收益</text><text x="840" y="346" font-size="24">两组各五个种子，均优于</text><text x="840" y="387" font-size="24">对应单位系数不更新参考。</text><text x="840" y="461" font-size="24">MSE为输出与理想电平差</text><text x="840" y="502" font-size="24">的平方平均，保留直流误差。</text><text x="840" y="578" font-size="20" fill="#596D7B">该结果不确定全局最优步长。</text></g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：EXP-069、模块六。项目候选步长与论文芯片未公开参数分别说明。</text><text x="1216" y="682" text-anchor="end">16</text></g>
+</svg>

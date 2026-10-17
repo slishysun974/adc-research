@@ -1,0 +1,47 @@
+{
+  "version": "EXP071-output-boundary-contract-v2",
+  "declared_date": "2026-10-12",
+  "authority": "D129 approved task4 routine model/range repair and D130 explicit boundary-contract review; user continues research",
+  "original_design": "experiments/exp_071_coherent_frequency_holdout/protocol.json",
+  "previous_development": "artifacts/runs/EXP_071/preflight_v2_diagnostic",
+  "original_gate_status": "FAILED: twelve unclipped endpoint integer codes outside0..4095. Original protocol, failures, data and verification remain unchanged.",
+  "rationale": "Legal analog input does not imply legal unclipped digital reconstruction. The declared0.82 smooth working model has an analytic unit-code bound97..3999. Existing output hardware saturates before nearest-even integerization.",
+  "change_only": "Replace zero clipping for FULL-SCALE STRESS endpoints with complete raw-Q3/integer/saturation-flag and independent saturated-output agreement. Working input paths still require zero raw-Q3 saturation, zero rounded-code clipping, zero coefficient saturation, legal physical and PWL domains, and exact outputs/states/gates/requests/counters. No training or scoring rule changes.",
+  "working_scope": {
+    "input_amplitude": 0.82,
+    "development_tones": [509, 1009],
+    "old_tone_control": 127,
+    "methods": ["point30", "full120"],
+    "rates": ["base", "quarter"],
+    "preflight_seed": 202610711,
+    "stress_is_not_a_performance_case": true,
+    "unit_bound_applies_only_to_declared_smooth_static_matched_model": true,
+    "learned_state_bound_is_sufficient_not_necessary": true
+  },
+  "stress_scope": {
+    "grid": "Original4096 midpoints plus-1 and nextafter(1,-infinity), four tags, smooth/ideal. No point deleted.",
+    "saturated_output": "Q3 saturation to[0,32760], THEN nearest-even division by8; equals clipping nearest-even integer to[0,4095]. Record preinteger Q3 flags separately.",
+    "acceptance": "All saved words/raw integer/saturated integer/boundary indices and exact independent probes agree. Preserve all clipping and original zero-clipping failure. No limit selected from measured clipping count."
+  },
+  "reuse": "Verify complete prior delivery/design/input/old-source manifests. Original source module definitions must remain AST-identical; only new offline range helpers are appended. Replay saved words/state/counters, not generate analog sources or learn anew. Unchanged prior platform, illegal-input and balanced permutation controls are reused within their original scope.",
+  "frozen_audit_budget": {
+    "saved_source_word_records": 48144,
+    "saved_online_codes_replayed": 61440,
+    "saved_unit_codes_replayed": 15360,
+    "saved_endpoint_codes_replayed": 32784,
+    "new_offline_integer_readouts": 109584,
+    "new_offline_q3_range_readouts": 109584,
+    "saved_bank_pair_transitions_replayed": 512,
+    "saved_learning_observations_per_stage_replayed_not_new": 31744,
+    "rational_and_formal_probe_cap_each": 80,
+    "new_source_conversions": 0,
+    "new_online_codes": 0,
+    "new_learning_observations": 0,
+    "new_fft": 0,
+    "performance_scores": 0
+  },
+  "theory_controls": "Six new exact tests: range constants;336 extreme-word/segment readouts; legal slopes with output overload; saturation target-inside condition and outside counterexample;64 Q3/rounding boundary cases; invalid contracts. Initial hand-constant test numerator error is preserved and corrected before the frozen data audit.",
+  "data_roles": "Original development/Gu confirmation/future reservation and every parameter, prediction, seed, score, horizon and long budget are unchanged. No confirmation/future source generated or result read.",
+  "long_entry": "Passing this saved-data boundary audit resolves only the range-contract preflight. Full long executable/accelerator, storage/resource assessment, complete sources and environment freeze, and final-implementation development controls remain required before confirmation opens. This audit alone sets long_ready=false.",
+  "stopping": "Any reuse/source/implementation/working-range mismatch fails the new audit. Preserve output and failure; do not reinterpret original gate or relax working paths after observing failure. No commit/push."
+}

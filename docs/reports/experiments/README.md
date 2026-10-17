@@ -1,14 +1,12 @@
 # 实验报告与结果索引
 
-当前任务看 [STATUS](../../STATUS.md)，近期解释与主线意义看 [综合分析](../RESEARCH_SYNTHESIS_2026-10-10.md)。本页定位已有成果，实验如何组织见 [实验说明](../../../experiments/README.md)，推导见 [理论索引](../../theory/README.md)。索引收录不表示所有成果已通过芯片或一般理论验收。
+本页按编号定位实验定义、正式证据和本地运行；当前任务与下一编号看[STATUS](../../STATUS.md)，方法看[主线计划](../../RESEARCH_PLAN_STATIC_FIXED_POINT_DIAGNOSTICS_2026-10-10.md)，本页不维护轮次进展日志。
 
-先读EXP-055—059的条件和结果，再按当前任务追溯EXP-026、030—035、039—054。EXP-058为局部定点预检，EXP-059完成预定静态定点百万控制及有限均值／协方差关系；一般长期理论与动态仍开放；静态失配长期见EXP-061。EXP-052—054的局部不利次数以EXP-055之后的解释修订为准；早期报告的“下一项”只代表当时安排。
-
-EXP-060补独立主辅静态合同与完整短预检，失配第三门前提已收紧；EXP-061已完成必要静态失配长期配对及观测／状态交叉；当前动态入口短控制已由EXP-067完成，必要有限动态长期已由EXP-068完成。相关早期敏感性见EXP-024—026，不能用其逐转换记录代替当前窗口验收。
+当前问题优先从EXP-069—071的学习率／切换／频率控制、EXP-072—075的正常未来／级反馈／门通道／前级观测范围追溯，再按需要读EXP-055—068的基础统计、定点、失配与动态。早期局部不利更新以EXP-055之后的解释核查，原报告‘下一项’只代表当时。
 
 ## 编号成果
 
-定义列链接实验README；证据列链接报告或已有理论证明。运行列只是本地目录定位，其中可能同时存在正式、预检和失败子目录；采用哪个运行须以报告和协议为准。数据缺失时不得声称复算。
+定义列链接实验README，证据列链接原报告或理论。运行列只是本地目录定位，预检、失败与正式子目录以报告和冻结协议为准；资料缺失须登记不可复算，不能补造替代数据。
 
 | 编号 | 主题 | 实验定义 | 报告／推导 | 本地运行 |
 |---|---|---|---|---|
@@ -80,11 +78,19 @@ EXP-060补独立主辅静态合同与完整短预检，失配第三门前提已�
 | EXP-067 | 动态三路历史／当前相关／静态退化与短预检 | [README](../../../experiments/exp_067_dynamic_history_preflight/README.md) | [报告](EXP_067_DYNAMIC_HISTORY_PREFLIGHT_V1.md) | [目录](../../../artifacts/runs/EXP_067) |
 | EXP-068 | 必要有限动态后台／相关根与MSE关系／完整整数交叉 | [README](../../../experiments/exp_068_dynamic_background/README.md) | [报告](EXP_068_DYNAMIC_BACKGROUND_V1.md) | [目录](../../../artifacts/runs/EXP_068) |
 | EXP-069 | 同数字流Gu学习率／输出收益／启动／有限稳定 | [README](../../../experiments/exp_069_gu_learning_rate/README.md) | [报告](EXP_069_GU_LEARNING_RATE_V1.md) | [目录](../../../artifacts/runs/EXP_069) |
+| EXP-070 | 固定 Gu 学习率幅度切换／完整输出与两种恢复验收 | [README](../../../experiments/exp_070_gu_learning_rate_switch/README.md) | [报告](EXP_070_GU_LEARNING_RATE_SWITCH_V1.md) | [目录](../../../artifacts/runs/EXP_070) |
+| EXP-071 | 固定频率确认完成；原端点与部分末端失败保留 | [README](../../../experiments/exp_071_coherent_frequency_holdout/README.md) | [报告](EXP_071_COHERENT_FREQUENCY_PREFLIGHT_V1.md) | [目录](../../../artifacts/runs/EXP_071)；最终预检与128块确认完成 |
+| EXP-072 | 正常状态位置×未来更新有限诊断／完整历史能力关系 | [README](../../../experiments/exp_072_normal_state_intervention/README.md) | [报告](EXP_072_NORMAL_STATE_INTERVENTION_V1.md) | [目录](../../../artifacts/runs/EXP_072)；固定八块完成，反方向与验收失败保留 |
+| EXP-073 | 单级与后级进入前级学习的受控因果分离 | [README](../../../experiments/exp_073_bank_feedback_intervention/README.md) | [报告](EXP_073_BANK_FEEDBACK_INTERVENTION_V1.md) | [目录](../../../artifacts/runs/EXP_073)；40路径及20学习连接分离完成，全部反向保持 |
+| EXP-074 | 后级进入前级学习的数值／门通道因果对照 | [README](../../../experiments/exp_074_learning_signal_gate_intervention/README.md) | [报告](EXP_074_LEARNING_SIGNAL_GATE_INTERVENTION_V1.md) | [目录](../../../artifacts/runs/EXP_074)；40新前级路径与20通道四格完成 |
+| EXP-075 | 前级四字／全槽观测的同初态有限闭环干预 | [README](../../../experiments/exp_075_front_sampling_intervention/README.md) | [报告](EXP_075_FRONT_SAMPLING_INTERVENTION_V1.md) | [目录](../../../artifacts/runs/EXP_075)；20同初态路径完成，反例与未认证保持 |
+| EXP-076 | 均值影子第二门的最小完整反馈／整数MSE对照 | [README](../../../experiments/exp_076_fixed_mean_gate_intervention/README.md) | [报告](EXP_076_FIXED_MEAN_GATE_INTERVENTION_V1.md) | [目录](../../../artifacts/runs/EXP_076)；一例原八块完成，额外未来知识与块例外保持 |
+| EXP-077 | 原合法初态连续影子第二门的完整反馈／信息对照 | [README](../../../experiments/exp_077_initial_gate_intervention/README.md) | [报告](EXP_077_INITIAL_GATE_INTERVENTION_V1.md) | [目录](../../../artifacts/runs/EXP_077)；一例改善预测被否定，成本漏账／超限保留 |
 
-编号实验目录已接续至EXP-069，另有EXP-001／002组合报告。EXP-029通过现有理论文档保存证明和数值，不补造一份同义报告；NG编号仍是理论结论索引，不能代替实验编号。
+编号实验目录与证据已接续至EXP-077；后续独立实验编号由STATUS维护，不预建空目录。EXP-001／002为组合报告，EXP-029由原理论保存证明与数值，不另补同义报告；NG编号是理论结果，不能代替实验编号。
 
 ## 非编号机制工作与历史
 
-[主辅、阈值和四路机制分析](../MAINLINE_PHYSICAL_MECHANISMS_2026-10-09.md)配套 [核算入口](../../../experiments/mainline_physical_mechanisms/README.md)与对应理论。阶段综合分析和审查位于上级报告目录，不强行编号为新实验。
+[主辅、阈值和四路机制分析](../MAINLINE_PHYSICAL_MECHANISMS_2026-10-09.md)配套[核算入口](../../../experiments/mainline_physical_mechanisms/README.md)。只读补分析可以归入原实验／理论；NG-42证据在EXP-074§6及原两级理论，不能因新增理论编号补造实验。
 
-旧实验的模型、留出含义、指标口径及信息边界须从原报告审查；具体成果不因新的四阶段分类而扩大。状态演变保存在 [历史快照](../PROJECT_PROGRESS_HISTORY_2026-10-10.md)。
+阶段解释见[Gu评价](../GU_ALGORITHM_EVALUATION_V1.md)与[综合分析](../RESEARCH_SYNTHESIS_2026-10-10.md)，状态演变见[历史快照](../PROJECT_PROGRESS_HISTORY_2026-10-10.md)。旧实验模型、指标、信息与留出含义保持，新的分类不扩大证据范围。

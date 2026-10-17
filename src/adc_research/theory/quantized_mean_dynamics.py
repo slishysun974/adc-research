@@ -227,3 +227,214 @@ def accelerated_orbit(model: FrozenStageMean, initial, bounds, max_events=20000)
         state = tuple(z+steps*d for z, d in zip(state, deltas))
         clock += steps
     return {"status": "event_limit", "events": events, "last_state": state, "steps": clock}
+
+
+def _box(bounds, dimension=None, maximum=None):
+    bounds = tuple(tuple(pair) for pair in bounds)
+    if not bounds or (dimension is not None and len(bounds) != dimension):
+        raise ValueError("nonempty rectangle of the declared dimension required")
+    for pair in bounds:
+        if len(pair) != 2:
+            raise ValueError("each interval needs two endpoints")
+        for value in pair: _integer(value, "rectangle endpoint")
+        if pair[0] > pair[1] or (maximum is not None and not 0 <= pair[0] <= pair[1] <= maximum):
+            raise ValueError("ordered legal integer intervals required")
+    return bounds
+
+
+def subtract_integer_box(source, cover):
+    """Disjoint exact rectangles for source minus cover, including tie points."""
+    source = _box(source)
+    cover = _box(cover, len(source))
+    intersection = tuple((max(a,c), min(b,d)) for (a,b),(c,d) in zip(source,cover))
+    if any(lo > hi for lo,hi in intersection): return (source,)
+    middle = list(source)
+    pieces = []
+    for axis, (lo,hi) in enumerate(intersection):
+        start, end = middle[axis]
+        if start < lo:
+            piece = middle.copy(); piece[axis] = (start,lo-1)
+            pieces.append(tuple(piece))
+        if hi < end:
+            piece = middle.copy(); piece[axis] = (hi+1,end)
+            pieces.append(tuple(piece))
+        middle[axis] = (lo,hi)
+    return tuple(pieces)
+
+
+def integer_box_uncovered(source, covers, *, max_fragments=4096):
+    """Exact uncovered pieces; corners or a bounding hull do not prove coverage."""
+    source = _box(source)
+    covers = tuple(_box(box,len(source)) for box in covers)
+    _integer(max_fragments,"fragment budget")
+    if max_fragments <= 0: raise ValueError("positive fragment budget required")
+    pieces = (source,)
+    for cover in covers:
+        remaining = []
+        for piece in pieces:
+            remaining.extend(subtract_integer_box(piece,cover))
+            if len(remaining) > max_fragments:
+                raise ValueError("integer coverage fragment budget exceeded")
+        pieces = tuple(remaining)
+        if not pieces: break
+    return pieces
+
+
+def certify_phase_unions(phase_boxes, request_vectors, *, guard_bits=12,
+                         maximum=2047*4096, max_cells=256,
+                         max_requests=512, max_fragments=4096):
+    """Exact phase-to-phase inclusion for export-cell-constant integer updates.
+
+    request_vectors(phase,codes) returns EVERY allowed full request vector for
+    that phase/export cell. Future coverage and independence from hidden bits
+    beyond the exported codes are caller obligations. All coordinates are
+    retained. Finite unions are tested by exact subtraction, not by corners.
+    The last phase maps back to phase zero. No cycle of a varying input or
+    PRNG is inferred from this inclusion certificate.
+    """
+    for value,name in ((guard_bits,"guard bits"),(maximum,"state maximum"),
+                       (max_cells,"cell budget"),(max_requests,"request budget")):
+        _integer(value,name)
+    if guard_bits < 0 or min(maximum,max_cells,max_requests) <= 0:
+        raise ValueError("legal export precision and positive budgets required")
+    phases = tuple(tuple(_box(box,maximum=maximum) for box in phase) for phase in phase_boxes)
+    if not phases or any(not phase for phase in phases):
+        raise ValueError("nonempty unions for every phase required")
+    dimension = len(phases[0][0])
+    if any(len(box) != dimension for phase in phases for box in phase):
+        raise ValueError("all phase rectangles must have the same dimension")
+    # Fail before any request computation when the declared local cover is too large.
+    potential_cells = 0
+    for phase in phases:
+        for box in phase:
+            count = 1
+            for lo,hi in box:
+                count *= export_code(hi,guard_bits)-export_code(lo,guard_bits)+1
+            potential_cells += count
+    if potential_cells > max_cells:
+        raise ValueError("export-cell budget exceeded before evaluating requests")
+    cells, violating, request_count = [], [], 0
+    for phase_index, phase in enumerate(phases):
+        targets = phases[(phase_index+1) % len(phases)]
+        for box_index, box in enumerate(phase):
+            ranges = tuple(range(export_code(lo,guard_bits),export_code(hi,guard_bits)+1)
+                           for lo,hi in box)
+            for codes in product(*ranges):
+                intersection = tuple((max(lo,export_cell(code,guard_bits)[0]),
+                                      min(hi,export_cell(code,guard_bits)[1]))
+                                     for (lo,hi),code in zip(box,codes))
+                if any(lo > hi for lo,hi in intersection): continue
+                vectors = iter(request_vectors(phase_index,codes))
+                entries = []
+                for vector in vectors:
+                    request_count += 1
+                    if request_count > max_requests:
+                        raise ValueError("full-request vector budget exceeded")
+                    vector = tuple(vector)
+                    if len(vector) != dimension:
+                        raise ValueError("full request vector must retain all coordinates")
+                    for value in vector: _integer(value,"request coordinate")
+                    image = tuple((min(max(lo+d,0),maximum),min(max(hi+d,0),maximum))
+                                  for (lo,hi),d in zip(intersection,vector))
+                    uncovered = integer_box_uncovered(image,targets,max_fragments=max_fragments)
+                    witness = tuple(lo for lo,_ in uncovered[0]) if uncovered else None
+                    entries.append({"request":vector,"image":image,
+                                    "inside":not uncovered,"uncovered_witness":witness})
+                    if uncovered:
+                        violating.append((phase_index,box_index,codes,vector,witness))
+                if not entries: raise ValueError("at least one allowed full request is required")
+                cells.append({"phase":phase_index,"box":box_index,"codes":codes,
+                              "intersection":intersection,"requests":entries})
+    return {"phase_unions":phases,"dimension":dimension,"cell_count":len(cells),
+            "request_count":request_count,"cells":cells,"invariant":not violating,
+            "violations":violating,
+            "future_request_coverage_provided_by_caller":True,
+            "actual_input_or_prng_period_certified":False}
+
+
+def propagate_export_itineraries(initial_box, windows, request_vector, *,
+                                  guard_bits=12, maximum=2047*4096,
+                                  max_cells_per_window=128, max_branches=128,
+                                  max_total_requests=64):
+    """Exact initial-state partition for a FIXED finite window sequence.
+
+    Each branch stores an initial rectangle and its cumulative translation.
+    Export-code boundaries split the initial rectangle, without filling gaps
+    or merging different itineraries. Saturation is deliberately a stop: the
+    translation theorem applies only before any possible saturated state.
+    Budget stops preserve only complete earlier window certificates.
+    No periodic extension, source/PRNG closure or contraction is supplied.
+    """
+    for value,name in ((windows,"window count"),(guard_bits,"guard bits"),
+                       (maximum,"state maximum"),(max_cells_per_window,"cell budget"),
+                       (max_branches,"branch budget"),(max_total_requests,"request budget")):
+        _integer(value,name)
+    if windows < 0 or guard_bits < 0 or min(maximum,max_cells_per_window,max_branches,max_total_requests) <= 0:
+        raise ValueError("nonnegative time/precision and positive budgets required")
+    initial_box=_box(initial_box,maximum=maximum)
+    dimension=len(initial_box)
+    def volume(box):
+        count=1
+        for lo,hi in box: count*=hi-lo+1
+        return count
+    cardinality=volume(initial_box)
+    branches=[{'initial':initial_box,'current':initial_box,
+               'offset':(0,)*dimension,'itinerary':()}]
+    history=[];requests={};status='complete';stop=None
+    for window in range(windows):
+        potential=0
+        for branch in branches:
+            count=1
+            for lo,hi in branch['current']:
+                count*=export_code(hi,guard_bits)-export_code(lo,guard_bits)+1
+            potential+=count
+        if potential>max_cells_per_window or potential>max_branches:
+            status='cell_budget' if potential>max_cells_per_window else 'branch_budget'
+            stop={'window':window,'required_cells':potential,'required_branches':potential}
+            break
+        intersections=[]
+        for parent,branch in enumerate(branches):
+            ranges=tuple(range(export_code(lo,guard_bits),export_code(hi,guard_bits)+1)
+                         for lo,hi in branch['current'])
+            for codes in product(*ranges):
+                cell=tuple((max(lo,export_cell(code,guard_bits)[0]),
+                            min(hi,export_cell(code,guard_bits)[1]))
+                           for (lo,hi),code in zip(branch['current'],codes))
+                if all(lo<=hi for lo,hi in cell): intersections.append((parent,codes,cell))
+        needed=sorted({codes for _,codes,_ in intersections})
+        if len(requests)+len(needed)>max_total_requests:
+            status='request_budget'
+            stop={'window':window,'required_new_requests':len(needed),
+                  'prior_requests':len(requests)}
+            break
+        for codes in needed:
+            vector=tuple(request_vector(window,codes))
+            if len(vector)!=dimension:
+                raise ValueError("full request must retain every initial coordinate")
+            for value in vector: _integer(value,'request coordinate')
+            requests[window,codes]=vector
+        following=[];actions=[];unsafe=[]
+        for parent,codes,cell in intersections:
+            branch=branches[parent];vector=requests[window,codes]
+            after=tuple((lo+d,hi+d) for (lo,hi),d in zip(cell,vector))
+            if any(lo<0 or hi>maximum for lo,hi in after):
+                unsafe.append({'codes':codes,'cell':cell,'request':vector,'unclipped_image':after})
+            origin=tuple((lo-d,hi-d) for (lo,hi),d in zip(cell,branch['offset']))
+            offset=tuple(a+b for a,b in zip(branch['offset'],vector))
+            following.append({'initial':origin,'current':after,'offset':offset,
+                              'itinerary':branch['itinerary']+(codes,)})
+            actions.append({'parent':parent,'codes':codes,'before':cell,'request':vector,
+                            'after':after,'initial':origin})
+        if unsafe:
+            status='saturation_possible';stop={'window':window,'unsafe_images':unsafe}
+            break
+        assert sum(volume(branch['initial']) for branch in following)==cardinality
+        history.append({'window':window,'source_branches':len(branches),
+                        'cells':len(intersections),'unique_requests':len(needed),
+                        'initial_state_count':cardinality,'actions':actions,
+                        'after_branches':following})
+        branches=following
+    return {'status':status,'certified_windows':len(history),'requested_windows':windows,
+            'initial_state_count':cardinality,'initial':initial_box,'branches':branches,
+            'history':history,'stop':stop,'unique_requests_evaluated':len(requests),
+            'future_windows_certified':False,'periodic_extension_certified':False}

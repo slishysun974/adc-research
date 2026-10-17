@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">附录A</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">指标与比较口径</text></g>
+<g id="definitions" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="64" y="207" font-size="28" font-weight="700" fill="#16324F">MAE与MSE</text><text x="340" y="202" font-size="24">MAE为绝对码误差平均，单位码。</text><text x="340" y="242" font-size="24">MSE为码误差平方平均，单位码²。本文整数MSE保留直流误差。</text>
+<line x1="64" y1="274" x2="1216" y2="274" stroke="#D7E0E7"/>
+<text x="64" y="332" font-size="28" font-weight="700" fill="#16324F">SNDR与SFDR</text><text x="340" y="322" font-size="24">SNDR比较基波与噪声、失真总功率，评分时去除直流。</text><text x="340" y="362" font-size="24">SFDR比较基波与最大杂散，误差功率的频率分布也会影响它。</text>
+<line x1="64" y1="394" x2="1216" y2="394" stroke="#D7E0E7"/>
+<text x="64" y="452" font-size="28" font-weight="700" fill="#16324F">观察量与时长</text><text x="340" y="442" font-size="24">同转换时长与同学习观测量分别比较。</text><text x="340" y="482" font-size="24">全样本方式每窗采用120条，四样本采用4条，观测量相差30倍。</text>
+<text x="64" y="558" font-size="24" fill="#226E9C">已有例子：平均SNDR提高0.994 dB，MSE却由32.176升至34.406码²。</text><text x="64" y="601" font-size="20" fill="#596D7B">该结果来自EXP-062四样本平滑条件，说明不同指标需要分别报告。</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：ADC指标协议、模块四及模块六。dB均值与功率均值也保留各自口径。</text><text x="1216" y="682" text-anchor="end">25</text></g>
+</svg>

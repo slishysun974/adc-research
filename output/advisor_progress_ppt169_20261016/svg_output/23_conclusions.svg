@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">阶段结论</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">当前阶段形成的主要认识</text></g>
+<g id="findings" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="64" y="213" font-size="28" fill="#226E9C">01</text><text x="144" y="213" font-size="28" font-weight="700" fill="#16324F">研究基础已能支撑明确条件下的分析</text><text x="144" y="258" font-size="24">行为平台、条件性预测及数字实现分别有核对依据。</text>
+<text x="64" y="329" font-size="28" fill="#226E9C">02</text><text x="144" y="329" font-size="28" font-weight="700" fill="#16324F">学习统计与最终输出目标需要对应检查</text><text x="144" y="374" font-size="24">相关量归零、局部可区分与低输出误差分别需要条件。</text>
+<text x="64" y="445" font-size="28" fill="#226E9C">03</text><text x="144" y="445" font-size="28" font-weight="700" fill="#16324F">持续学习会同时改变平均位置与输出历史</text><text x="144" y="490" font-size="24">后期收益、启动、恢复及数字成本需要共同评价。</text>
+<text x="64" y="561" font-size="28" fill="#226E9C">04</text><text x="144" y="561" font-size="28" font-weight="700" fill="#16324F">有限场景的误差解释与改善空间已经形成</text><text x="144" y="606" font-size="24">选样、时间和门有对应证据，在线取得较好校正仍是缺口。</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">适用范围：各原理论与实验声明的条件；一般未知增益理论及新算法尚未全部完成。</text><text x="1216" y="682" text-anchor="end">23</text></g>
+</svg>

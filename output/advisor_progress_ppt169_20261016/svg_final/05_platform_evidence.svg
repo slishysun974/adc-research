@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块一　实验平台与信号链核对</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">平台核对与可交付模型</text></g>
+<g id="evidence" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="64" y="190" font-size="28" fill="#226E9C">先核对信号链，再用它研究校准机制。</text>
+<line x1="64" y1="227" x2="1216" y2="227" stroke="#D7E0E7"/>
+<text x="64" y="268" font-size="24" font-weight="700">理想链路</text><text x="340" y="268" font-size="24">4096个理想码中心的重构、单调性与缺失码检查</text>
+<line x1="64" y1="301" x2="1216" y2="301" stroke="#D7E0E7"/>
+<text x="64" y="344" font-size="24" font-weight="700">非理想与失效边界</text><text x="340" y="344" font-size="24">逐项注入误差，分别记录过载、裁剪与不可纠正状态</text>
+<line x1="64" y1="377" x2="1216" y2="377" stroke="#D7E0E7"/>
+<text x="64" y="420" font-size="24" font-weight="700">独立实现</text><text x="340" y="420" font-size="24">Simulink与Python核对23组、82,343次转换</text>
+<text x="340" y="458" font-size="20" fill="#596D7B">数字与学习记录数值相等，模拟浮点量按预定容差比较</text>
+<line x1="64" y1="491" x2="1216" y2="491" stroke="#D7E0E7"/>
+</g>
+<g id="conclusion" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="546" font-size="24" fill="#243746">可交付成果：行为模型、Simulink模型及相应核对记录。</text><text x="64" y="598" font-size="24" fill="#226E9C">这些证据支持声明模型内的机制研究，物理适用性另需验证。</text></g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：EXP-003、阶段一平台验收、simulink_adc/VALIDATION.md</text><text x="1216" y="682" text-anchor="end">05</text></g>
+</svg>

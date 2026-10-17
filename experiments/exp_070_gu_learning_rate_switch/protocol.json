@@ -1,0 +1,43 @@
+{
+  "version": "EXP-070-fixed-gu-rate-switch-v1",
+  "declared_date": "2026-10-11",
+  "authority": "User continues research; D-126 task4 after accepted D-127 tasks1/2/3/5",
+  "question": "Does the seen quarter-rate startup/tail benefit persist after the original amplitude down-switch, and what finite output recovery cost remains?",
+  "cases": ["ideal", "both_linear", "both_smooth"],
+  "seeds": [202610621,202610622,202610623,202610624,202610625],
+  "rates": [{"name":"base","numerator":1,"denominator":1},{"name":"quarter","numerator":1,"denominator":4}],
+  "methods": [{"name":"point30","selected":4,"multiplier":30},{"name":"full120","selected":120,"multiplier":1}],
+  "variants": ["carry", "fresh"],
+  "sources": {
+    "startup_base":"artifacts/runs/EXP_062/background_v1",
+    "startup_quarter":"artifacts/runs/EXP_069/background_v1",
+    "switch_base":"artifacts/runs/EXP_066/tracking_v1",
+    "accepted_contract":"artifacts/research/gu_baseline_closure_20261011_v2"
+  },
+  "architecture_protocol":"experiments/exp_057_static_two_stage_million/protocol.json",
+  "model_protocol":"experiments/exp_065_input_switch_tracking/protocol.json",
+  "input":{"samples_per_block":30720,"tone_bin":127,"amplitude_before":0.82,"amplitude_after":0.41,"scale_after":0.5,"sample_rate_hz":3000000000,"source":"Original stored tone; global phase and independent counter stream2/3 indices continue"},
+  "switch":{"global_window":32768,"global_conversion":3932160,"carry":"Eight Q22 codes from matching rate/method at original boundary. No partial sum at boundary. Diagnostic post-segment counters reset without affecting updates; global conversion index and tags retained.","fresh":"Unity Q22 at identical global index/future words; no PRNG restart","analog_history":"Original static feedforward models, no analog memory state or coefficient feedback to ADC source"},
+  "digital_contract":"Only q1,q2,SAR center,bipolar dither1/2 and old state enter update. Rear first; Q3 data/PWL/gates, Q1.10 export, Q22 accumulator, nearest-even product/offset/export/request/output, original legal domains and saturation. All120 slots use old exported state, both banks commit once at boundary. Base steps front[1,3,6,12]/262144000 rear[1,3,6,12]/16384000; apply rate before rounding. No active-count normalization.",
+  "preflight":{
+    "seeds":"first original seed only",
+    "main":{"paths":24,"windows_per_path":32,"outputs":92160,"bank_pair_commits":768,"learning_observations_per_stage":47616},
+    "nochange":{"paths":12,"windows_per_path":34,"start_global_window":32766,"outputs":48960,"bank_pair_commits":408,"learning_observations_per_stage":25296,"comparison":"All34 windows against matching EXP062/base or EXP069/quarter; first2 recover switch-boundary carry state"},
+    "serialized_restart":{"paths":12,"windows_per_path":32,"split_windows":[16,16],"outputs":46080,"bank_pair_commits":384,"learning_observations_per_stage":23808,"comparison":"Quarter both initializations/methods; new Context for each half, second half loads eight int32 codes from first-half file, retains global source offset. Concatenated outputs/states/counters equal main path"},
+    "totals":{"outputs":187200,"bank_pair_commits":1560,"learning_observations_per_stage":96720,"original_platform_probe_conversions":23760,"rational_core_readouts":141120,"formal_single_bank_commits":2352},
+    "negative_controls":"Reject incomplete119-slot formal window and shifted conversion ID; detect tags reindexed to zero; exact Q22 export-equivalence counterexample. No malformed path is trained or scored.",
+    "performance_scores":"No FFT or incomplete-block SNDR/recovery claims in short preflight"
+  },
+  "budget":{"new_quarter_paths":60,"reused_base_paths":60,"windows_per_path":32768,"blocks":128,"conversion_slots_per_path":3932160,"new_online_outputs":235929600,"new_bank_pair_commits":1966080,"point_learning_observations_per_stage":3932160,"full_learning_observations_per_stage":117964800,"new_learning_observations_per_stage":121896960,"regenerated_adc_source_conversions":0,"carry_prefix_cost_per_path":3932160,"comparison":"Equal conversion duration within each method; full120 observes30x more. Seen mechanism controls, not physical/curve/seed holdout."},
+  "verification":{"long_probe_blocks":[0,1,4,16,64,127],"first_windows_per_probe_block":4,"final_windows":4,"long_probe_windows_per_source":28,"original_platform_probe_conversions":50400,"rational_core_readouts":201600,"formal_single_bank_commits":3360,"all_digital":"Independent integer vector replay of every output/Q22 transition/selected and all counters; all used source tags and independent physical vector formulas. Base main and nochange exact short comparison; serialized restart. Original scalar platform only declared probes, no full-long physical rerun claim.","mismatches_allowed":0},
+  "finite_output":{"group_blocks":8,"need_groups":3,"mse_and_residual_ratio_to_unit_maximum":"9/10","sndr_gain_minimum_db":0,"recovery_relative_fresh_loss_gap_maximum":"1/10","recovery_sndr_gap_maximum_db":1,"definition":"Unchanged D-127/learning-rate theory16. Each group must pass both losses and SNDR; recovery needs BOTH paths independently beneficial. Zero reference does not certify positive gain. First pass/all later violations/terminal suffix retained; offline only."},
+  "empirical_convergence":{"group_blocks":8,"minimum_groups":3,"sndr_group_mean_range_db":1.0,"coefficient_group_mean_range":0.005,"definition":"Unchanged original EXP062/066 criterion; supported coordinate union, unsupported listed. Original criterion never replaced by finite output criterion."},
+  "tracking":{"group_blocks":8,"minimum_groups":3,"pair_sndr_group_mean_gap_db":1.0,"pair_coefficient_group_mean_gap":0.005,"definition":"Unchanged original EXP066 separate stability plus paired closeness on selected joint-support union"},
+  "tail":{"first_block":64,"groups":8,"lags_windows":[1,100,1000]},
+  "startup_blocks":24,
+  "checkpoints_blocks":[1,8,24,64,128],
+  "score":"All uninterrupted30720-code blocks, same-input unit and matching rate/init/method comparisons; MSE/DC/SNDR/SFDR/signal/residual powers, dB and power means separately, all seeds and support. Independent complex FFT and extended-precision MSE/DC; finite MSE/residual cross identities. No FFT pause or horizon extension.",
+  "predictions":["Original-rate main/nochange codes and states exactly reproduce originals","Quarter serialized restart and nochange exactly match saved matching histories","Small-step output benefit and recovery may differ from startup; no universal ordering or4x recovery claim","Finite output recovery and original state criterion can disagree; unsupported not frozen"],
+  "acceptance":"Implementation/source/readout/commit/score controls must pass before interpretation. Abort and retain illegal-domain run. Retain saturations/out-of-range; no parameter repair or longer budget. Success of every performance criterion is not required for completion of the finite question.",
+  "freeze":"Refuse overwrite; save protocol, executable/data/source manifests, exact per-task initial states and documents-before. Long requires accepted final-source preflight. Preserve all failures; never edit original protocol/source/data. No commit/push or new algorithm/RTL."
+}

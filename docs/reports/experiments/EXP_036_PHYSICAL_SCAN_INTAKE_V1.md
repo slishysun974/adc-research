@@ -8,7 +8,7 @@
 
 ## 研究问题与冻结条件
 
-EXP-035 已完成等价整数 RTL 及同流程逻辑结构比较。按[主线复核](../../MAINLINE_REVIEW_2026-10-02.md)，本轮回到未知模拟传输的输入证据，不继续任意缩位、换学习参数或延长训练。
+EXP-035 已完成等价整数 RTL 及同流程逻辑结构比较。按[主线复核](../MAINLINE_REVIEW_2026-10-02.md)，本轮回到未知模拟传输的输入证据，不继续任意缩位、换学习参数或延长训练。
 
 现有[取证要求](../../stages/02_end_to_end_theory/PHYSICAL_ENVELOPE_EVIDENCE_GATE_V1.md)及[网格范围理论](../../theory/GRID_TO_ANALOG_ENVELOPE_V1.md)指出：单张电压曲线还不够，必须知道实际节点、差分单位、PVT／通道／历史、误差口径及独立全域斜率。新增[只读离线验收器](../../../src/adc_research/evaluation/physical_scan_package.py)按这些声明建立范围，不从网格割线拟合 $L$，不让模拟资料进入在线算法。
 

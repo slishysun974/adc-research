@@ -6,6 +6,7 @@ import unittest
 from adc_research.theory.static_fixed_contract import (
     nearest_even, export, pwl, readout, commit,
     local_error_bounds, gate_error_bounds, protected,
+    output_range_bound, saturated_integer, saturation_loss_change,
 )
 
 
@@ -71,6 +72,52 @@ class StaticFixedContractTests(unittest.TestCase):
         self.assertFalse(before.gates[1][1])
         self.assertTrue(after.gates[1][1])
         self.assertFalse(after.support[1][1])
+
+    def test_q3_range_bound_keeps_two_rear_rounding_terms(self):
+        bound = output_range_bound(3, 2, 79, 1228, 1228)
+        self.assertEqual(bound.front_raw_radius, F(93917, 256))
+        self.assertEqual(bound.output_radius, F(133694215, 65536))
+        self.assertTrue(bound.no_saturation)
+        self.assertFalse(output_range_bound(3, 2, 79, 1280, 1280).no_saturation)
+
+    def test_range_bound_covers_extreme_words_and_segment_boundaries(self):
+        from itertools import product
+        banks = ((1024,)*8, (1228,)*8, (0,1228,0,1228)*2)
+        for codes in banks:
+            bound = output_range_bound(3, 2, 79, max(codes[:4]), max(codes[4:]))
+            for q1,q2,be,d1,d2 in product((-3,3),(-2,2),(-79,-32,0,31,32,78,79),(-1,1),(-1,1)):
+                rd=readout(q1,q2,F(be),d1,d2,tuple(F(k,1024) for k in codes),data_q3=True)
+                self.assertLessEqual(abs(rd.raw1),bound.front_raw_radius)
+                self.assertLessEqual(abs(rd.output-2048),bound.output_radius)
+                self.assertEqual(nearest_even(rd.output),saturated_integer(rd.output))
+
+    def test_legal_slopes_alone_do_not_certify_output_range(self):
+        codes=(2047,)*8
+        bound=output_range_bound(3,2,79,2047,2047)
+        self.assertTrue(bound.front_domain_safe)
+        self.assertFalse(bound.no_saturation)
+        rd=readout(3,2,F(79),-1,-1,tuple(F(k,1024) for k in codes),data_q3=True)
+        self.assertGreater(rd.output,4095)
+
+    def test_saturation_mse_projection_requires_target_inside_range(self):
+        for y in (F(-5), F(-1,8), F(4095)+F(1,8), F(4100)):
+            for t in (F(0),F(2048),F(4095)):
+                self.assertLessEqual(saturation_loss_change(y,t),0)
+        self.assertEqual(saturation_loss_change(F(4096),F(4096)),1)
+        # Q3 saturation can occur even when both final integer codes equal4095.
+        self.assertEqual(saturated_integer(F(32761,8)),4095)
+        self.assertEqual(saturation_loss_change(F(32761,8),F(4095)),0)
+
+    def test_round_then_integer_clip_matches_saturate_then_round(self):
+        for j in range(-16,16):
+            for offset in (0,4095):
+                y=F(offset)+F(j,8)
+                self.assertEqual(saturated_integer(y),min(4095,max(0,nearest_even(y))))
+
+    def test_range_and_saturation_reject_invalid_contract(self):
+        for args in ((3,2,128,1228,1228),(3,2,79,-1,1228),(5,2,79,1228,1228)):
+            with self.assertRaises(ValueError):output_range_bound(*args)
+        with self.assertRaises(ValueError):saturated_integer(F(0),1,0)
 
 
 if __name__=="__main__":

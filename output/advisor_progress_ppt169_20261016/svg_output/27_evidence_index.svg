@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">附录C</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">阅读索引与证据入口</text></g>
+<g id="index" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746" font-size="24"><rect x="64" y="166" width="1152" height="52" fill="#F2F5F8"/><text x="84" y="202" font-weight="700">页码</text><text x="280" y="202" font-weight="700">内容</text><text x="660" y="202" font-weight="700">主要证据</text>
+<text x="84" y="264">04—05</text><text x="280" y="264">平台与独立实现</text><text x="660" y="264">阶段一验收、Simulink验收</text><line x1="64" y1="284" x2="1216" y2="284" stroke="#D7E0E7"/>
+<text x="84" y="324">06—07</text><text x="280" y="324">条件性预测</text><text x="660" y="324">EXP-015、016、038</text><line x1="64" y1="344" x2="1216" y2="344" stroke="#D7E0E7"/>
+<text x="84" y="384">08—09</text><text x="280" y="384">定点与硬件</text><text x="660" y="384">EXP-013、030—035、Vivado报告</text><line x1="64" y1="404" x2="1216" y2="404" stroke="#D7E0E7"/>
+<text x="84" y="444">10—12</text><text x="280" y="444">观测与校正目标</text><text x="660" y="444">EXP-020、022、048、观测理论</text><line x1="64" y1="464" x2="1216" y2="464" stroke="#D7E0E7"/>
+<text x="84" y="504">13—14</text><text x="280" y="504">激励、选样与更新</text><text x="660" y="504">窗口合同、EXP-056、标量理论</text><line x1="64" y1="524" x2="1216" y2="524" stroke="#D7E0E7"/>
+<text x="84" y="564">15—17</text><text x="280" y="564">持续后台性能</text><text x="660" y="564">EXP-062、069、070</text><line x1="64" y1="584" x2="1216" y2="584" stroke="#D7E0E7"/>
+<text x="84" y="624">18—22</text><text x="280" y="624">误差来源与改善空间</text><text x="660" y="624">EXP-072—077、两级理论、综合分析</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">详细文件路径见各页备注及本目录README。当前科学进展以docs/STATUS.md为准。</text><text x="1216" y="682" text-anchor="end">27</text></g>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块七　剩余误差来源与改善空间</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">一个门来源的深入对照</text><text x="64" y="181" font-size="24" fill="#243746">仅替换前级第二低段采用门的来源，重新传播完整反馈，后级保持。</text><text x="64" y="219" font-size="20" fill="#596D7B">采用门决定样本是否参与对应系数的更新。以下为整期整数MSE，越小越好。</text></g>
+<!-- chart-plot-area: x_min=360,y_min=245,x_max=900,y_max=550; x_range=0,4 -->
+<g id="chart-gates" font-family="Microsoft YaHei, Arial, sans-serif" font-size="24" fill="#243746">
+<line x1="360" y1="245" x2="360" y2="550" stroke="#D7E0E7"/><line x1="495" y1="245" x2="495" y2="550" stroke="#D7E0E7"/><line x1="630" y1="245" x2="630" y2="550" stroke="#D7E0E7"/><line x1="765" y1="245" x2="765" y2="550" stroke="#D7E0E7"/><line x1="900" y1="245" x2="900" y2="550" stroke="#D7E0E7"/>
+<text x="64" y="275">原全样本学习</text><rect id="bar-full" x="360" y="252" width="450.08" height="28" fill="#226E9C"/><text x="825" y="275" font-size="20">3.3339</text><text x="1000" y="275" font-size="20" fill="#596D7B">原在线路径</text>
+<text x="64" y="336">未来均值计算门</text><rect id="bar-mean" x="360" y="313" width="413.09" height="28" fill="#21857A"/><text x="788" y="336" font-size="20">3.0599</text><text x="1000" y="336" font-size="20" fill="#B15B36">使用未来信息</text>
+<text x="64" y="397">可见初态计算门</text><rect id="bar-initial" x="360" y="374" width="465.14" height="28" fill="#B15B36"/><text x="840" y="397" font-size="20">3.4454</text><text x="1000" y="397" font-size="20" fill="#596D7B">当前可见参照</text>
+<text x="64" y="458">两级系数保持</text><rect id="bar-held" x="360" y="435" width="431.30" height="28" fill="#9AA9B4"/><text x="806" y="458" font-size="20">3.1948</text><text x="1000" y="458" font-size="20" fill="#596D7B">同原始状态</text>
+<text x="64" y="519">较好合法固定系数</text><rect id="bar-witness" x="360" y="496" width="259.21" height="28" fill="#21857A"/><text x="634" y="519" font-size="20">1.9201</text><text x="1000" y="519" font-size="20" fill="#B15B36">依赖离线目标</text>
+<line x1="360" y1="550" x2="900" y2="550" stroke="#596D7B"/><text x="360" y="579" text-anchor="middle" font-size="20">0</text><text x="495" y="579" text-anchor="middle" font-size="20">1</text><text x="630" y="579" text-anchor="middle" font-size="20">2</text><text x="765" y="579" text-anchor="middle" font-size="20">3</text><text x="900" y="579" text-anchor="middle" font-size="20">4</text><text x="947" y="579" font-size="20" fill="#596D7B">MSE（码²）</text>
+</g>
+<g id="takeaway" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="626" font-size="24" fill="#226E9C">未来均值门对照有益，可见初态门未保留收益。在线改法仍需单独研究。</text></g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：EXP-076、077及后续核对。仅625前缀起点、1/4步长；固定参照的低两初态不同。</text><text x="1216" y="682" text-anchor="end">21</text></g>
+</svg>

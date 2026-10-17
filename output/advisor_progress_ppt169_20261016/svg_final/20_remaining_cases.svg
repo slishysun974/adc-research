@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块七　剩余误差来源与改善空间</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">剩余六例的两种增损关系</text></g>
+<g id="definitions" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><text x="64" y="189" font-size="24">分别检查系数历史的平均位置，以及实际持续变化相对该参照的作用。</text></g>
+<g id="case-types" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="64" y="298" font-size="56" font-weight="700" fill="#B15B36">4例</text><text x="298" y="278" font-size="28" font-weight="700" fill="#16324F">平均位置与持续变化都不利</text><text x="298" y="326" font-size="24">仅减少变化，仍不能保证消除平均位置带来的误差。</text>
+<line x1="64" y1="373" x2="1216" y2="373" stroke="#D7E0E7"/>
+<text x="64" y="463" font-size="56" font-weight="700" fill="#226E9C">2例</text><text x="298" y="443" font-size="28" font-weight="700" fill="#16324F">平均位置有益，收益被持续变化抵消</text><text x="298" y="491" font-size="24">平均校正有帮助，实际学习历史却使净误差增加。</text>
+<text x="64" y="573" font-size="24" fill="#226E9C">把四个不利均值固定后，原连续模型下的平均相关量仍非零。</text><text x="64" y="613" font-size="20" fill="#596D7B">因此，不能统一解释为“已经收敛到坏位置”，也不能把全部剩余误差称为随机噪声。</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：EXP-075补分析、最新综合判断。平均位置仅作离线参照，分解包含交叉作用。</text><text x="1216" y="682" text-anchor="end">20</text></g>
+</svg>

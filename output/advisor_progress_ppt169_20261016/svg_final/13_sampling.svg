@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块五　激励、抽样与参数更新</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">学习样本与系数提交时刻</text></g>
+<g id="window" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="64" y="188" font-size="24">项目窗口候选：每120次转换用旧系数输出，在窗口末尾同时提交两级系数。</text>
+<text x="250" y="245" font-size="20" fill="#226E9C">采用首4条观测</text><text x="858" y="245" font-size="20" fill="#596D7B">全部120次转换均产生输出</text>
+<text x="64" y="291" font-size="24" font-weight="700">四样本</text><rect x="250" y="267" width="900" height="36" fill="#F2F5F8" stroke="#D7E0E7"/><rect x="250" y="267" width="30" height="36" fill="#226E9C"/><line x1="257.5" y1="267" x2="257.5" y2="303" stroke="#FFFFFF"/><line x1="265" y1="267" x2="265" y2="303" stroke="#FFFFFF"/><line x1="272.5" y1="267" x2="272.5" y2="303" stroke="#FFFFFF"/>
+<text x="250" y="344" font-size="24">相关和乘30，实际仍只有4条学习观测。</text>
+<text x="64" y="421" font-size="24" font-weight="700">全样本</text><rect x="250" y="397" width="900" height="36" fill="#21857A"/>
+<text x="250" y="474" font-size="24">采用全部120条观测，相关和乘1。</text>
+<line x1="1150" y1="254" x2="1150" y2="489" stroke="#596D7B" stroke-dasharray="5 5"/><text x="1150" y="523" font-size="20" text-anchor="end" fill="#596D7B">末尾提交，下一转换使用新系数</text>
+<text x="64" y="586" font-size="28" fill="#226E9C">统计缩放不会补回未采用的观测。</text>
+<text x="64" y="624" font-size="20" fill="#596D7B">固定选样相位、门控和状态关联还可能改变平均统计，不能把全部差别都称为独立噪声。</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：模块五、四路窗口合同。point30与full120均为本项目明确的候选语义。</text><text x="1216" y="682" text-anchor="end">13</text></g>
+</svg>

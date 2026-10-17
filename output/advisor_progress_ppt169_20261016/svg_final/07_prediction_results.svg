@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块二　信号链建模与性能预测</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">条件性预测的成果与适用范围</text></g>
+<g id="results" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<rect x="64" y="177" width="1152" height="54" fill="#F2F5F8"/>
+<text x="85" y="213" font-size="24" font-weight="700">研究对象</text><text x="340" y="213" font-size="24" font-weight="700">已有结果</text><text x="834" y="213" font-size="24" font-weight="700">成立条件</text>
+<text x="85" y="278" font-size="24">静态转换特性</text><text x="340" y="278" font-size="24">四类条件、262,144个测试输入</text><text x="340" y="316" font-size="24">最终码与可纠正状态一致</text><text x="834" y="278" font-size="24">指定模拟传输</text><text x="834" y="316" font-size="24">明确的判决与重构规则</text>
+<line x1="64" y1="344" x2="1216" y2="344" stroke="#D7E0E7"/>
+<text x="85" y="390" font-size="24">有限记录频谱</text><text x="340" y="390" font-size="24">18条记录、589,824个平台样本</text><text x="340" y="428" font-size="24">输出码与评分结果一致</text><text x="834" y="390" font-size="24">指定输入和采样记录</text><text x="834" y="428" font-size="24">连续周期谱另行评价</text>
+<line x1="64" y1="456" x2="1216" y2="456" stroke="#D7E0E7"/>
+<text x="85" y="502" font-size="24">未知范围传播</text><text x="340" y="502" font-size="24">已有条件性输出与性能界限</text><text x="340" y="540" font-size="24">部分数值界仍较宽</text><text x="834" y="502" font-size="24">需要可信模拟范围</text><text x="834" y="540" font-size="24">当前扫描为人工控制数据</text>
+</g>
+<g id="takeaway" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="611" font-size="24" fill="#226E9C">阶段结论：预测强度由模型条件与输入资料共同决定。</text></g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：EXP-015、016、038。程序一致性与真实芯片适用性分别评价。</text><text x="1216" y="682" text-anchor="end">07</text></g>
+</svg>

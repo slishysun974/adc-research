@@ -1,0 +1,226 @@
+{
+  "source_path": "artifacts\\runs\\EXP_075\\front_sampling_v1\\results.json",
+  "source_sha256": "7ad8f592e2294c07e5b5c2a696aae306b16cd55e7eb2e57c6161de66b5cd155a",
+  "rows": [
+    {
+      "seed": 202610621,
+      "rate": "base",
+      "initialization": "actual",
+      "mse": {
+        "full": 5.327421912754755,
+        "point": 11.566626780922993,
+        "held": 6.308754889037237
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610621,
+      "rate": "base",
+      "initialization": "prefix",
+      "mse": {
+        "full": 2.802530887846189,
+        "point": 9.925964196619288,
+        "held": 2.8774789742994042
+      },
+      "full_vs_held_certified": false
+    },
+    {
+      "seed": 202610621,
+      "rate": "quarter",
+      "initialization": "actual",
+      "mse": {
+        "full": 3.6285420292780435,
+        "point": 4.4852899993530855,
+        "held": 4.727861600041458
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610621,
+      "rate": "quarter",
+      "initialization": "prefix",
+      "mse": {
+        "full": 3.4295154935459493,
+        "point": 4.138474198502979,
+        "held": 3.5644084629705284
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610622,
+      "rate": "base",
+      "initialization": "actual",
+      "mse": {
+        "full": 3.0029903629309582,
+        "point": 13.210609044487388,
+        "held": 22.730866852695662
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610622,
+      "rate": "base",
+      "initialization": "prefix",
+      "mse": {
+        "full": 2.92076080355482,
+        "point": 15.264304062817203,
+        "held": 2.534972689566058
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610622,
+      "rate": "quarter",
+      "initialization": "actual",
+      "mse": {
+        "full": 1.9223997466958473,
+        "point": 3.1300218318637993,
+        "held": 2.250709478396849
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610622,
+      "rate": "quarter",
+      "initialization": "prefix",
+      "mse": {
+        "full": 1.6809904989033748,
+        "point": 4.441839057865929,
+        "held": 2.6990763507082045
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610623,
+      "rate": "base",
+      "initialization": "actual",
+      "mse": {
+        "full": 4.095808728164054,
+        "point": 52.94975907950413,
+        "held": 10.862690602649103
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610623,
+      "rate": "base",
+      "initialization": "prefix",
+      "mse": {
+        "full": 2.6157963644572173,
+        "point": 53.6697282869185,
+        "held": 7.034995668187206
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610623,
+      "rate": "quarter",
+      "initialization": "actual",
+      "mse": {
+        "full": 3.046452454782806,
+        "point": 21.147701205106685,
+        "held": 3.6370524881569666
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610623,
+      "rate": "quarter",
+      "initialization": "prefix",
+      "mse": {
+        "full": 3.6601782250592545,
+        "point": 24.11075488433704,
+        "held": 5.491893832037903
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610624,
+      "rate": "base",
+      "initialization": "actual",
+      "mse": {
+        "full": 8.391222237835764,
+        "point": 37.808966828367815,
+        "held": 25.99352725723312
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610624,
+      "rate": "base",
+      "initialization": "prefix",
+      "mse": {
+        "full": 2.42182508832521,
+        "point": 32.52911582921543,
+        "held": 1.7142591519706492
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610624,
+      "rate": "quarter",
+      "initialization": "actual",
+      "mse": {
+        "full": 4.393055262018908,
+        "point": 9.243055876934969,
+        "held": 18.036944216773996
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610624,
+      "rate": "quarter",
+      "initialization": "prefix",
+      "mse": {
+        "full": 1.4660315039980738,
+        "point": 6.676188424374545,
+        "held": 1.5502218771788543
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610625,
+      "rate": "base",
+      "initialization": "actual",
+      "mse": {
+        "full": 7.50624348595992,
+        "point": 18.917362852755097,
+        "held": 5.866509392982108
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610625,
+      "rate": "base",
+      "initialization": "prefix",
+      "mse": {
+        "full": 6.164467577761984,
+        "point": 16.896523776516524,
+        "held": 5.66022324354235
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610625,
+      "rate": "quarter",
+      "initialization": "actual",
+      "mse": {
+        "full": 4.265708089819075,
+        "point": 4.874654456020486,
+        "held": 3.286215849107621
+      },
+      "full_vs_held_certified": true
+    },
+    {
+      "seed": 202610625,
+      "rate": "quarter",
+      "initialization": "prefix",
+      "mse": {
+        "full": 3.3339276231531354,
+        "point": 3.855259913724604,
+        "held": 3.194836766085461
+      },
+      "full_vs_held_certified": true
+    }
+  ]
+}

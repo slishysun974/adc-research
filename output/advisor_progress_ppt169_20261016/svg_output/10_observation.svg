@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块四　数字观测与校正目标</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">数字观测能够约束什么</text></g>
+<g id="setup" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><text x="64" y="194" font-size="24">算法接收两级判决码、末级码和两级dither标签，并保存自身状态。</text><text x="64" y="236" font-size="24">真实输入电压与模拟放大曲线由研究者在离线评价时使用。</text></g>
+<g id="example" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<line x1="64" y1="281" x2="1216" y2="281" stroke="#D7E0E7"/>
+<text x="64" y="330" font-size="28" font-weight="700" fill="#16324F">有限训练覆盖的反例</text>
+<text x="64" y="381" font-size="24">构造两条严格单调的模拟曲线，仅在训练未访问的小区间内不同。</text>
+<text x="64" y="438" font-size="24">16,384条训练记录</text><text x="492" y="438" font-size="24" fill="#21857A">五字段观测与最终码完全相同</text>
+<text x="64" y="487" font-size="24">另一条8,192点正弦记录</text><text x="492" y="487" font-size="24" fill="#B15B36">最终码有2处不同</text>
+<line x1="64" y1="524" x2="1216" y2="524" stroke="#D7E0E7"/>
+<text x="64" y="580" font-size="28" fill="#226E9C">这批训练观测不足以唯一确定该留出记录的结果。</text>
+<text x="64" y="619" font-size="20" fill="#596D7B">增加覆盖或可信物理条件可能缩小不确定性。该结论限定于原反例的信息与输入条件。</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：模块四、EXP-020。原反例为人工静态传输，未启用数字PWL校正。</text><text x="1216" y="682" text-anchor="end">10</text></g>
+</svg>

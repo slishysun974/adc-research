@@ -1,0 +1,50 @@
+{
+  "version": "EXP073-bank-feedback-v1",
+  "date": "2026-10-13",
+  "authority": "D136 and explicit user: continue low-segment requests; ultimately separate causal stage feedback",
+  "scope": "Seen both_smooth, original five seeds202610621..625, rates1 and1/4, actual/prefix starts, point30, same [128,136) 2048 windows. No new long axis or input/source generation.",
+  "new_paths": [
+    "actual_front_only",
+    "actual_rear_only",
+    "prefix_front_only",
+    "prefix_rear_only"
+  ],
+  "old_paths": "EXP072 both-active and both-held, two initializations, immutable full states/requests/outputs",
+  "information": "New updates accept same five digital fields and own legal Q22 only. Original actual/prefix initial states reused exactly. Target/truth/phase certificate only enter after trajectories in offline scoring.",
+  "intervention": "Only chosen bank commits original Gu requests; its gates/products and complete future state recomputed. Other bank stays at initial Q22. Same global slots/counter tags; output old-state120 slots before simultaneous masked submission.",
+  "edge_cut": "Output uses front-only evolving front state and autonomous moving rear state. Front learner sees held initial rear. Its shadow learner is exactly the separately propagated front-only branch; this is a declared diagnostic edge intervention, not Gu or a deployable algorithm.",
+  "causal_targets": "Four total controlled bank effects and interaction. Bridge separates rear direct output effect given front learner edge cut, from rear-to-front-history mediated effect. No unique percentage attribution or natural-world identifiability claim.",
+  "low_request_analysis": "Both-active and front-only contexts, all20 cases each. Apply only each saved first2 front Q22 requests to the same current120 digital words, hold other6 coordinates. Score all120 vs selected4, preserve products/gates/support, export crossings, exact local sign, power/cross. Not future causal effect or an online acceptance gate.",
+  "predictions": [
+    "Rear-only rear state/requests equal both-active for every saved window; failure rejects triangular execution",
+    "Front-only first submission equals both-active at common initial state; subsequent differences may arise through rear coupling",
+    "M=Lboth-Lbridge>0 supports harmful rear-to-front transmission here; zero/negative/seed dependence restricts that statement",
+    "Factorial interaction I splits exactly into M plus current-readout interaction with front-only history",
+    "Front-only versus both-held isolates front learning without moving rear; no performance order assumed",
+    "Local120/selected4 signs need not agree and local increments cannot be summed as complete future MSE"
+  ],
+  "budget": {
+    "new_long_axes": 0,
+    "new_source_conversions": 0,
+    "new_bank_paths": 40,
+    "new_path_outputs": 9830400,
+    "new_path_windows": 81920,
+    "new_effective_learning_each_stage": 163840,
+    "new_active_bank_submissions_each_stage": 40960,
+    "preflight_windows_per_pair": 2,
+    "preflight_outputs_all_old_and_new": 19200,
+    "preflight_new_path_outputs": 9600,
+    "preflight_new_learning_each_stage": 160,
+    "preflight_new_active_bank_submissions_each_stage": 40,
+    "full_new_replay_codes": 9830400,
+    "old_both_replay_codes": 4915200,
+    "bridge_readouts": 4915200,
+    "low_same_window_readouts": 9830400,
+    "rational_and_formal_readouts_each": 41520,
+    "formal_active_bank_probes": 280,
+    "fft": 0
+  },
+  "verification": "Five exact scalar controls; preflight all10 seed/rate pairs, old4 plus new4 states, all120 rational/formal readouts and active bank probes. Full new integer output/state/request replay; rear autonomy whole history. Final local windows0,1024,2047 all120 new/bridge probes, low-counterfactual slots0,1,2,3,59,119.",
+  "stopping": "Stop at existing136 endpoint; no extra seed/model/horizon/parameter repair, score selection or holdout. Preserve failures; no performance gate. Invalid digital domain or arithmetic mismatch stops.",
+  "limitations": "Deterministic finite causal interventions in declared static feedforward candidate only; synthetic analog assumptions. No general chip causality, stationarity or new algorithm; source reuse does not mean zero diagnostic learning."
+}

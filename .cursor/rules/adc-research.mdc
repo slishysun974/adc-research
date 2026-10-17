@@ -5,7 +5,9 @@ alwaysApply: true
 
 # ADC Research Project Continuity
 
-- Before substantive work, follow `docs/README.md`: read the current status, charter, relevant latest decisions, and approved plan. Historical next-step text does not override `docs/STATUS.md`.
+- Before substantive work, follow `docs/README.md`: read STATUS, charter, relevant decisions, and the approved mainline. Use the mainline to identify the research question and delivery criteria; use STATUS to locate current evidence and the exact stop. Historical next-step text does not override them.
+- Before detailed work, state the phase question, key established evidence, the most consequential unresolved relation, and how this turn can change the mainline judgment. Do not mechanically extend the latest small subproblem.
+- Before expanding a subproblem, precision, readouts, matrices, or tools, apply the relevance and stopping checks in `CONTRIBUTING.md`. Preserve minor unresolved limits when they do not change the main conclusion; complete correctness checks that do. Test counts, EXP/NG counts, and unused budget are not progress criteria.
 - Treat the charter as the current, amendable research baseline. New evidence or user decisions may revise it.
 - Follow the current four-stage route: experimental platform; integrated unknown-gain signal-chain and calibration theory; Gu baseline analysis and hardware evaluation; new algorithm design and comparison. Do not infer authorization to advance beyond the user's current request.
 - Treat physical residue-amplifier nonlinearity as unknown to the running calibration algorithm. A synthetic analog PWL truth or Cadence curve may be used for offline tests, never silently as an algorithm input or a default physical law.

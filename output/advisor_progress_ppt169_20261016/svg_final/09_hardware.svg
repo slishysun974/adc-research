@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块三　Gu算法实现、定点与硬件基线</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">RTL功能与FPGA实现进展</text></g>
+<g id="functional" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><text x="64" y="190" font-size="24">已核对指定候选的最终码、门、更新量和隐藏状态，并用等价算术减少实现冗余。</text></g>
+<g id="resources" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="64" y="264" font-size="28" font-weight="700" fill="#16324F">Artix-7原基线综合结果</text>
+<line x1="64" y1="291" x2="589" y2="291" stroke="#D7E0E7"/>
+<text x="84" y="338" font-size="24">LUT</text><text x="565" y="338" font-size="24" text-anchor="end">2548</text>
+<text x="84" y="389" font-size="24">FF</text><text x="565" y="389" font-size="24" text-anchor="end">184</text>
+<text x="84" y="440" font-size="24">DSP / BRAM</text><text x="565" y="440" font-size="24" text-anchor="end">4 / 0</text>
+<line x1="64" y1="468" x2="589" y2="468" stroke="#D7E0E7"/>
+<text x="84" y="515" font-size="24">100 MHz建立时间余量</text><text x="565" y="515" font-size="24" text-anchor="end" fill="#B15B36">−50.309 ns</text>
+</g>
+<g id="timing" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="674" y="264" font-size="28" font-weight="700" fill="#B15B36">100 MHz目标尚未通过</text>
+<text x="674" y="328" font-size="24">长路径跨过后级校正、前级重构</text><text x="674" y="366" font-size="24">及前级更新。</text>
+<text x="674" y="432" font-size="24">插入流水寄存器需要重新规定</text><text x="674" y="470" font-size="24">观测对齐与系数生效时刻。</text>
+<text x="64" y="594" font-size="24" fill="#226E9C">现有逐转换RTL与120转换窗口实验分别验收，ASIC面积与功耗尚未完成。</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：模块三、Vivado实际验收报告。综合资源与有限功能一致性各自说明。</text><text x="1216" y="682" text-anchor="end">09</text></g>
+</svg>

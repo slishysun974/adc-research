@@ -1,0 +1,67 @@
+{
+  "version": "EXP-072-normal-state-intervention-v1",
+  "date": "2026-10-12",
+  "authority": "D-136; user asks to continue approved plan",
+  "cases": [
+    "both_smooth"
+  ],
+  "seeds": [
+    202610621,
+    202610622,
+    202610623,
+    202610624,
+    202610625
+  ],
+  "rates": {
+    "base": 1,
+    "quarter": 4
+  },
+  "method": "point30",
+  "prefix_blocks": [
+    120,
+    128
+  ],
+  "evaluation_blocks": [
+    128,
+    136
+  ],
+  "window_start": 32768,
+  "window_stop": 34816,
+  "branches": [
+    "actual_continue",
+    "actual_hold",
+    "prefix_continue",
+    "prefix_hold"
+  ],
+  "initialization": "actual window-start Q22; or coordinate-wise nearest-even average of EXPORTED Q1.10 over preceding 2048 window starts, embedded as code*4096. Prefix stops before evaluation; no target or future states in initialization.",
+  "contract": "Original five fields,Q22,Q1.10,Q3,nearest-even,saturation,4 selected slots*30,120 old-state outputs,simultaneous banks. Baseline continued exactly. Held branches suppress both updates only. Prefix continued recomputes all gates,products,requests and future states.",
+  "source_condition": "Static physical words and counter tags independent of digital coefficients; identical old words reused for every branch. Global indices preserved.",
+  "target": "Original 2048*(1+tone.bin),binary64 real level,offline only; final output integer. MSE/DC/error power only, no FFT.",
+  "predictions": [
+    "Baseline outputs and every Q22 transition equal saved EXP062/069",
+    "If continuing increases MSE at both initializations in each paired path, it supports harmful continuation over THIS interval; reversed or seed-dependent signs restrict that statement",
+    "Prefix-hold versus actual-hold isolates initial-state location under fixed future readout; no preset universal benefit",
+    "Continuation effect depending on initialization requires interaction, not additive unique contributions",
+    "Physical equal-word control has opposite preference between two legal static states even with identical full causal prefix"
+  ],
+  "budget": {
+    "long_new_axes": 0,
+    "source_words_read": 1228800,
+    "prefix_state_vectors_read": 20480,
+    "all_diagnostic_readouts": 9830400,
+    "reused_baseline_readouts": 2457600,
+    "new_intervention_readouts": 7372800,
+    "active_diagnostic_windows": 40960,
+    "new_intervention_active_windows": 20480,
+    "new_intervention_learning_per_stage": 81920,
+    "source_adc_conversions": 0,
+    "capability_source_probes": 2,
+    "preflight_windows_per_pair": 2,
+    "rational_probe_windows_per_branch": 3,
+    "fft": 0
+  },
+  "verification": "Preflight2 windows/all seeds/rates/branches. Full baseline output/state equality. Replay every saved branch output/request/state. Exact Fraction and formal fixed core at local windows0,1024,2047 (all120 codes); active fixed bank commits separately. Prefix rounding exact rational. No full physical source regeneration.",
+  "stopping": "Fixed endpoint136; all seeds reported. No extension,performance-selected initial state,extra rate or parameter repair. Failed runs remain.",
+  "capability_family": "Exact same smooth coefficients, but arbitrary causal unknown input in [-.82,.82] and identical prior history. Does NOT establish an online bound for the known coherent sine in the normal diagnostic.",
+  "limits": "Seen mechanism conditions; diagnostic reset/hold is not a new algorithm. Causal effect conditional on this intervention,reference,prefix,window; no general convergence or unique total-error attribution. Future6007/8009 untouched."
+}

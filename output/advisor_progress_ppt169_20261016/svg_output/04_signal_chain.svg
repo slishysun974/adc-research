@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<defs><marker id="arrow" orient="auto" markerWidth="8" markerHeight="8" refX="7" refY="4"><polygon points="0,0 8,4 0,8" fill="#226E9C"/></marker></defs>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块一　实验平台与信号链核对</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">实验平台的信号与信息边界</text></g>
+<g id="physical" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="64" y="185" font-size="24">测试平台设置模拟传输，数字算法只读取硬件可提供的信息。</text>
+<rect x="64" y="240" width="290" height="115" fill="#F2F5F8" stroke="#D7E0E7"/><rect x="491" y="240" width="290" height="115" fill="#F2F5F8" stroke="#D7E0E7"/><rect x="918" y="240" width="290" height="115" fill="#F2F5F8" stroke="#D7E0E7"/>
+<text x="209" y="282" font-size="28" text-anchor="middle">第一级</text><text x="209" y="326" font-size="20" text-anchor="middle">判决、CDAC、残余放大</text>
+<text x="636" y="282" font-size="28" text-anchor="middle">第二级</text><text x="636" y="326" font-size="20" text-anchor="middle">判决、CDAC、残余放大</text>
+<text x="1063" y="282" font-size="28" text-anchor="middle">末级SAR</text><text x="1063" y="326" font-size="20" text-anchor="middle">残余量化</text>
+<line x1="355" y1="274" x2="488" y2="274" stroke="#226E9C" stroke-width="2" marker-end="url(#arrow)"/><line x1="355" y1="322" x2="488" y2="322" stroke="#226E9C" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="420" y="256" font-size="20" text-anchor="middle">主路</text><text x="420" y="353" font-size="20" text-anchor="middle">辅助判决路</text>
+<line x1="783" y1="296" x2="913" y2="296" stroke="#226E9C" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="209" y1="356" x2="209" y2="430" stroke="#226E9C" stroke-width="2" marker-end="url(#arrow)"/><line x1="636" y1="356" x2="636" y2="430" stroke="#226E9C" stroke-width="2" marker-end="url(#arrow)"/><line x1="1063" y1="356" x2="1063" y2="430" stroke="#226E9C" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="229" y="403" font-size="20">判决码、dither标签</text><text x="656" y="403" font-size="20">判决码、dither标签</text><text x="1090" y="403" font-size="20">末级码</text>
+</g>
+<g id="digital" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><rect x="64" y="436" width="1144" height="88" fill="#FFFFFF" stroke="#226E9C" stroke-width="2"/><text x="636" y="472" font-size="28" fill="#16324F" text-anchor="middle">两级数字PWL校正与后台学习</text><text x="636" y="507" font-size="20" text-anchor="middle">自身系数状态参与更新，校正后形成最终输出码</text><text x="64" y="577" font-size="24">主路送往后级CDAC，辅助路用于后级粗判决。</text><text x="64" y="615" font-size="24" fill="#226E9C">理想输入与模拟真值只用于离线评分。</text></g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：模块一、Simulink README及在线信息边界审查。图为行为模型的关系示意。</text><text x="1216" y="682" text-anchor="end">04</text></g>
+</svg>

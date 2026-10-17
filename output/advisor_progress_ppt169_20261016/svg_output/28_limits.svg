@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">附录D</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">未完成项与保留限制</text></g>
+<g id="limits" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="64" y="207" font-size="28" font-weight="700" fill="#16324F">科学适用范围</text><text x="340" y="202" font-size="24">有限模型、输入与期限内的证据，尚未形成一般八状态长期结论。</text><text x="340" y="242" font-size="24">原经验稳定判据未通过，不能据此直接判定发散。</text><line x1="64" y1="273" x2="1216" y2="273" stroke="#D7E0E7"/>
+<text x="64" y="329" font-size="28" font-weight="700" fill="#16324F">未认证与成本</text><text x="340" y="324" font-size="24">全样本对保持的一项小改善仍未认证。</text><text x="340" y="364" font-size="24">EXP-075及补分析的漏账／超限、EXP-077完整成本失败保持。</text><line x1="64" y1="395" x2="1216" y2="395" stroke="#D7E0E7"/>
+<text x="64" y="451" font-size="28" font-weight="700" fill="#16324F">物理与实现</text><text x="340" y="446" font-size="24">尚无真实主辅传输、芯片动态及目标工艺PPA的完整证据。</text><text x="340" y="486" font-size="24">100 MHz时序未通过，旧电路汇报两份验收JSON当前缺失。</text><line x1="64" y1="517" x2="1216" y2="517" stroke="#D7E0E7"/>
+<text x="64" y="573" font-size="28" font-weight="700" fill="#16324F">在线与留出</text><text x="340" y="568" font-size="24">未来均值、离线目标及较好系数参照未进入原在线更新。</text><text x="340" y="608" font-size="24">已用于Gu确认的条件，不能再次承担新算法的独立确认。</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：STATUS与各原报告。数值核对、成本合同、物理适用性和实现验收分别记录。</text><text x="1216" y="682" text-anchor="end">28</text></g>
+</svg>

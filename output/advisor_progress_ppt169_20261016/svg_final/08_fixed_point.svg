@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块三　Gu算法实现、定点与硬件基线</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">Gu数字校正与定点实现</text></g>
+<g id="architecture" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><text x="64" y="190" font-size="28" fill="#226E9C">两级各四个斜率系数，先处理后级，再重构前级局部数字量。</text><text x="64" y="239" font-size="24">PWL段间偏移由前段累计得到，后台学习按dither相关量调整系数。</text></g>
+<g id="precision" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<rect x="64" y="283" width="1152" height="52" fill="#F2F5F8"/><text x="85" y="318" font-size="24" font-weight="700">数值位置</text><text x="385" y="318" font-size="24" font-weight="700">项目候选精度</text><text x="735" y="318" font-size="24" font-weight="700">作用</text>
+<text x="85" y="383" font-size="24">数据运算</text><text x="385" y="383" font-size="24">Q3，保留3个小数位</text><text x="735" y="383" font-size="24">规定校正运算与门判断的分辨率</text><line x1="64" y1="408" x2="1216" y2="408" stroke="#D7E0E7"/>
+<text x="85" y="454" font-size="24">校正系数接口</text><text x="385" y="454" font-size="24">Q1.10，步进1/1024</text><text x="735" y="454" font-size="24">决定实际用于输出的系数</text><line x1="64" y1="479" x2="1216" y2="479" stroke="#D7E0E7"/>
+<text x="85" y="525" font-size="24">内部学习状态</text><text x="385" y="525" font-size="24">Q22，保留22个小数位</text><text x="735" y="525" font-size="24">先累积小更新，再导出接口系数</text>
+</g>
+<g id="takeaway" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="605" font-size="24" fill="#226E9C">接口系数暂时不变时，内部累加状态仍可能继续变化。</text></g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：模块三、EXP-013、Gu评价§4。Q22及具体舍入／饱和规则属于项目候选。</text><text x="1216" y="682" text-anchor="end">08</text></g>
+</svg>

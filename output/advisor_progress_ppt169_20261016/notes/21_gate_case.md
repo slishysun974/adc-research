@@ -1,0 +1,3 @@
+仅种子625前缀起点、1/4的一例。原全槽MSE3.333927623；使用原未来均值构造第二门3.059911930；可见合法初态构造门3.445446290；保持3.194836766；旧离线合法系数W为1.920095347码²。均值门和初态门均重算完整前级反馈，后级保持。未来均值是离线信息。W依赖离线目标且低两初态不同，不能当同初态在线可达结果。初态门失败只否定这一具体参照，不能证明所有有益门都需未来信息。原不利块、未认证和完整成本合同失败均保留。
+
+来源：D:/ADC/docs/reports/experiments/EXP_076_FIXED_MEAN_GATE_INTERVENTION_V1.md；D:/ADC/docs/reports/experiments/EXP_077_INITIAL_GATE_INTERVENTION_V1.md；D:/ADC/docs/STATUS.md。

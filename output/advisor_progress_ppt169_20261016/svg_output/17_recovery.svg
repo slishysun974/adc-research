@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块六　后台校准的性能、稳定性与适用条件</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">后期误差与切换恢复的取舍</text></g>
+<g id="protocol" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><text x="64" y="187" font-size="24">归一化输入幅度由0.82降为0.41，保留完整学习状态及全局时刻。</text><text x="64" y="235" font-size="24">比较承接旧状态与从单位系数重新开始的两条路径。</text><text x="64" y="277" font-size="24">恢复判据要求两者先各自有收益，再连续满足预定的输出接近条件。</text></g>
+<g id="recovery-table" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><text x="64" y="345" font-size="20" fill="#596D7B">下表为全样本方式末端满足恢复判据的种子数</text><rect x="64" y="366" width="1152" height="53" fill="#F2F5F8"/><text x="85" y="402" font-size="24" font-weight="700">学习率</text><text x="602" y="402" font-size="24" text-anchor="middle" font-weight="700">两级线性增益误差</text><text x="1016" y="402" font-size="24" text-anchor="middle" font-weight="700">两级平滑非线性</text>
+<text x="85" y="468" font-size="24">原步长</text><text x="602" y="468" font-size="28" text-anchor="middle" fill="#226E9C">5 / 5</text><text x="1016" y="468" font-size="28" text-anchor="middle" fill="#226E9C">5 / 5</text><line x1="64" y1="496" x2="1216" y2="496" stroke="#D7E0E7"/>
+<text x="85" y="545" font-size="24">1/4步长</text><text x="602" y="545" font-size="28" text-anchor="middle" fill="#B15B36">0 / 5</text><text x="1016" y="545" font-size="28" text-anchor="middle" fill="#B15B36">2 / 5</text></g>
+<g id="takeaway" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="616" font-size="24" fill="#226E9C">较小步长的后期误差更低，但没有统一改善本次定义的恢复表现。</text></g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：EXP-070、模块六。有限期限与指定恢复定义下的结果，不估计总体失败率。</text><text x="1216" y="682" text-anchor="end">17</text></g>
+</svg>

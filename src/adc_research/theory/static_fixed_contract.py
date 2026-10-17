@@ -111,3 +111,53 @@ def gate_error_bounds(front_export_error: F = F(1, 2048),
 
 def protected(margin: F, output_error: F, threshold_error: F) -> bool:
     return abs(margin) > output_error + threshold_error
+
+
+@dataclass(frozen=True)
+class OutputRangeBound:
+    """Same-word sufficient range bound, not a learning invariant."""
+
+    front_raw_radius: F
+    output_radius: F
+
+    @property
+    def front_domain_safe(self) -> bool:
+        # Positive full scale is excluded by the signed PWL contract.
+        return self.front_raw_radius < 512
+
+    @property
+    def no_saturation(self) -> bool:
+        return self.front_domain_safe and self.output_radius <= 2047
+
+
+def output_range_bound(q1_radius: int, q2_radius: int, backend_radius: int,
+                       front_max_code: int, rear_max_code: int) -> OutputRangeBound:
+    """Q1.10 nonnegative banks; Q3 offset/product rounding kept separately.
+
+    Digital radii must be justified independently by the caller. Rear
+    rounding contributes at most 1/8; front offsets are exact in Q3 for
+    width128, so only its product contributes 1/16. No platform imports.
+    """
+    if not (0 <= q1_radius <= 4 and 0 <= q2_radius <= 4 and
+            0 <= backend_radius < 128):
+        raise ValueError("invalid digital radii")
+    if not (0 <= front_max_code <= 2047 and 0 <= rear_max_code <= 2047):
+        raise ValueError("invalid Q1.10 slope maximum")
+    raw = 128*q2_radius + F(rear_max_code, 1024)*backend_radius + F(1, 8) + 16
+    radius = 512*q1_radius + F(front_max_code, 1024)*raw + F(1, 16) + 64
+    return OutputRangeBound(raw, radius)
+
+
+def saturated_integer(value: F, low: int = 0, high: int = 4095) -> int:
+    """Saturate the Q3/real readout before final nearest-even integerization."""
+    if low > high:
+        raise ValueError("invalid output range")
+    return nearest_even(min(F(high), max(F(low), value)))
+
+
+def saturation_loss_change(value: F, target: F,
+                           low: int = 0, high: int = 4095) -> F:
+    """Exact signed integer-MSE change; target need not lie inside the range."""
+    raw = nearest_even(value)
+    final = saturated_integer(value, low, high)
+    return (final-target)**2 - (raw-target)**2

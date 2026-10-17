@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="toc">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">阅读结构</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">七个模块的研究安排</text></g>
+<g id="agenda" font-family="Microsoft YaHei, Arial, sans-serif" font-size="24" fill="#243746">
+<text x="64" y="197" fill="#226E9C">一</text><text x="122" y="197">实验平台与信号链核对</text><text x="950" y="197" fill="#596D7B">04—05页</text>
+<text x="64" y="258" fill="#226E9C">二</text><text x="122" y="258">信号链建模与性能预测</text><text x="950" y="258" fill="#596D7B">06—07页</text>
+<text x="64" y="319" fill="#226E9C">三</text><text x="122" y="319">Gu算法实现、定点与硬件基线</text><text x="950" y="319" fill="#596D7B">08—09页</text>
+<line x1="122" y1="348" x2="1170" y2="348" stroke="#D7E0E7"/>
+<text x="64" y="391" fill="#226E9C">四</text><text x="122" y="391">数字观测与校正目标</text><text x="950" y="391" fill="#596D7B">10—12页</text>
+<text x="64" y="452" fill="#226E9C">五</text><text x="122" y="452">激励、抽样与参数更新</text><text x="950" y="452" fill="#596D7B">13—14页</text>
+<text x="64" y="513" fill="#226E9C">六</text><text x="122" y="513">后台校准的性能、稳定性与适用条件</text><text x="950" y="513" fill="#596D7B">15—17页</text>
+<text x="64" y="574" fill="#226E9C">七</text><text x="122" y="574">剩余误差来源与改善空间</text><text x="950" y="574" fill="#596D7B">18—22页</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">23—24页：阶段认识与下一步　　25—28页：指标、实现口径及证据索引</text><text x="1216" y="682" text-anchor="end">03</text></g>
+</svg>

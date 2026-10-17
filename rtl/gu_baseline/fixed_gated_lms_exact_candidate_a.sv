@@ -5,9 +5,18 @@
 // valid Y2 in [-2175,2159]. See CANDIDATE_A_EXACT_UPDATE_ARITHMETIC_V1.md.
 module fixed_gated_lms_exact_candidate_a #(
     parameter integer SLICE_WIDTH_Q3 = 1024,
-    parameter integer REDUCED_SHIFT = 4
+    parameter integer REDUCED_SHIFT = 4,
+    // Default preserves the original per-conversion interface. In the
+    // multicycle engine, compute gates/deltas continuously but write only at
+    // commit; gating valid_in late would put the divider on a one-cycle path.
+    parameter integer EXTERNAL_COMMIT = 0,
+    // The multicycle engine supplies the same signed integer requests after
+    // serial division. Zero requests preserve invalid/disabled coordinates.
+    parameter integer EXTERNAL_DELTA = 0
 ) (
     input  logic               clk, reset, valid_in,
+    input  logic               commit_enable,
+    input  logic signed [14:0]  delta0, delta1, delta2, delta3,
     input  logic signed [14:0] learning_output_q3,
     input  logic               dither_positive,
     output logic        [3:0]  gate,
@@ -73,24 +82,31 @@ module fixed_gated_lms_exact_candidate_a #(
         end
     endfunction
 
+    function [22:0] add_delta;
+        input [22:0] accumulator;
+        input signed [14:0] requested;
+        reg signed [24:0] sum;
+        begin
+            sum = $signed({2'b00, accumulator}) +
+                  $signed({{10{requested[14]}}, requested});
+            if (sum < 0)
+                add_delta = 23'd0;
+            else if (sum > 25'sd8384512)
+                add_delta = MAXIMUM_Q22;
+            else
+                add_delta = sum[22:0];
+        end
+    endfunction
+
     function [22:0] updated_accumulator;
         input [22:0] accumulator;
         input signed [14:0] learning;
         input positive;
         input [3:0] step_numerator;
         input enabled;
-        reg signed [14:0] requested;
-        reg signed [24:0] sum;
         begin
-            requested = enabled ? requested_delta(learning, positive, step_numerator) : 15'sd0;
-            sum = $signed({2'b00, accumulator}) +
-                  $signed({{10{requested[14]}}, requested});
-            if (sum < 0)
-                updated_accumulator = 23'd0;
-            else if (sum > 25'sd8384512)
-                updated_accumulator = MAXIMUM_Q22;
-            else
-                updated_accumulator = sum[22:0];
+            updated_accumulator = add_delta(accumulator,
+                enabled ? requested_delta(learning, positive, step_numerator) : 15'sd0);
         end
     endfunction
 
@@ -121,11 +137,18 @@ module fixed_gated_lms_exact_candidate_a #(
             accumulator1_q22 <= UNITY_Q22;
             accumulator2_q22 <= UNITY_Q22;
             accumulator3_q22 <= UNITY_Q22;
-        end else if (valid_in) begin
-            accumulator0_q22 <= updated_accumulator(accumulator0_q22, learning_output_q3, dither_positive, 4'd1, gate[0]);
-            accumulator1_q22 <= updated_accumulator(accumulator1_q22, learning_output_q3, dither_positive, 4'd3, gate[1]);
-            accumulator2_q22 <= updated_accumulator(accumulator2_q22, learning_output_q3, dither_positive, 4'd6, gate[2]);
-            accumulator3_q22 <= updated_accumulator(accumulator3_q22, learning_output_q3, dither_positive, 4'd12, gate[3]);
+        end else if ((EXTERNAL_DELTA || valid_in) && (!EXTERNAL_COMMIT || commit_enable)) begin
+            if (EXTERNAL_DELTA) begin
+                accumulator0_q22 <= add_delta(accumulator0_q22, delta0);
+                accumulator1_q22 <= add_delta(accumulator1_q22, delta1);
+                accumulator2_q22 <= add_delta(accumulator2_q22, delta2);
+                accumulator3_q22 <= add_delta(accumulator3_q22, delta3);
+            end else begin
+                accumulator0_q22 <= updated_accumulator(accumulator0_q22, learning_output_q3, dither_positive, 4'd1, gate[0]);
+                accumulator1_q22 <= updated_accumulator(accumulator1_q22, learning_output_q3, dither_positive, 4'd3, gate[1]);
+                accumulator2_q22 <= updated_accumulator(accumulator2_q22, learning_output_q3, dither_positive, 4'd6, gate[2]);
+                accumulator3_q22 <= updated_accumulator(accumulator3_q22, learning_output_q3, dither_positive, 4'd12, gate[3]);
+            end
         end
     end
 endmodule

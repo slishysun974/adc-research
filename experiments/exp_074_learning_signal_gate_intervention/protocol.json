@@ -1,0 +1,48 @@
+{
+  "version": "EXP074-signal-gate-v1",
+  "date": "2026-10-13",
+  "authority": "D136/D137, current user continue research; necessary finite channel test after frozen existing-history analysis",
+  "necessity": "Request analysis found rare second-low gate switches but 3.885..9.505 times larger absolute gate forcing than signal forcing, plus strong history response. This algebra cannot identify each channel causal loss. Two mixed learner policies complete a controlled two-channel square in same original object.",
+  "object": "both_smooth; original5 seeds202610621..625; rates1 and1/4; actual/prefix starts; same [128,136) 2048 windows; no new source/model/horizon/holdout",
+  "channels": "a chooses learner y1 from moving(1) or initial-held(0) rear; b chooses learner gates from moving(1) or initial-held(0) rear. Both readouts use the policy current front coefficients and original thresholds. Output always moving rear. No target in updates.",
+  "new_policies": [
+    "actual_signal_only",
+    "actual_gate_only",
+    "prefix_signal_only",
+    "prefix_gate_only"
+  ],
+  "existing_policies": "(1,1) original both-active front; (0,0) front-only learner with moving-rear bridge output; both already saved in EXP073",
+  "rear": "Original autonomous rear trajectory reused, same current-window clock and digital words; no new rear learning or stage2 policy. Its causal equivalence already proved and all20 histories verified in NG40.",
+  "contract": "Only five digital observation fields and legal own front state; original Q22/Q1.10/Q3, products, step sizes, selected4*30, nearest-even and clipping; 120 old-state output then front boundary commit. Extra held-rear readout is explicitly diagnostic resource.",
+  "predictions": [
+    "Preflight(1,1) and(0,0) requests/states/outputs equal old complete records; new first requests equal at shared initial rear",
+    "If changing the gate channel produces large signed effects in both signal contexts it supports a causal role beyond large request impulses",
+    "Gate and signal effects can be negative or seed/initialization dependent; retain all signs and channel interaction",
+    "Same output and learner inputs at first window and structural first gate always open controls must pass",
+    "The two replacement orders sum to previous mediated effect exactly; nonzero interaction precludes a unique channel percentage"
+  ],
+  "budget": {
+    "new_front_paths": 40,
+    "new_outputs": 9830400,
+    "new_front_submissions": 81920,
+    "new_front_learning_observations": 327680,
+    "new_rear_learning": 0,
+    "preflight_windows_per_seed_rate_pair": 2,
+    "preflight_new_outputs": 9600,
+    "preflight_new_front_submissions": 80,
+    "preflight_new_front_learning_observations": 320,
+    "kernel_readouts_preflight": 38400,
+    "kernel_readouts_new_execution": 19660800,
+    "kernel_readouts_new_verification": 19660800,
+    "kernel_readouts_all_phases": 39360000,
+    "kernel_gate_support_product_components_each": 314880000,
+    "rational_and_formal_readouts_each": 67200,
+    "independent_front_candidate_vectors": 280,
+    "fft": 0,
+    "source_conversions": 0,
+    "new_long_axis": 0
+  },
+  "validation": "Scalar channel controls. Preflight all10 seed/rate pairs, both starts/all4 policies, full120 normal and shadow Fraction/formal readouts plus exact rational commit and independent original fixed-point rounding/clipping. Full new normal output/state/request replay; fixed local windows0,1024,2047 all120 both readouts. Original core bank is not claimed to implement mixed diagnostic gates.",
+  "stopping": "Same136 endpoint and all20 cases, no score-selected choice/extension/new rate/model. Source mismatch, invalid readout or state arithmetic mismatch stops and is preserved; performance is not acceptance.",
+  "limits": "Controlled causal learner-channel policies in declared digital static candidate; reference-dependent channel effects and interaction, not unique physical percentages or new deployable algorithm; no new global ability bound."
+}

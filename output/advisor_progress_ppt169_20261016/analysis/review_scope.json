@@ -1,0 +1,11 @@
+{
+  "changed_slides": [
+    2,
+    20,
+    24
+  ],
+  "unchanged_slide_xml_count": 25,
+  "embedded_notes_count": 28,
+  "first_render_process_exit_code": 1,
+  "first_render_scope": "All 28 PNG files produced and inspected; process ended with code 1 after its complete JSON report. No native PowerPoint execution."
+}

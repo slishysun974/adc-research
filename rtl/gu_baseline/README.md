@@ -1,8 +1,12 @@
 # 阶段三：Gu 候选硬件基线
 
-此处逐步建立 Gu 数字校准的 RTL、验证平台与综合约束。现有候选 flash 入口、逐转换门控乘积、单级定点 PWL、冻结系数两级校正链及逐转换在线 Q22 更新；已有通用逻辑综合结果，尚无四路抽取/广播 RTL 或工艺面积、时序、功耗结果。硬件实际可见的总线、更新时序和论文未公开的字长细节仍须另行核对；候选设定逐项注明。
+此处逐步建立 Gu 数字校准的 RTL、验证平台与综合约束。现有候选 flash 入口、逐转换门控乘积、单级定点 PWL、冻结系数两级校正链、逐转换在线 Q22 更新及独立多拍版本；已有通用逻辑综合与指定FPGA时序结果，尚无四路抽取/广播 RTL 或目标工艺面积、功耗结果。硬件实际可见的总线、更新时序和论文未公开的字长细节仍须另行核对；候选设定逐项注明。
 
-2026-10-11 追加面向电路教师的 [Vivado 集成入口](vivado_review/REPRODUCE.md)和[实际工程报告](../../docs/reports/CIRCUIT_REVIEW_VIVADO_RESULTS_2026-10-11.md)。现有专用链已在 Vivado 2026.1 / Artix-7 建立 `.xpr`、结构网表及原生图；八状态 RTL 与有限网表输出回放通过。2548 LUT/184 FF/4 DSP/0 BRAM，100 MHz 综合时序未满足，不升级为板级或芯片实现结论。原候选源码未修改。
+2026-10-11追加面向电路教师的[Vivado集成入口](vivado_review/REPRODUCE.md)和[实际工程报告](../../docs/reports/CIRCUIT_REVIEW_VIVADO_RESULTS_2026-10-11.md)。当时专用链在Vivado 2026.1／Artix-7建立工程、结构网表及原生图；八状态RTL与有限网表输出回放通过。2548 LUT／184 FF／4 DSP／0 BRAM，100 MHz综合时序未满足；“原候选源码未修改”是该次历史运行的状态。
+
+2026-10-16启动的[多拍核心](two_stage_multicycle_candidate_a.sv)与[整改报告](../../docs/reports/RTL_MULTICYCLE_TIMING_2026-10-16.md)单列：当前串行除法版E39提交、40周期接收间隔，保持原递推；精确bank新增的外部提交／整数请求参数默认关闭，仍兼容原逐转换方式。当前物理验收进度及旧Artix-7未复验边界见报告。
+
+另有按论文功能边界划分的[分段PWL](fixed_pwl_staged_candidate_a.sv)与[分段核心](two_stage_staged_candidate_a.sv)，对应段宽仅256／1024、核心默认16周期时序槽。独立请求token使无效样本仍完成；E0快照旧系数，原Q3／Q10／Q22与E39／40合同保留。测试入口为[双段宽参考控制](vivado_review/tb_staged_pwl.sv)。实际功能、单周期STA、SDF范围和失败见原整改报告第8节及STATUS，不能当作四路芯片位级复刻。
 
 OJSSCS Fig. 14 画出前级 `D[7:0]` 原始比较器输出，而 Fig. 13 仅把 flash 方框标作 `3-bit`。当前软件使用九状态 `q=-4…4`；若 RTL 候选要用三位输入，须先明确第九状态如何处理，不能静默截断。位级接口核查见[来源审计](../../docs/stages/03_gu_baseline/DIGITAL_BUS_AND_DUAL_PATH_SOURCE_AUDIT_V1.md)。
 

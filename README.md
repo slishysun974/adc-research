@@ -1,29 +1,46 @@
 # 流水线 ADC 数字后台校准研究
 
-> 后续AI或研究者先读 [文档阅读指南](docs/README.md) 和 [当前状态](docs/STATUS.md)。阅读入口、研究流程和成果索引复用现有文件；当前批准的静态定点阶段同时包含理论推导、实验验证和结果分析。
+本项目以Gu的分段线性后台校准为基线，研究：**内部数字信息怎样驱动系数学习，为什么仍会留下输出误差，以及在观测和资源限制下还有多少改善空间。** 最终目标是据此设计并检验更好的校准算法。
 
-本项目研究一个直接的问题：**残差放大器的非线性事先未知时，ADC 内部能看到哪些信息，数字校准能改善多少性能，能否设计出比 Gu et al. 基线更好的算法？** 这里的“更好”还需要通过留出测试和硬件成本比较来证明。
+## 与Gu论文的关系
 
-研究按[四阶段章程](docs/PROJECT_CHARTER.md)开展：实验平台、完整信号链与校准理论、Gu 算法基线、新算法。旧“三阶段”文档和实验编号仍在原位置，便于核查历史结果；[阶段导航](docs/stages/README.md)解释它们在新路线中的位置。
+熟悉Gu论文的读者，可以从校正函数与系数学习之间的关系进入。分段线性函数决定怎样重构数字码，门控LMS决定怎样利用已知微小扰动（dither）调整系数。本项目进一步检查：哪些样本提供了有效信息，系数怎样随时间变化，以及这些变化最终改善还是降低输出质量。
 
-## 当前最重要的限制
+研究依据公开结构和公式建立了Gu候选实现。论文未公开的内部精度、随机源和更新时序采用明确标注的项目约定，详见[与原文的对应关系](docs/reports/GU_ALGORITHM_EVALUATION_V1.md#4-本项目实现与gu原文的对应关系)。这些候选用于条件研究，不等同于芯片全部内部实现。
 
-已有平台可人为指定一条模拟 PWL 曲线（若干段直线），旧理论预测器在**给定这条曲线**时计算码边界与频谱。这个一致性结果没有证明真实放大器的曲线已知，也没有证明它本来就是 PWL。Gu 的 PWL 指的是**数字校正函数**，不是模拟增益的物理形状。
+模拟平台可以预设放大曲线，供研究者控制和评分；**运行中的算法仍不知道这条曲线，只使用内部数字码、扰动标签和自身状态。** Gu的分段线性形式属于数字校正函数，不规定模拟放大器的物理形状。
 
-新阶段二的[理论入口](docs/theory/UNKNOWN_GAIN_END_TO_END_FRAMEWORK_V0_1.md)把模拟传输当成未知对象，同时纳入从输入到最终码的逐级信号链，以及数字校正和参数更新。旧的[TeX 推导](docs/theory/ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.tex)和 [PDF](output/pdf/ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.pdf)保留作有指定曲线／动态假设的条件性底稿；新的未知增益理论尚未完成，不可用旧 PDF 冒充。
+## 目前最重要的三项认识
 
-## 阅读与代码入口
+以下概述依据截至2026-10-15的既有证据，均保留原行为模型和有限记录条件；最新进展、准确停止点与下一研究安排由[STATUS](docs/STATUS.md)维护。
 
-- [章程](docs/PROJECT_CHARTER.md)：目标、四阶段和不泄漏模拟真值的原则。
-- [状态](docs/STATUS.md)与[决策](docs/DECISIONS.md)：现在做到哪里、有哪些开放问题。
-- [四阶段导航](docs/stages/README.md)：旧代码、实验与新阶段的对应关系。
-- `src/adc_research/platform/`：含模拟真值的逐样本实验链；`calibration/`：只从数字样本更新的校准核心；`evaluation/`：提取数字观测和离线 oracle 评分；`theory/`：现有条件性计算器；`metrics/`：统一指标。
-- [Simulink 行为模型](simulink_adc/README.md)：新文件夹内的可编辑 `.slx`、逐级信号流程、Scope和与原 Python 的逐样本核对入口。已验证浮点候选；定点／RTL与芯片适用性另行验收。
-- `experiments/`：可复现的编号实验；`docs/reports/`：经审查的结果；`rtl/`：已有 Gu 数字候选的功能核对与通用综合，目标工艺成本和新算法仍待研究。
+1. **学习信息的数量和采用方式会影响净收益。** 少量样本的统计变化可能抵消校正收益；减小步长或增加学习观测，在部分条件下能降低误差，也会涉及启动、恢复和资源取舍。见[后台性能汇报](docs/reports/RESEARCH_MODULE_06_BACKGROUND_PERFORMANCE_V1.md)。
+2. **剩余误差需要结合平均系数与持续变化解释。** 学习目标、请求发生的时间、随状态变化的采用门和两级作用共同影响结果，当前证据不能归结为单一原因。见[误差来源汇报](docs/reports/RESEARCH_MODULE_07_ERROR_MECHANISMS_V1.md)。
+3. **较好系数的存在与在线取得它是不同问题。** 部分合法固定系数能够给出更低误差，但离线构造依赖的目标信息不能直接交给在线算法。见[数字观测与校正目标](docs/reports/RESEARCH_MODULE_04_INFORMATION_V1.md)。
 
-[第一轮代码信息边界审计](docs/stages/03_gu_baseline/ONLINE_INFORMATION_BOUNDARY_AUDIT_V1.md)指出旧 EXP-010/011/013 的配置经由模拟真值对象建立；现已拆分配置来源与在线输入，但跨曲线留出测试和真实芯片可见总线核对仍未完成。
+## 已有基础与当前关键缺口
 
-理论实现与逐样本平台保持分开；共享经过审查的架构信息可以，但不能把平台幕后真值或频谱喂给正在检验的理论和算法。
+已有静态行为平台验收、条件性信号链／性能推导、Gu浮点与定点实现、有限RTL功能核对，以及一批持续后台运行和受控干预结果。这些成果分别支撑实验、理论和实现判断，各自的成立条件由原报告说明。
+
+当前仍需回答：**实际可见信息或可信输入条件，能否帮助算法判断有益方向，并从同一初态达到、维持较好的校正？** 同成本收益、更广输入适用性、一般长期收敛和芯片物理证据仍待解决；新算法阶段尚未正式启动。
+
+[四阶段章程](docs/PROJECT_CHARTER.md)描述推进路线：实验平台、完整链路与校准理论、Gu基线、新算法。现有工作主要在阶段二、三。[七个研究模块](docs/reports/PROJECT_STRUCTURE_AND_RESEARCH_REVIEW_2026-10-16.md#6-七个模块的研究汇报)是成果分类，便于按问题阅读，不表示四阶段均已完成。
+
+## 怎样阅读
+
+已经读过Gu论文、第一次接触项目，请从[首次阅读路线](docs/README.md#首次阅读了解课题与已有成果)进入：先理解目标和与论文的对应关系，再看实际性能、学习过程、误差原因和信息边界。预测理论、平台细节和硬件实现可按需要补读。
+
+准备继续开展研究时，再按[研究接续流程](docs/README.md#继续开展研究确认当前证据与停止点)核对STATUS、现行主线和相关证据。决策、历史记录与全部实验编号用于追溯，首次阅读无需顺读。
+
+## 实现与复现入口
+
+- `src/adc_research/`：`platform/`为模拟实验链，`calibration/`为在线数字校准，`evaluation/`为数字观测提取和离线评分，`theory/`为条件计算器，`metrics/`为统一指标。理论预测与逐样本平台独立实现，真值和理想参照不进入在线学习。
+- [Simulink行为模型](simulink_adc/README.md)：可展开的逐级信号流程、浮点反馈和与Python的逐样本核对。定点、RTL和芯片适用性分别验收。
+- [导师阶段汇报](output/advisor_progress_ppt169_20261016/README.md)：28页可编辑PPT、逐页说明与SVG源文件，按七模块组织截至2026-10-15的研究证据；最新进展仍以STATUS为准。
+- [实验索引](docs/reports/experiments/README.md)定位`experiments/`的定义和原报告；[RTL入口](rtl/README.md)定位数字候选、功能核对与综合。原逐转换候选未通过100 MHz；[多拍整改](docs/reports/RTL_MULTICYCLE_TIMING_2026-10-16.md)保留原递推，当前串行除法版接收间隔40周期，100 MHz完整验收与适用范围见报告。目标工艺成本仍待验证。
+- [旧TeX](docs/theory/ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.tex)和[PDF](output/pdf/ADC_PERFORMANCE_PREDICTION_THEORY_FRAMEWORK.pdf)是给定传输／动态假设下的底稿；[未知增益理论框架](docs/theory/UNKNOWN_GAIN_END_TO_END_FRAMEWORK_V0_1.md)说明一般问题和现有条件关系。
+
+早期实验的配置来源修订见[在线信息边界审查](docs/stages/03_gu_baseline/ONLINE_INFORMATION_BOUNDARY_AUDIT_V1.md)；旧结果保留其条件，真实芯片可见总线仍有未公开项。
 
 ## 本地检查
 

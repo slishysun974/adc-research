@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块四　数字观测与校正目标</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">相关量为零与输出误差最小</text></g>
+<g id="context" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><text x="64" y="183" font-size="24">在同一条三次模拟曲线、同一训练记录上，只改变第一级第一系数。</text><text x="64" y="222" font-size="20" fill="#596D7B">其余系数固定。比较对象为未裁剪浮点输出的平均绝对码误差（MAE）。</text></g>
+<!-- chart-plot-area: x_min=125,y_min=275,x_max=655,y_max=545; y_range=0,1.2 -->
+<g id="chart-mae" font-family="Microsoft YaHei, Arial, sans-serif" font-size="20" fill="#596D7B">
+<text x="125" y="258">MAE（码）</text>
+<line x1="125" y1="275" x2="655" y2="275" stroke="#D7E0E7"/><line x1="125" y1="365" x2="655" y2="365" stroke="#D7E0E7"/><line x1="125" y1="455" x2="655" y2="455" stroke="#D7E0E7"/><line x1="125" y1="545" x2="655" y2="545" stroke="#596D7B"/>
+<text x="109" y="282" text-anchor="end">1.2</text><text x="109" y="372" text-anchor="end">0.8</text><text x="109" y="462" text-anchor="end">0.4</text><text x="109" y="552" text-anchor="end">0</text>
+<rect id="bar-correlation" x="185" y="337.85" width="140" height="207.15" fill="#226E9C"/>
+<rect id="bar-mae" x="455" y="397.17" width="140" height="147.83" fill="#21857A"/>
+<text x="255" y="321" font-size="24" text-anchor="middle" fill="#243746">0.92068</text><text x="525" y="381" font-size="24" text-anchor="middle" fill="#243746">0.65701</text>
+<text x="255" y="578" text-anchor="middle">相关量零点</text><text x="525" y="578" text-anchor="middle">MAE最小点</text>
+</g>
+<g id="interpretation" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><text x="752" y="296" font-size="28" font-weight="700" fill="#16324F">对应系数位置不同</text><text x="752" y="352" font-size="24">相关量零点：1.010000</text><text x="752" y="394" font-size="24">MAE最小点：1.002608</text><text x="752" y="466" font-size="24">Gu利用相关统计间接学习。</text><text x="752" y="508" font-size="24">它与输出目标的一致性</text><text x="752" y="550" font-size="24">需要额外条件。</text></g>
+<g id="takeaway" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="623" font-size="24" fill="#226E9C">该对照说明目标位置可能不同，完整八系数是否收敛需另行判断。</text></g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：EXP-022 frozen_v2，training_code_centers，16,384条记录。图示数值按报告舍入。</text><text x="1216" y="682" text-anchor="end">11</text></g>
+</svg>

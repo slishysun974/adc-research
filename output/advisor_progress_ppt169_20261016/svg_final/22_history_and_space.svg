@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块七　剩余误差来源与改善空间</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">学习历史与尚未取得的改善</text></g>
+<g id="time" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><text x="64" y="209" font-size="28" font-weight="700" fill="#16324F">时间顺序</text><text x="64" y="262" font-size="24">较早的更新会影响更多后续输出。</text><text x="64" y="304" font-size="24">对实际平均位置，它的权重更大。</text><text x="64" y="360" font-size="24">原案例中，固定时间权重已能</text><text x="64" y="402" font-size="24">使一个方向的累计作用翻转。</text></g>
+<line x1="622" y1="189" x2="622" y2="422" stroke="#D7E0E7"/>
+<g id="gate" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><text x="690" y="209" font-size="28" font-weight="700" fill="#16324F">状态与采用门</text><text x="690" y="262" font-size="24">门随系数状态变化，重新选择样本。</text><text x="690" y="304" font-size="24">固定位置的方向不直接决定移动历史。</text><text x="690" y="360" font-size="24">后级进入前级学习的传导</text><text x="690" y="402" font-size="24">在受控对照中既有益也有害。</text></g>
+<g id="remaining" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><line x1="64" y1="459" x2="1216" y2="459" stroke="#D7E0E7"/><text x="64" y="512" font-size="28" font-weight="700" fill="#226E9C">现有表示仍有改善空间</text><text x="64" y="558" font-size="24">原20个合法固定系数参照均优于对应全样本路径，构造使用离线目标。</text><text x="64" y="605" font-size="24">在线算法怎样从相同初态发现、达到并维持有益状态，仍需独立证明。</text></g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：两级理论§29—45、EXP-073—077、综合分析§77。不同层次的作用不合成唯一百分比。</text><text x="1216" y="682" text-anchor="end">22</text></g>
+</svg>

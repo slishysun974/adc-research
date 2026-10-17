@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块五　激励、抽样与参数更新</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">启动、持续波动与平均偏差</text></g>
+<g id="method" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746"><text x="64" y="188" font-size="24">先在单级、无记忆、单斜率条件下推导均值关系，再用长记录核对。</text></g>
+<g id="mechanisms" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="64" y="267" font-size="28" font-weight="700" fill="#16324F">启动过程</text><text x="340" y="267" font-size="24">系数尚未接近平均位置，延长学习可能降低这部分误差。</text>
+<line x1="64" y1="308" x2="1216" y2="308" stroke="#D7E0E7"/>
+<text x="64" y="367" font-size="28" font-weight="700" fill="#16324F">固定步长波动</text><text x="340" y="367" font-size="24">平均方向正确时，实际系数仍可持续变化。</text><text x="340" y="407" font-size="24">更多重复样本不保证每个时刻都停在平均值。</text>
+<line x1="64" y1="445" x2="1216" y2="445" stroke="#D7E0E7"/>
+<text x="64" y="504" font-size="28" font-weight="700" fill="#16324F">量化相关偏差</text><text x="340" y="504" font-size="24">增益0.975的正确逆增益约为1.025641。</text><text x="340" y="544" font-size="24">小摆幅／直流量化控制的平均相关零点为1.024。</text><text x="340" y="584" font-size="24" fill="#226E9C">全样本降低波动，但没有消除该平均位置差。</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：EXP-056、标量统计理论。以上解析结论限定于原单斜率条件，完整两级需另证。</text><text x="1216" y="682" text-anchor="end">14</text></g>
+</svg>

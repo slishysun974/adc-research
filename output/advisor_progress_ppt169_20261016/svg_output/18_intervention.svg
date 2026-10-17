@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<defs><marker id="arrow" orient="auto" markerWidth="8" markerHeight="8" refX="7" refY="4"><polygon points="0,0 8,4 0,8" fill="#226E9C"/></marker></defs>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">模块七　剩余误差来源与改善空间</text><text x="64" y="115" font-size="40" fill="#16324F" font-weight="700">剩余误差的受控分析方法</text></g>
+<g id="comparison" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="64" y="184" font-size="24">研究重点：改变一个明确因素后，未来完整输出发生什么变化。</text>
+<rect x="64" y="265" width="280" height="142" fill="#F2F5F8" stroke="#D7E0E7"/><text x="204" y="308" font-size="28" font-weight="700" text-anchor="middle">共同条件</text><text x="204" y="349" font-size="24" text-anchor="middle">相同完整初态</text><text x="204" y="385" font-size="24" text-anchor="middle">相同未来数字记录</text>
+<path d="M 344 336 L 433 336 L 433 277 L 516 277" fill="none" stroke="#226E9C" stroke-width="2" marker-end="url(#arrow)"/><path d="M 433 336 L 433 411 L 516 411" fill="none" stroke="#226E9C" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="521" y="235" width="360" height="86" fill="#FFFFFF" stroke="#226E9C" stroke-width="2"/><text x="701" y="269" font-size="24" text-anchor="middle">原学习方式</text><text x="701" y="303" font-size="20" text-anchor="middle" fill="#596D7B">完整传播状态与输出</text>
+<rect x="521" y="369" width="360" height="86" fill="#FFFFFF" stroke="#226E9C" stroke-width="2"/><text x="701" y="403" font-size="24" text-anchor="middle">改变指定因素</text><text x="701" y="437" font-size="20" text-anchor="middle" fill="#596D7B">重新计算活动级的完整反馈</text>
+<text x="946" y="302" font-size="24">固定终点</text><text x="946" y="345" font-size="24">比较整数码误差</text><text x="946" y="388" font-size="24">保留不利案例</text>
+<text x="64" y="522" font-size="24">因素包括：是否继续更新、后级进入前级学习的连接、采用样本与门来源。</text>
+<text x="64" y="579" font-size="24" fill="#226E9C">这样可以检验特定解释对未来结果的作用。</text><text x="64" y="619" font-size="20" fill="#596D7B">当前结论限定于原平滑模型、五种子、两倍率、两起点与固定八块记录。</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：EXP-072—077、模块七。特定干预的条件效应与唯一物理贡献比例分别判断。</text><text x="1216" y="682" text-anchor="end">18</text></g>
+</svg>

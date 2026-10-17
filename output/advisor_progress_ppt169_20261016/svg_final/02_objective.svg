@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-pptx-page-role="content">
+<rect width="1280" height="720" fill="#FFFFFF"/>
+<g id="title" font-family="Microsoft YaHei, Arial, sans-serif"><text x="64" y="55" font-size="20" fill="#596D7B">课题定位</text><text x="64" y="115" font-size="40" font-weight="700" fill="#16324F">研究目标与当前进展</text></g>
+<g id="goal" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<text x="64" y="202" font-size="28" font-weight="700" fill="#226E9C">未知模拟非线性下，数字校准能够做到什么</text>
+<text x="64" y="253" font-size="24">以Gu为基线，研究内部观测怎样推动系数学习，</text><text x="64" y="293" font-size="24">以及系数变化怎样影响最终码误差和频谱。</text>
+</g>
+<g id="progress" font-family="Microsoft YaHei, Arial, sans-serif" fill="#243746">
+<line x1="64" y1="335" x2="1216" y2="335" stroke="#D7E0E7"/>
+<text x="64" y="389" font-size="28" font-weight="700" fill="#16324F">当前已形成的阶段成果</text>
+<text x="64" y="439" font-size="24">可复查的行为平台、条件性理论及数字实现基线。</text><text x="64" y="479" font-size="24">对一批有限场景，已有剩余误差的受控解释。</text>
+<text x="64" y="561" font-size="24" fill="#226E9C">下一关键关系：实际可见信息如何支持有益的在线调整。</text>
+<text x="64" y="605" font-size="20" fill="#596D7B">当前重点为条件理论与Gu基线分析，新算法与芯片适用性仍待独立验证。</text>
+</g>
+<g id="footer" font-family="Microsoft YaHei, Arial, sans-serif" font-size="15" fill="#596D7B"><line x1="64" y1="652" x2="1216" y2="652" stroke="#D7E0E7"/><text x="64" y="682">依据：项目章程、现行主线与STATUS（2026-10-16）</text><text x="1216" y="682" text-anchor="end">02</text></g>
+</svg>
