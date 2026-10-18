@@ -1,17 +1,18 @@
+`default_nettype none
 // One conversion in flight. At the default COMPUTE_CYCLES=16:
 // accept E0, stage2 E1..E4, reconstruction E5, stage1 E6..E9, capture E10,
-// hold through E16, seed division E17, divide E18..E38,
+// numerator pipeline E11..E14, hold through E16, seed division E17, divide E18..E38,
 // publish/commit E39, next acceptance E40 (2.5 MS/s at 100 MHz).
 // All arithmetic and both banks use the pre-conversion coefficients.
 // No clock gating; only data registers and synchronous clock enables.
 module two_stage_staged_candidate_a #(
     parameter integer COMPUTE_CYCLES = 16
 ) (
-    input logic clk, reset, valid_in,
+    input wire clk, reset, valid_in,
     output logic ready_in,
-    input logic signed [3:0] stage1_symbol, stage2_symbol,
-    input logic [7:0] backend_raw_code,
-    input logic stage1_dither_positive, stage2_dither_positive,
+    input wire signed [3:0] stage1_symbol, stage2_symbol,
+    input wire [7:0] backend_raw_code,
+    input wire stage1_dither_positive, stage2_dither_positive,
     output logic done_out, valid_out,
     output logic [11:0] final_code,
     output logic [3:0] stage1_gate, stage2_gate,
@@ -40,25 +41,24 @@ module two_stage_staged_candidate_a #(
     wire [7:0] partial_remainder [0:7];
     integer i;
 
-    function [21:0] biased_numerator;
-        input signed [14:0] learning;
-        input positive;
-        input [3:0] step_numerator;
-        input integer reduced_shift;
-        reg signed [21:0] scaled_learning, numerator;
-        reg [20:0] magnitude, biased;
-        begin
-            scaled_learning = $signed({{7{learning[14]}},learning}) *
-                              $signed({1'b0,step_numerator});
-            numerator = (positive ? -scaled_learning : scaled_learning) <<< reduced_shift;
-            magnitude = numerator < 0 ? $unsigned(-numerator) : $unsigned(numerator);
-            biased = magnitude + 21'd62;
-            biased_numerator = {numerator < 0,biased};
-        end
-    endfunction
-
+    // Declare held dither signals before the generate instances use them.
+    (* KEEP = "TRUE" *) logic signed [3:0] sample_stage1, sample_stage2;
+    (* KEEP = "TRUE" *) logic [7:0] sample_backend;
+    (* KEEP = "TRUE" *) logic sample_dither1, sample_dither2;
+    wire [21:0] request_seed [0:7];
+    wire seed_start = phase == HOLD && remaining == COMPUTE_CYCLES - 11;
     genvar g;
     generate for (g=0;g<8;g=g+1) begin: serial_requests
+        wire seed_done_unused;
+        fixed_request_seed_staged_candidate_a #(
+            .STEP_NUMERATOR(g%4==0 ? 4'd1 : g%4==1 ? 4'd3 : g%4==2 ? 4'd6 : 4'd12),
+            .REDUCED_SHIFT(g<4 ? 4 : 6)
+        ) seed_pipeline (
+            .clk(clk), .reset(reset), .enable_in(seed_start),
+            .learning_q3(g<4 ? pending_learning1[14:0] : pending_learning2[14:0]),
+            .dither_positive(g<4 ? sample_dither1 : sample_dither2),
+            .done_out(seed_done_unused), .negative_out(request_seed[g][21]),
+            .biased_out(request_seed[g][20:0]));
         assign partial_remainder[g] = {remainder125[g],dividend[g][20]};
         wire enabled = pending_valid &&
             (g<4 ? pending_gate1[g%4] : pending_gate2[g%4]);
@@ -67,9 +67,6 @@ module two_stage_staged_candidate_a #(
     end endgenerate
 
     // Held sample and state names retained for full-state verification.
-    (* KEEP = "TRUE" *) logic signed [3:0] sample_stage1, sample_stage2;
-    (* KEEP = "TRUE" *) logic [7:0] sample_backend;
-    (* KEEP = "TRUE" *) logic sample_dither1, sample_dither2;
     logic [10:0] k10, k11, k12, k13, k20, k21, k22, k23;
     (* DONT_TOUCH = "TRUE" *) reg [10:0] snapshot_k10, snapshot_k11, snapshot_k12, snapshot_k13, snapshot_k20, snapshot_k21, snapshot_k22, snapshot_k23;
     wire correction_valid, stage2_valid, stage1_done, stage2_done;
@@ -277,11 +274,7 @@ module two_stage_staged_candidate_a #(
                       else remaining <= remaining - 1'b1;
                 NUMERATE: begin
                     for(i=0;i<8;i=i+1) begin
-                        {negative[i],dividend[i]} <= biased_numerator(
-                            i<4 ? pending_learning1[14:0] : pending_learning2[14:0],
-                            i<4 ? sample_dither1 : sample_dither2,
-                            i%4==0 ? 4'd1 : i%4==1 ? 4'd3 : i%4==2 ? 4'd6 : 4'd12,
-                            i<4 ? 4 : 6);
+                        {negative[i],dividend[i]} <= request_seed[i];
                         remainder125[i] <= 0;
                         quotient[i] <= 0;
                     end
@@ -319,3 +312,4 @@ module two_stage_staged_candidate_a #(
         end
     end
 endmodule
+`default_nettype wire

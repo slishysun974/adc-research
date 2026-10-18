@@ -1,0 +1,2 @@
+# Keep Bash entry points runnable from Windows checkouts through WSL.
+*.sh text eol=lf

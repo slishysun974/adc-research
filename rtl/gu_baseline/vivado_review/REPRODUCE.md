@@ -171,3 +171,98 @@ bash "$adc_case/tools/run_staged_build.sh" "$adc_new"
 `tools/run_seed_probe.sh`和`run_2019_seedprobe.sh`记录实际有限探针，含本机原快照绝对路径，移植前先另建目录、核对输入指纹和时刻，不覆盖任何证据目录。2019.1实际编译快照另保留在`/opt/Xilinx/rtl_checks/staged_2019_20261017_v1`。两版27×60个采样值相同；这些是有限连接线观察，不是原语内部连续历史。
 
 CVC二进制在`/opt/Xilinx/alternate_simulators/open-src-cvc/build64/cvc64`，固定源码与许可留在该目录。`software/`保留安装配置、成功日志、零器件拒绝日志、构建告警和两种随包自检日志；`cvc_primitive/`保存35101事件／79稳定值以及3条未屏蔽告警。CVC忽略PATHPULSE，不能替代当前脉冲合同；本轮未做CVC整网表回放。源码、DCP、原SDF不改，原训练／留出和完整SDF未完成状态保持。
+
+### 2026-10-18同算术分子流水线
+
+当前[分段核心](../two_stage_staged_candidate_a.sv)调用[分子流水线](../fixed_request_seed_staged_candidate_a.sv)，默认16周期计算合同下在E11—E14登记原22位分子运算，保持E17除法起点、E39提交、40周期接收。原位宽溢出保留；PWL、门、Q22饱和和学习算法不变。结果、失败及有限验收边界见[整改报告第10节](../../../docs/reports/RTL_MULTICYCLE_TIMING_2026-10-16.md#10-同算术分子流水线的局部整改2026-10-18)，实际停止点以STATUS为准。
+
+本机新证据目录为`artifacts/research/circuit_review/timing_staged_numerator_20261018_v1`至`v4`。v1—v3的入口／集成／读入失败均保留；v4复用v2不变分子模块的524288次穷举及复位控制，没有重跑该穷举。重算使用不存在的新目录，准备器核对原分段v3冻结sources与公开数字向量，再复制独立输入；缺少原冻结目录时不能用生成数据代替。从仓库根执行：
+
+```powershell
+python rtl/gu_baseline/vivado_review/prepare_staged_numerator.py `
+  artifacts/research/circuit_review/timing_staged_20261017_v3 `
+  artifacts/research/circuit_review/timing_staged_numerator_new
+```
+
+随后在已有`Ubuntu-20.04-D`／Vivado2022.1环境，从`/mnt/d/ADC`执行下列顺序；任一步失败即停，日志及旧目录不覆盖。新复现默认重新做一次算术控制，不能当作本轮已发生的运行成本：
+
+```bash
+adc_new="$PWD/artifacts/research/circuit_review/timing_staged_numerator_new"
+bash "$adc_new/tools/run_numerator_rtl.sh" "$adc_new"
+bash "$adc_new/tools/run_staged_build.sh" "$adc_new"
+python3 "$adc_new/tools/prepare_staged_netlist.py" "$adc_new"
+bash "$adc_new/tools/run_staged_netlist.sh" "$adc_new"
+```
+
+构建为xc7z020clg400-1、100MHz、DSP上限4、无MCP／false-path。网表观察线由实际FDRE／FDSE实例生成，保持184位状态、53位中间量及公开输出比较。SDF先做222行与第221行负对照，再做8263＋128／38处复位及第0行负对照；编译／展开／注释／正向日志仍须无告警并确认原SDF注释成功，脉冲及建立／保持选项保持。Icarus对原PWL的KEEP属性提示明文登记；其负对照按预期FATAL且没有PASS判断，允许本机实际观察到的进程退出0或1，不能只看返回码。
+
+### 2026-10-18原语内部连续波形与单元回放
+
+本轮只做诊断，原v4 RTL／DCP／网表／SDF保持，功能和STA没有重跑。证据在`artifacts/research/circuit_review/timing_numerator_event_20261018_v1/`，实际配对、未决事件区／队列和完整SDF边界见[整改报告第11节](../../../docs/reports/RTL_MULTICYCLE_TIMING_2026-10-16.md#11-e11至e12通路的连续原语内部波形2026-10-18)。
+
+`original_trace/`记录原编译快照33条连续连接线，`diagnostic/`只增加76条被动内部观察，保持原预编译simprims及所有脉冲选项。同一失败和五条完整输出位历史配对通过，内部组合表达式正确而延迟O错误。`local_replay/`保留SDF注释根错误导致的展开拒绝，未做仿真；`local_replay_v2/`的新work／snapshot完成79次端口历史、64个稳定检查及期望位翻转负对照。单元SDF仅重定位INSTANCE，原IOPATH和PATHPULSE数值保持。
+
+供后续复算的`tools/reproduce_local_replay.sh`只复制六份文本输入至不存在的新目录，不复制旧编译缓存；从仓库根、原WSL2022.1环境调用：
+
+```bash
+adc_event="$PWD/artifacts/research/circuit_review/timing_numerator_event_20261018_v1"
+bash "$adc_event/tools/reproduce_local_replay.sh" \
+  "$PWD/artifacts/research/circuit_review/local_carry_replay_new"
+```
+
+该新增入口本轮仅通过Bash语法检查，没有额外执行回放。局部PASS只证明记录的单元控制，不是整网表SDF验收；1ps端口值变化记录没有保存原内核全部事件区／待决队列。原快照和诊断平台的完整前缀只能在新目录中复现，不能对证据目录直接重跑或把诊断测试平台替换为验收平台。
+
+### 2026-10-18输出拼接最小复现与受控规范化
+
+后继证据位于`artifacts/research/circuit_review/timing_sdf_context_20261018_v1/`。相同79次输入、64个检查、单元SDF及2022.1选项下，原输出连接形式足以重现CARRY4内部表达式0001、延迟O为0100；原输入连接单独保留、输出改完整向量则通过。输出因素含O拼接／父向量及CO接法／读出别名；保留CO接法、仅规范化O的后继控制也通过，未逐因素分离所有初始化／别名交互。`binding/`、`output_only/`保存失败，`input_only/`保存正负对照。没有启动原先条件安排的输入互连分支。
+
+[规范化工具](normalize_carry_outputs.py)只为CARRY4拼接O／CO增加完整四位线和逐位零延迟别名，不改变单元名、管脚、参数、连接目标或SDF字节；不能综合该输出文件，不能覆盖原始导出。命令须指定不存在的输出和审计文件：
+
+```powershell
+python rtl/gu_baseline/vivado_review/normalize_carry_outputs.py `
+  ORIGINAL_ROUTED.v NEW_NORMALIZED.v --audit NEW_CONNECTION_AUDIT.json
+```
+
+审计保存每个端口的原连接、逐位目标、可逆编辑及输入／输出指纹。当前521个端口／2084位另按原声明范围独立核对，反向编辑恢复原始字节；交换位别名的控制被拒。规范化后原局部79次事件／64个检查及期望位翻转负对照通过。整网表运行与最终范围见[整改报告第12节](../../../docs/reports/RTL_MULTICYCLE_TIMING_2026-10-16.md#12-carry4输出拼接的最小复现与连接规范化2026-10-18)和STATUS，不由本命令提前认证。
+
+`normalized_full/`使用同一v4 DCP导出的网表、原SDF、原184位状态／53位中间量测试平台和公开数字向量。仍按222行正向→第221行负对照→8263＋128完整正向→第0行负对照执行；保留最大延迟、transport和全部pulse选项、严格编译／注释／日志门禁。新增零延迟别名改变仿真事件边界，结果须标为受控仿真连接规范化，不能写成未经处理的原导出已通过、厂商确认bug或实际硅认证。原RTL、物理网表、SDF、DCP与所有旧失败保持。
+
+本轮上述四项实际全部完成，入口退出0并输出`STAGED_SDF_FULL_CONTROLS_PASS`；全量正向49分39秒，在3600秒限内。两个负对照分别准确在第221／0行拒绝，正向／注释日志无告警。汇总为该目录`research_result.json`，原始导出整体验收仍为false，未生成整体`validation.json`。没有为制作本入口再重跑全量。
+
+### 2026-10-18规范化路径的正式准备、回放与验收
+
+[正式入口](normalized_replay.py)把上述有限规范化路径整理为可搬移包，只使用Python标准库，兼容本机Windows Python 3.13及WSL Python 3.8。准备器需要已保存的分子流水线v4物理运行；它核对原网表、SDF、DCP、完整比较平台、8263行向量、两份负对照及原源码指纹，不会重新综合，也不会生成替代向量。这个入口针对已定位的v4，不自动接受其他实现。
+
+从仓库根准备不存在的新目录：
+
+```powershell
+python rtl/gu_baseline/vivado_review/normalized_replay.py prepare `
+  artifacts/research/circuit_review/timing_staged_numerator_20261018_v4 `
+  artifacts/research/circuit_review/normalized_replay_new
+```
+
+包内`physical/`保留原始导出、DCP、源码和报告，`design/`保留规范化仿真文件、原SDF及原比较平台，`tools/`包含全部运行依赖。[独立接线检查器](check_carry_outputs.py)重新解析旧／新实际实例管脚和原声明范围，检查521个端口／2084位与反向字节恢复；不依赖规范化工具给出的目标位清单。`replay_manifest.json`冻结包内文件。负对照只翻转期望量：第0行最终码字段6，第221行后级第一个状态字段16，数字输入不改。
+
+包可搬到其他目录，路径可以含空格。以下在Linux／WSL执行，`adc_replay`是搬移后的完整路径；settings是实际已有Vivado2022.1安装，不得指向旧编译缓存：
+
+```bash
+adc_replay="$PWD/artifacts/research/circuit_review/normalized_replay_new"
+bash "$adc_replay/tools/run_normalized_replay.sh" "$adc_replay" \
+  /opt/Xilinx/Vivado/2022.1/settings64.sh pilot
+```
+
+`pilot`在新目录重新编译／展开，先核对222行正向，再要求第221行期望位负对照准确失败。`full`须在另一个新准备包中运行同一命令、将末参数改为`full`，依次执行上述两项及8263＋128全量正向／第0行负对照。每次日志和编译工作目录只允许使用一次，失败记录不能覆盖；不是对已有pilot包追加重跑。原maxdelay、transport、全部pulse=0选项保持，编译／展开／每次正向及其控制台均拒绝告警，负对照只允许指定行号的FATAL。各短项600秒，全量3600秒，失败即停。
+
+通过时分别写`normalized_pilot_validation.json`或`normalized_validation.json`。后者仅表示受控规范化网表的完整有限SDF回放，明确保留`raw_export_acceptance=false`和`methodology_clearance=false`；31条SYNTH-9提示、原始第11行失败及全部旧失败不改写，不生成原始导出整体`validation.json`。新增零延迟别名的时间语义边界与第12节保持。
+
+只读复核已有全量证据时，先准备另一个新包，再执行下面两步；不会启动仿真。必须逐字节匹配已有完整设计／SDF／比较平台／向量，核对原保存日志指纹并通过全部正负门禁。证书明确记录`evidence_origin.mode=reused_saved_full_replay`，不能称为新全量运行：
+
+```powershell
+python rtl/gu_baseline/vivado_review/normalized_replay.py import-saved `
+  artifacts/research/circuit_review/normalized_replay_new `
+  artifacts/research/circuit_review/timing_sdf_context_20261018_v1/normalized_full
+python rtl/gu_baseline/vivado_review/normalized_replay.py validate `
+  artifacts/research/circuit_review/normalized_replay_new
+```
+
+本轮实际搬移回放、有限验收和预检失败见[整改报告第13节](../../../docs/reports/RTL_MULTICYCLE_TIMING_2026-10-16.md#13-规范化路径的可搬移复现与独立验收2026-10-18)。本入口不代替原始导出通过、其他候选／器件、板级或ASIC验收。
