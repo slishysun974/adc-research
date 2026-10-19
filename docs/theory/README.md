@@ -11,6 +11,7 @@
 
 ## 学习目标、收敛与跟踪
 
+- [框架内的校准性能影响完整推导](UNKNOWN_GAIN_END_TO_END_FRAMEWORK_V0_1.md#五校准闭环误差机制与条件理论)：§5.1—5.14串起请求／导出、两级输出增量、净MSE、时间权重与状态关联、标量解析及两级局部条件、谱交叉／旁带、时间协方差、SNDR／SFDR和静态码密度，区分精确关系与条件统计闭合。
 - [百万量级标量统计、状态噪声与量化](MILLION_SAMPLE_SCALAR_MEAN_NOISE_AND_QUANTIZATION_V1.md)：原理控制、学习率、有限时间矩、输出与恢复合同；EXP-056／069／070按原预算复用。
 - [两级窗口平均更新与门控条件](WINDOW_MEAN_AND_GATE_MARGIN_CONDITIONS_V1.md)：保护邻域、两级有限传播及有序周期条件；条件成立不等于实际长期根已认证。
 - [数字激励、受约束更新与输入／历史变化](EXCITATION_AND_CONSTRAINED_STABILITY_V1.md)：有限激励、传播与跟踪条件；EXP-065／066幅度切换证据。
@@ -42,6 +43,7 @@
 
 ## 从模拟范围到最终码与频谱
 
+- [模块二可计算模型与完整推导](UNKNOWN_GAIN_END_TO_END_FRAMEWORK_V0_1.md#三从信号链到码和频谱哪些关系仍然成立)：§3.1—3.13从数字算术、独立主辅阈值反算、静态指标、连续／有限谱，接到动态与Gu窗口递推、范围传播和性能界；给出三套求解流程、终止条件与手算例。给定模型可条件计算，可信覆盖输入可算界。
 - [静态主辅范围的全链路传播](STATIC_MAIN_AUX_OBSERVATION_BOUNDS_V1.md)
 - [有限电压网格到连续模拟包络](GRID_TO_ANALOG_ENVELOPE_V1.md)
 - [在线系数可达集](ONLINE_COEFFICIENT_REACHABILITY_V1.md)

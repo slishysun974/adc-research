@@ -266,3 +266,33 @@ python rtl/gu_baseline/vivado_review/normalized_replay.py validate `
 ```
 
 本轮实际搬移回放、有限验收和预检失败见[整改报告第13节](../../../docs/reports/RTL_MULTICYCLE_TIMING_2026-10-16.md#13-规范化路径的可搬移复现与独立验收2026-10-18)。本入口不代替原始导出通过、其他候选／器件、板级或ASIC验收。
+
+
+### 2026-10-19不依赖厂商源码的SDF输出连接复现
+
+[独立四位小例](vector_path_reproducer/reproducer.v)和[九条路径的SDF](vector_path_reproducer/chain.sdf)用于定位模拟器行为，不是ADC核心或新的验收平台。它从稳定初态开始，仅改变三次输入；12.277ns时，布尔递推的期望值为0001。本机XSim2022.1中，直接在specify写相同最大延迟时三种接法都正确；加入SDF注释后，整向量赋值接分裂输出得到0100，完整向量与逐位赋值两控制仍为0001。原官方CARRY4加原单元SDF的短历史也复现相同失配。
+
+三份文本不包含厂商原语源码、DCP、模拟真值、训练数据或本机绝对路径。先复制到一个不存在的新工作目录，在已有Vivado2022.1环境下运行：
+
+```bash
+xvlog -work tiny_paths reproducer.v
+xelab tiny_paths.tb_path_reproducer -s tiny_paths_sim -debug all -mt 2 \
+  -maxdelay -transport_int_delays -pulse_r 0 -pulse_int_r 0 -pulse_e 0 -pulse_int_e 0
+xsim tiny_paths_sim -tclbatch run.tcl -log positive.log
+```
+
+`MINIMAL_SPLIT_DISCREPANCY checks=2 discrepancies=1`表示成功复现局部失配，不表示设计验收通过；`MINIMAL_CONTROL_MISMATCH`表示两个参考控制之一失败，不能使用该次复现。按相同入口另加`-testplusarg CORRUPT`应在check1／12277ps拒绝，这只翻转期望位。原日志和工作目录不能覆盖。
+
+这个SDF已去掉PATHPULSE记录，本机波形与带原PATHPULSE50的小例完全相同，说明该记录不是本例失配的必要条件。CVC得到正确稳定值，但保留两条PATHPULSE$和一条DIVIDER警告，资格仍未通过，不抑制告警或替代原脉冲合同。详细配对、冻结限额及停止见[整改报告第16节](../../../docs/reports/RTL_MULTICYCLE_TIMING_2026-10-16.md#16-短历史与独立四位sdf连接复现2026-10-19)。原始导出仍未修复，第12—13节的规范化全量证据及31条SYNTH-9提示保持；没有提交问题给厂商。
+
+
+### 2026-10-19新版XSim的资格结果
+
+实际安装于WSL `Ubuntu-20.04-D`的`/opt/Xilinx/alternate2024/Vivado/2024.2`，版本查询为XSim2024.2.2。按原小例／SDF／maxdelay／transport及四项pulse=0运行后，12277ps仍为完整向量0001、分裂输出0100、逐位赋值0001；SDF注释成功且日志无告警，但数值资格失败。该候选不能作为原始导出的已验证修复，不应跳过此门启动原网表。
+
+本轮只执行1次编译、1次展开、1次小例正向；负对照、官方CARRY4资格与整网表未启动。准备目录已含本次不可覆盖的日志／缓存，不能对其直接重跑。失败后的候选／输入指纹、24条旧新VCD完整历史核对和停止条件见[整改报告第19节](../../../docs/reports/RTL_MULTICYCLE_TIMING_2026-10-16.md#19-新版xsim202422的局部资格失败2026-10-19)；当前可复用的完整有限验收仍是第12—13节的受控规范化路径。原始导出验收和方法学清零仍为false，31条SYNTH-9保持。
+
+
+### 2026-10-19零路径与单元根修复结果
+
+原模型／连接／脉冲合同保持时，三个独立小例的SDF各补齐到20条路径（新增均为原零默认）仍复现分裂输出0100／期望0001。直接单元根系统任务因路径跳过告警未取得资格；一次CLI纠正又因重复-sdfmax参数被拒绝，没有其数值回放。三组原目录保存不可覆盖的失败／缓存，不对它们直接重跑，也不把“注释成功”文本覆盖同时存在的跳过告警。详细静态映射核对、真实成本和后继入口条件见[整改报告第20节](../../../docs/reports/RTL_MULTICYCLE_TIMING_2026-10-16.md#20-显式零路径与单元根注释的修复尝试2026-10-19)；受控规范化完整有限验收与原始导出失败继续分别保留。
